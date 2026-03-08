@@ -1,16 +1,20 @@
+import { useI18n } from "@/lib/i18n";
+
 const AnnouncementBar = () => {
+  const { t } = useI18n();
+
   const messages = [
-    "Türkiye geneli ücretsiz kargo",
+    t("announcement.freeShipping"),
     "✦",
-    "2+ üründe %10 indirim",
+    t("announcement.discount"),
     "✦",
-    "Yeni koleksiyon şimdi çıktı",
+    t("announcement.newCollection"),
     "✦",
-    "Türkiye geneli ücretsiz kargo",
+    t("announcement.freeShipping"),
     "✦",
-    "2+ üründe %10 indirim",
+    t("announcement.discount"),
     "✦",
-    "Yeni koleksiyon şimdi çıktı",
+    t("announcement.newCollection"),
     "✦",
   ];
 

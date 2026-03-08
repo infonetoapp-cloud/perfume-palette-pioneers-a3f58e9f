@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
 const Newsletter = () => {
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
 
   return (
@@ -15,33 +17,28 @@ const Newsletter = () => {
           className="mx-auto max-w-lg text-center"
         >
           <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
-            İlk öğrenen siz olun
+            {t("newsletter.title")}
           </h2>
           <p className="mt-3 font-body text-sm text-primary-foreground/70">
-            Yeni koleksiyonlar, özel fırsatlar ve koku dünyasından ilham.
+            {t("newsletter.desc")}
           </p>
-
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="mt-8 flex flex-col gap-3 sm:flex-row"
-          >
+          <form onSubmit={(e) => e.preventDefault()} className="mt-8 flex flex-col gap-3 sm:flex-row">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="E-posta adresiniz"
+              placeholder={t("newsletter.placeholder")}
               className="flex-1 rounded-full border border-primary-foreground/20 bg-transparent px-5 py-3 font-body text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:outline-none"
             />
             <button
               type="submit"
               className="rounded-full bg-accent px-8 py-3 font-body text-sm font-semibold uppercase tracking-wider text-accent-foreground transition-all hover:bg-coral-light"
             >
-              Abone Ol
+              {t("newsletter.subscribe")}
             </button>
           </form>
-
           <p className="mt-4 font-body text-[11px] text-primary-foreground/40">
-            Gizliliğinize saygı duyuyoruz. İstediğiniz zaman iptal edebilirsiniz.
+            {t("newsletter.privacy")}
           </p>
         </motion.div>
       </div>
