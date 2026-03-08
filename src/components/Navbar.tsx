@@ -23,10 +23,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const languages: { code: Locale; label: string }[] = [
-    { code: "en", label: "English" },
-    { code: "es", label: "Español" },
-  ];
 
   return (
     <nav
