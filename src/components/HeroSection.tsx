@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback } from "react";
-import heroBg from "@/assets/hero-minimal-bg.jpg";
-import bottleClean from "@/assets/bottle-clean.webp";
+import heroStudio from "@/assets/hero-studio.jpg";
 import { useI18n } from "@/lib/i18n";
 
 interface Particle {
@@ -100,63 +99,53 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] overflow-hidden bg-black">
-      {/* Vintage background */}
+    <section className="relative min-h-[85vh] overflow-hidden bg-[#c8b8a8]">
+      {/* Studio background with bottle */}
       <img
-        src={heroBg}
-        alt=""
+        src={heroStudio}
+        alt="David Walker Perfume - Studio"
         className="absolute inset-0 h-full w-full object-cover object-center"
         loading="eager"
       />
 
-      {/* Bottle - placed on the right side on the velvet surface */}
-      <div className="absolute inset-0 flex items-end justify-end pr-[12%] md:pr-[18%] pb-[3%]">
-        <img
-          src={bottleClean}
-          alt="David Walker Perfume"
-          className="h-[45%] md:h-[58%] lg:h-[68%] object-contain drop-shadow-[0_10px_50px_rgba(0,0,0,0.7)]"
-          loading="eager"
-        />
-      </div>
-
-      {/* Gradient overlay for text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+      {/* Subtle gradient for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
 
       {/* Spray clickable area & effect */}
       <div className="absolute inset-0 z-10">
         <button
           onClick={() => { handleSpray("left"); handleSpray("right"); }}
-          className="absolute right-[10%] top-[15%] w-[25%] h-[70%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
+          className="absolute right-[5%] top-[10%] w-[30%] h-[80%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
           aria-label="Spray bottle"
         />
         <SprayEffect side="left" isActive={sprayLeft} />
         <SprayEffect side="right" isActive={sprayRight} />
       </div>
 
-      {/* Center brand text */}
-      <div className="relative z-20 flex min-h-[85vh] flex-col items-center justify-center text-center px-4">
+      {/* Brand text - left aligned */}
+      <div className="relative z-20 flex min-h-[85vh] flex-col items-start justify-center text-left px-8 md:px-16 lg:px-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col items-center"
+          className="flex flex-col items-start max-w-[50%] md:max-w-[45%]"
         >
-          <h1 className="font-display text-5xl font-bold text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] md:text-7xl lg:text-8xl xl:text-9xl tracking-wide">
+          <h1 className="font-display text-4xl font-bold text-charcoal md:text-6xl lg:text-7xl xl:text-8xl tracking-wide">
             DAVID WALKER
           </h1>
-          <p className="mt-3 font-body text-sm font-light uppercase tracking-[0.3em] text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)] md:text-base lg:text-lg">
+          <p className="mt-3 font-body text-sm font-light uppercase tracking-[0.3em] text-charcoal/70 md:text-base lg:text-lg">
             {t("hero.subtitle")}
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#products"
-              className="rounded-full bg-white px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-foreground transition-all hover:bg-secondary"
+              className="rounded-full bg-charcoal px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all hover:bg-charcoal/80"
             >
               {t("hero.cta1")}
             </a>
             <a
               href="#products"
-              className="rounded-full border-2 border-white/50 bg-white/10 px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-all hover:border-white hover:bg-white/20"
+              className="rounded-full border-2 border-charcoal/30 bg-transparent px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-charcoal transition-all hover:border-charcoal hover:bg-charcoal/5"
             >
               {t("hero.cta2")}
             </a>
