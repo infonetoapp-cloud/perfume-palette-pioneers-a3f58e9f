@@ -61,7 +61,7 @@ const Navbar = () => {
 
         {/* Center: Logo */}
         <Link to="/" className="absolute left-1/2 -translate-x-1/2">
-          <img src={logo} alt="Real Scents" className="h-20 md:h-24 w-auto" />
+          <img src={logo} alt="Real Scents" className="h-24 md:h-[6.5rem] w-auto" />
         </Link>
 
         {/* Right: Actions */}
