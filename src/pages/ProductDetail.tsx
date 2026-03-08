@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader2, ShoppingBag, ChevronRight, Leaf, Heart, Sparkles, Droplets, Flower2, Wind, Package, RotateCcw, HelpCircle } from "lucide-react";
+import { ArrowLeft, Loader2, ShoppingBag, ChevronRight, Heart, Sparkles, Droplets, Flower2, Wind, Flame, TreePine, Citrus, Package, RotateCcw, HelpCircle, Cherry } from "lucide-react";
 import { storefrontApiRequest, PRODUCT_BY_HANDLE_QUERY, PRODUCTS_QUERY, type ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { getProductMeta, type ProductMeta } from "@/lib/productMetadata";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -32,6 +33,18 @@ interface ProductNode {
   options: Array<{ name: string; values: string[] }>;
 }
 
+/* ── Icon helpers ── */
+const noteIconMap: Record<string, React.ReactNode> = {
+  floral: <Flower2 className="h-7 w-7 text-accent" />,
+  sweet: <Cherry className="h-7 w-7 text-accent" />,
+  warm: <Flame className="h-7 w-7 text-accent" />,
+  fresh: <Wind className="h-7 w-7 text-accent" />,
+  woody: <TreePine className="h-7 w-7 text-accent" />,
+  spicy: <Sparkles className="h-7 w-7 text-accent" />,
+  citrus: <Citrus className="h-7 w-7 text-accent" />,
+  musky: <Droplets className="h-7 w-7 text-accent" />,
+};
+
 /* ── JSON-LD Schema ── */
 const ProductJsonLd = ({ product, variant }: { product: ProductNode; variant: ProductNode["variants"]["edges"][0]["node"] }) => {
   const schema = {
@@ -52,7 +65,6 @@ const ProductJsonLd = ({ product, variant }: { product: ProductNode; variant: Pr
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 };
 
-/* ── Breadcrumb JSON-LD ── */
 const BreadcrumbJsonLd = ({ productTitle, handle }: { productTitle: string; handle: string }) => {
   const schema = {
     "@context": "https://schema.org",
@@ -66,41 +78,42 @@ const BreadcrumbJsonLd = ({ productTitle, handle }: { productTitle: string; hand
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 };
 
-/* ── Trust Badges ── */
-const TrustBadges = () => (
-  <div className="flex flex-wrap gap-3 mt-5">
-    {[
-      { icon: <Leaf className="h-3.5 w-3.5" />, label: "Vegan" },
-      { icon: <Heart className="h-3.5 w-3.5" />, label: "Cruelty-free" },
-      { icon: <Sparkles className="h-3.5 w-3.5" />, label: "Clean Ingredients" },
-    ].map((badge) => (
-      <span key={badge.label} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-3 py-1.5 font-body text-xs text-foreground">
-        {badge.icon} {badge.label}
-      </span>
-    ))}
-  </div>
-);
+/* ── Trust Badges (no Vegan) ── */
+const TrustBadges = ({ meta }: { meta: ProductMeta | null }) => {
+  const badges = [
+    { icon: <Heart className="h-3.5 w-3.5" />, label: "Cruelty-free" },
+    { icon: <Sparkles className="h-3.5 w-3.5" />, label: "Clean Ingredients" },
+    { icon: <Droplets className="h-3.5 w-3.5" />, label: "Long-lasting" },
+  ];
+  return (
+    <div className="flex flex-wrap gap-2 mt-5">
+      {badges.map((badge) => (
+        <span key={badge.label} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-3 py-1.5 font-body text-xs text-foreground">
+          {badge.icon} {badge.label}
+        </span>
+      ))}
+    </div>
+  );
+};
 
-/* ── Scent Notes ── */
-const ScentNotes = () => (
+/* ── Scent Notes (dynamic from meta) ── */
+const ScentNotes = ({ meta }: { meta: ProductMeta }) => (
   <div className="space-y-4">
     <div className="flex gap-6 justify-center py-4">
-      {[
-        { icon: <Wind className="h-7 w-7 text-accent" />, label: "Fresh" },
-        { icon: <Flower2 className="h-7 w-7 text-accent" />, label: "Floral" },
-        { icon: <Droplets className="h-7 w-7 text-accent" />, label: "Musky" },
-      ].map((note) => (
-        <div key={note.label} className="flex flex-col items-center gap-1.5">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary/60">{note.icon}</div>
-          <span className="font-body text-xs text-muted-foreground">{note.label}</span>
+      {meta.mainNotes.map((note) => (
+        <div key={note.name} className="flex flex-col items-center gap-1.5">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary/60">
+            {noteIconMap[note.icon] || <Droplets className="h-7 w-7 text-accent" />}
+          </div>
+          <span className="font-body text-xs text-muted-foreground">{note.name}</span>
         </div>
       ))}
     </div>
     <div className="space-y-3 text-sm">
       {[
-        { tier: "Top", desc: "The first notes you smell", notes: "Bergamot, Citrus, Green Leaves" },
-        { tier: "Middle", desc: "The heart of the perfume", notes: "Rose, Jasmine, White Flowers" },
-        { tier: "Base", desc: "The notes that linger all day", notes: "Musk, Amber, Sandalwood" },
+        { tier: "Top", desc: "İlk hissedilen notalar", notes: meta.scentNotes.top.join(", ") },
+        { tier: "Middle", desc: "Parfümün kalbi", notes: meta.scentNotes.middle.join(", ") },
+        { tier: "Base", desc: "Gün boyu kalıcı notalar", notes: meta.scentNotes.base.join(", ") },
       ].map((row) => (
         <div key={row.tier} className="flex items-start gap-3 rounded-lg bg-secondary/30 p-3">
           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-accent/10">
@@ -117,12 +130,12 @@ const ScentNotes = () => (
 );
 
 /* ── Scent Intensity Bar ── */
-const ScentIntensity = ({ level = "Medium" }: { level?: string }) => {
-  const levels = ["Soft", "Medium", "Strong"];
+const ScentIntensity = ({ level = "Medium" }: { level?: "Soft" | "Medium" | "Strong" }) => {
+  const levels: Array<"Soft" | "Medium" | "Strong"> = ["Soft", "Medium", "Strong"];
   const idx = levels.indexOf(level);
   return (
     <div className="mt-4 flex items-center gap-3">
-      <span className="font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">Intensity:</span>
+      <span className="font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">Yoğunluk:</span>
       <div className="flex items-center gap-1">
         {levels.map((l, i) => (
           <div key={l} className={`h-2 w-8 rounded-full ${i <= idx ? "bg-accent" : "bg-border"}`} />
@@ -134,33 +147,62 @@ const ScentIntensity = ({ level = "Medium" }: { level?: string }) => {
 };
 
 /* ── Product Info Accordions ── */
-const ProductAccordions = () => (
-  <Accordion type="multiple" className="mt-6 w-full" defaultValue={["scent-notes"]}>
-    <AccordionItem value="scent-notes">
-      <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Droplets className="h-4 w-4" /> Scent Notes</span>
-      </AccordionTrigger>
-      <AccordionContent>
-        <ScentNotes />
-      </AccordionContent>
-    </AccordionItem>
+const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
+  <Accordion type="multiple" className="mt-6 w-full" defaultValue={meta ? ["scent-notes"] : ["about"]}>
+    {meta && (
+      <AccordionItem value="scent-notes">
+        <AccordionTrigger className="font-display text-sm font-semibold">
+          <span className="flex items-center gap-2"><Droplets className="h-4 w-4" /> Koku Notaları</span>
+        </AccordionTrigger>
+        <AccordionContent>
+          <ScentNotes meta={meta} />
+        </AccordionContent>
+      </AccordionItem>
+    )}
 
     <AccordionItem value="about">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> About</span>
+        <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> Hakkında</span>
       </AccordionTrigger>
       <AccordionContent>
-        <div className="space-y-2 font-body text-sm text-muted-foreground">
-          <p>Crafted in collaboration with master perfumers using only the finest ingredients. Each bottle is a celebration of artistry and authenticity.</p>
-          <p><strong>Concentration:</strong> 18% Eau de Parfum</p>
-          <p><strong>Size:</strong> 50ml / 1.7oz</p>
+        <div className="space-y-3 font-body text-sm text-muted-foreground">
+          {meta && (
+            <>
+              <p className="text-foreground font-medium">{meta.feeling}</p>
+              <p>{meta.description}</p>
+              <div className="flex items-center gap-2 rounded-lg bg-secondary/40 px-3 py-2">
+                <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">İlham:</span>
+                <span className="text-foreground">{meta.inspiredBy} — {meta.inspiredBrand}</span>
+              </div>
+            </>
+          )}
+          <p><strong>Konsantrasyon:</strong> Eau de Parfum</p>
+          <p><strong>Boyut:</strong> 50ml / 1.7oz</p>
         </div>
       </AccordionContent>
     </AccordionItem>
 
+    {meta && (
+      <AccordionItem value="usage">
+        <AccordionTrigger className="font-display text-sm font-semibold">
+          <span className="flex items-center gap-2"><Wind className="h-4 w-4" /> Kullanım Havası</span>
+        </AccordionTrigger>
+        <AccordionContent>
+          <div className="font-body text-sm text-muted-foreground space-y-2">
+            <p>{meta.usage}</p>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {meta.badges.map((badge) => (
+                <span key={badge} className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">{badge}</span>
+              ))}
+            </div>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    )}
+
     <AccordionItem value="shipping">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Package className="h-4 w-4" /> Shipping</span>
+        <span className="flex items-center gap-2"><Package className="h-4 w-4" /> Kargo</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
@@ -173,29 +215,33 @@ const ProductAccordions = () => (
 
     <AccordionItem value="returns">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4" /> Returns</span>
+        <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4" /> İade</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
-          <p>We want you to love your scent. If not, returns must be postmarked within 30 days of the initial order.</p>
-          <p>Free exchanges available on all orders.</p>
+          <p>Kokunuzu sevmenizi istiyoruz. Memnun kalmazsanız, siparişin teslim tarihinden itibaren 30 gün içinde iade edebilirsiniz.</p>
+          <p>Tüm siparişlerde ücretsiz değişim imkânı.</p>
         </div>
       </AccordionContent>
     </AccordionItem>
 
     <AccordionItem value="faq">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><HelpCircle className="h-4 w-4" /> FAQs</span>
+        <span className="flex items-center gap-2"><HelpCircle className="h-4 w-4" /> SSS</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-3 font-body text-sm text-muted-foreground">
           <div>
-            <p className="font-semibold text-foreground">Are these fragrances long lasting?</p>
-            <p>Yes, they are designed to be very long lasting, just like designer fragrances.</p>
+            <p className="font-semibold text-foreground">Bu parfümler kalıcı mı?</p>
+            <p>Evet, yüksek konsantrasyonlu Eau de Parfum formülüyle uzun süre kalıcılık sağlar.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">How will I know what scent I like?</p>
-            <p>Browse our curated collections or reach out to us for personalized recommendations.</p>
+            <p className="font-semibold text-foreground">Hangi kokuyu seçeceğimi bilmiyorum?</p>
+            <p>Koleksiyonumuza göz atın veya bize ulaşın, size özel önerilerde bulunalım.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-foreground">Orijinal parfümlerle aynı mı?</p>
+            <p>Ürünlerimiz ilham aldığı kokuların yorumlarıdır. Aynı kalite standartlarında, daha uygun fiyatlarla sunulmaktadır.</p>
           </div>
         </div>
       </AccordionContent>
@@ -240,7 +286,7 @@ const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
 
   return (
     <section className="mt-16 border-t border-border pt-12">
-      <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">You Might Love</h2>
+      <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">Bunları da Sevebilirsin</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         {products.map((p) => {
           const img = p.node.images.edges[0]?.node;
@@ -284,6 +330,8 @@ const ProductDetail = () => {
   const addItem = useCartStore((s) => s.addItem);
   const isCartLoading = useCartStore((s) => s.isLoading);
 
+  const meta = handle ? getProductMeta(handle) : null;
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -298,7 +346,6 @@ const ProductDetail = () => {
     if (handle) fetchProduct();
   }, [handle]);
 
-  // Update document title for SEO
   useEffect(() => {
     if (product) {
       document.title = `${product.title} | Real Scents — Premium Perfumes`;
@@ -370,13 +417,21 @@ const ProductDetail = () => {
           <div className="grid gap-10 lg:grid-cols-2">
             {/* Images */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+              {/* Gender + Badges */}
+              {meta && (
+                <div className="mb-3 flex gap-2">
+                  <span className="rounded-full border border-border bg-secondary/50 px-3 py-1 font-body text-xs text-muted-foreground">
+                    {meta.gender === "women" ? "Women" : meta.gender === "men" ? "Men" : "Unisex"}
+                  </span>
+                  {meta.badges.slice(0, 2).map((b) => (
+                    <span key={b} className="rounded-full bg-accent/10 px-3 py-1 font-body text-xs text-accent">{b}</span>
+                  ))}
+                </div>
+              )}
+
               <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-muted">
                 {images[selectedImage] ? (
-                  <img
-                    src={images[selectedImage].node.url}
-                    alt={images[selectedImage].node.altText || product.title}
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={images[selectedImage].node.url} alt={images[selectedImage].node.altText || product.title} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full items-center justify-center"><ShoppingBag className="h-16 w-16 text-muted-foreground" /></div>
                 )}
@@ -384,11 +439,7 @@ const ProductDetail = () => {
               {images.length > 1 && (
                 <div className="mt-3 flex gap-2 overflow-x-auto">
                   {images.map((img, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedImage(idx)}
-                      className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all ${idx === selectedImage ? "border-accent" : "border-border"}`}
-                    >
+                    <button key={idx} onClick={() => setSelectedImage(idx)} className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all ${idx === selectedImage ? "border-accent" : "border-border"}`}>
                       <img src={img.node.url} alt="" className="h-full w-full object-cover" loading="lazy" />
                     </button>
                   ))}
@@ -401,24 +452,38 @@ const ProductDetail = () => {
               <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">{product.title}</h1>
               <p className="mt-1 font-body text-sm text-muted-foreground">Eau de Parfum · 50ml / 1.7oz</p>
 
+              {/* Inspired By */}
+              {meta && (
+                <p className="mt-2 font-body text-xs text-muted-foreground">
+                  İlham: <span className="font-semibold text-foreground">{meta.inspiredBy}</span> — {meta.inspiredBrand}
+                </p>
+              )}
+
               <div className="mt-4">
                 <span className="font-display text-2xl font-bold text-foreground">
                   ${variant ? parseFloat(variant.price.amount).toFixed(0) : parseFloat(product.priceRange.minVariantPrice.amount).toFixed(0)}
                 </span>
               </div>
 
-              {product.description && (
-                <p className="mt-5 font-body text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+              {/* Dynamic description from metadata or Shopify */}
+              <p className="mt-5 font-body text-sm leading-relaxed text-muted-foreground">
+                {meta ? meta.feeling + " " + meta.description : product.description}
+              </p>
+
+              {/* Product Tags - no "Crafted in France" */}
+              {meta && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 font-body text-xs text-accent">
+                    {meta.gender === "women" ? "Kadın Parfümü" : meta.gender === "men" ? "Erkek Parfümü" : "Unisex"}
+                  </span>
+                  <span className="rounded-full border border-border px-3 py-1 font-body text-xs text-muted-foreground">
+                    Kullanım: {meta.usage.split(",")[0]}
+                  </span>
+                </div>
               )}
 
-              {/* Product Tags */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-border px-3 py-1 font-body text-xs text-muted-foreground">Crafted in <strong className="text-accent">France</strong></span>
-                <span className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 font-body text-xs text-accent">Scent Family: Fresh</span>
-              </div>
-
-              <ScentIntensity level="Medium" />
-              <TrustBadges />
+              <ScentIntensity level={meta?.intensity || "Medium"} />
+              <TrustBadges meta={meta} />
 
               {/* Variant Selector */}
               {product.options.length > 0 && product.options[0].name !== "Title" && (
@@ -452,7 +517,7 @@ const ProductDetail = () => {
               </button>
 
               {/* Accordions */}
-              <ProductAccordions />
+              <ProductAccordions meta={meta} />
             </motion.div>
           </div>
 
