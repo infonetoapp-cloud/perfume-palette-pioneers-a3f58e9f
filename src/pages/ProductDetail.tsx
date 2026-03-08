@@ -170,10 +170,6 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
             <>
               <p className="text-foreground font-medium">{meta.feeling}</p>
               <p>{meta.description}</p>
-              <div className="flex items-center gap-2 rounded-lg bg-secondary/40 px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Inspired by:</span>
-                <span className="text-foreground">{meta.inspiredBy} — {meta.inspiredBrand}</span>
-              </div>
             </>
           )}
           <p><strong>Concentration:</strong> Eau de Parfum</p>
@@ -452,12 +448,8 @@ const ProductDetail = () => {
               <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">{product.title}</h1>
               <p className="mt-1 font-body text-sm text-muted-foreground">Eau de Parfum · 50ml / 1.7oz</p>
 
-              {/* Inspired By */}
-              {meta && (
-                <p className="mt-2 font-body text-xs text-muted-foreground">
-                  Inspired by: <span className="font-semibold text-foreground">{meta.inspiredBy}</span> — {meta.inspiredBrand}
-                </p>
-              )}
+
+
 
               <div className="mt-4">
                 <span className="font-display text-2xl font-bold text-foreground">
