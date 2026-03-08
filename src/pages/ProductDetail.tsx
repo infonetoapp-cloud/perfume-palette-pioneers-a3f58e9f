@@ -455,7 +455,7 @@ const ProductDetail = () => {
               {/* Inspired By */}
               {meta && (
                 <p className="mt-2 font-body text-xs text-muted-foreground">
-                  İlham: <span className="font-semibold text-foreground">{meta.inspiredBy}</span> — {meta.inspiredBrand}
+                  Inspired by: <span className="font-semibold text-foreground">{meta.inspiredBy}</span> — {meta.inspiredBrand}
                 </p>
               )}
 
