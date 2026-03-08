@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, User, Menu, X, ChevronDown, Globe } from "lucide-react";
+import { Search, User, Menu, X, ChevronDown } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Link } from "react-router-dom";
-import { useI18n, Locale } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 
 const Navbar = () => {
-  const { t, locale, setLocale } = useI18n();
+  const { t } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
 
   const navLinks = [
     { label: t("nav.perfumes"), href: "#products", hasDropdown: true },
@@ -24,10 +23,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const languages: { code: Locale; label: string }[] = [
-    { code: "en", label: "English" },
-    { code: "es", label: "Español" },
-  ];
 
   return (
     <nav
@@ -95,34 +90,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Language switcher */}
-          <div className="relative">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 rounded-full border border-border px-2.5 py-1.5 font-body text-xs font-medium text-foreground transition-all hover:bg-muted"
-            >
-              <Globe size={14} />
-              <span className="uppercase">{locale}</span>
-            </button>
-            {langOpen && (
-              <div className="absolute right-0 top-full mt-1 rounded-xl border border-border bg-background p-1 shadow-elevated z-50">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      setLocale(lang.code);
-                      setLangOpen(false);
-                    }}
-                    className={`block w-full rounded-lg px-4 py-2 text-left font-body text-sm transition-all hover:bg-muted ${
-                      locale === lang.code ? "font-semibold text-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           <button
             aria-label={t("nav.search")}
@@ -182,17 +149,6 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <div className="mt-2 flex gap-2 px-3">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => { setLocale(lang.code); setMenuOpen(false); }}
-                    className={`rounded-full border px-4 py-2 font-body text-sm ${locale === lang.code ? "border-foreground bg-foreground text-background" : "border-border text-foreground"}`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
             </div>
           </motion.div>
         )}
