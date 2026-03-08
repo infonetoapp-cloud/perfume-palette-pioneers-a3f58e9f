@@ -5,46 +5,43 @@ const Newsletter = () => {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="bg-background py-24 lg:py-32">
-      <div className="container mx-auto px-6 lg:px-12">
+    <section className="bg-primary py-20 lg:py-24">
+      <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mx-auto max-w-xl text-center"
+          className="mx-auto max-w-lg text-center"
         >
-          <span className="mb-3 block font-body text-xs font-medium uppercase tracking-[0.4em] text-accent">
-            Bülten
-          </span>
-          <h2 className="mb-4 font-display text-3xl font-light text-foreground md:text-4xl">
-            İlk öğrenen <span className="italic">siz olun</span>
+          <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
+            İlk öğrenen siz olun
           </h2>
-          <p className="mb-8 font-body text-sm text-muted-foreground">
-            Yeni koleksiyonlar, özel fırsatlar ve koku dünyasından ilham veren içerikler.
+          <p className="mt-3 font-body text-sm text-primary-foreground/70">
+            Yeni koleksiyonlar, özel fırsatlar ve koku dünyasından ilham.
           </p>
 
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="flex flex-col gap-3 sm:flex-row"
+            className="mt-8 flex flex-col gap-3 sm:flex-row"
           >
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="E-posta adresiniz"
-              className="flex-1 rounded-sm border border-border bg-transparent px-5 py-3.5 font-body text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+              className="flex-1 rounded-full border border-primary-foreground/20 bg-transparent px-5 py-3 font-body text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:outline-none"
             />
             <button
               type="submit"
-              className="rounded-sm bg-primary px-8 py-3.5 font-body text-sm font-medium uppercase tracking-widest text-primary-foreground transition-all hover:bg-accent"
+              className="rounded-full bg-accent px-8 py-3 font-body text-sm font-semibold uppercase tracking-wider text-accent-foreground transition-all hover:bg-coral-light"
             >
               Abone Ol
             </button>
           </form>
 
-          <p className="mt-4 font-body text-[10px] text-muted-foreground">
-            Gizliliğinize saygı duyuyoruz. İstediğiniz zaman aboneliğinizi iptal edebilirsiniz.
+          <p className="mt-4 font-body text-[11px] text-primary-foreground/40">
+            Gizliliğinize saygı duyuyoruz. İstediğiniz zaman iptal edebilirsiniz.
           </p>
         </motion.div>
       </div>

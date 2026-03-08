@@ -1,25 +1,25 @@
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-background py-16">
-      <div className="container mx-auto px-6 lg:px-12">
+    <footer className="border-t border-border bg-background py-14">
+      <div className="container mx-auto px-4 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <h3 className="mb-4 font-display text-xl font-semibold text-foreground">
+            <h3 className="font-display text-lg font-bold text-foreground">
               Real Scents
             </h3>
-            <p className="font-body text-sm leading-relaxed text-muted-foreground">
-              Seçkin parfümlerin sessiz lüksü. Her şişede bir hikaye.
+            <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">
+              Seçkin parfümlerin adresi. Her şişede bir hikaye.
             </p>
           </div>
 
           {/* Shop */}
           <div>
-            <h4 className="mb-4 font-body text-xs font-medium uppercase tracking-[0.3em] text-foreground">
+            <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-widest text-foreground">
               Alışveriş
             </h4>
-            <ul className="flex flex-col gap-2">
-              {["Tüm Parfümler", "Kadın", "Erkek", "Yeni Gelenler", "Çok Satanlar"].map((item) => (
+            <ul className="flex flex-col gap-2.5">
+              {["Tüm Parfümler", "Kadın", "Erkek", "Yeni Gelenler"].map((item) => (
                 <li key={item}>
                   <a href="#" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
                     {item}
@@ -31,11 +31,11 @@ const Footer = () => {
 
           {/* Info */}
           <div>
-            <h4 className="mb-4 font-body text-xs font-medium uppercase tracking-[0.3em] text-foreground">
+            <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-widest text-foreground">
               Bilgi
             </h4>
-            <ul className="flex flex-col gap-2">
-              {["Hakkımızda", "Kargo & İade", "Gizlilik Politikası", "Kullanım Koşulları", "SSS"].map((item) => (
+            <ul className="flex flex-col gap-2.5">
+              {["Hakkımızda", "Kargo & İade", "Gizlilik Politikası", "SSS"].map((item) => (
                 <li key={item}>
                   <a href="#" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
                     {item}
@@ -45,21 +45,19 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Social */}
           <div>
-            <h4 className="mb-4 font-body text-xs font-medium uppercase tracking-[0.3em] text-foreground">
-              İletişim
+            <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-widest text-foreground">
+              Sosyal
             </h4>
-            <ul className="flex flex-col gap-2 font-body text-sm text-muted-foreground">
-              <li>info@realscents.com</li>
-              <li>+90 212 000 00 00</li>
-              <li className="mt-4 flex gap-4">
-                {["Instagram", "Twitter", "Pinterest"].map((social) => (
-                  <a key={social} href="#" className="text-xs uppercase tracking-widest transition-colors hover:text-foreground">
+            <ul className="flex flex-col gap-2.5">
+              {["Instagram", "Twitter", "Pinterest", "TikTok"].map((social) => (
+                <li key={social}>
+                  <a href="#" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
                     {social}
                   </a>
-                ))}
-              </li>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
