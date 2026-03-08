@@ -109,24 +109,24 @@ const HeroSection = () => {
         loading="eager"
       />
 
-      {/* Two bottles on top of background */}
-      <div className="absolute inset-0 flex items-end justify-between px-[4%] md:px-[8%] lg:px-[12%] pb-[8%]">
+      {/* Two bottles on vintage surface */}
+      <div className="absolute inset-0 flex items-end justify-center gap-[8%] md:gap-[12%] pb-[3%]">
         <img
           src={bottleCutout}
           alt="David Walker Perfume"
-          className="h-[50%] md:h-[65%] lg:h-[75%] object-contain drop-shadow-[0_5px_30px_rgba(0,0,0,0.3)]"
+          className="h-[45%] md:h-[60%] lg:h-[70%] object-contain drop-shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
           loading="eager"
         />
         <img
           src={bottleCutout}
           alt="David Walker Perfume"
-          className="h-[50%] md:h-[65%] lg:h-[75%] object-contain drop-shadow-[0_5px_30px_rgba(0,0,0,0.3)]"
+          className="h-[45%] md:h-[60%] lg:h-[70%] object-contain drop-shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
           loading="eager"
         />
       </div>
 
       {/* Gradient overlay for text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30" />
 
       {/* Spray clickable areas & effects */}
       <div className="absolute inset-0 z-10">
