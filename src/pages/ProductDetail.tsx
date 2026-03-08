@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2, ShoppingBag } from "lucide-react";
 import { storefrontApiRequest, PRODUCT_BY_HANDLE_QUERY } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -73,9 +74,10 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <>
+        <AnnouncementBar />
         <Navbar />
         <div className="flex min-h-screen items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
       </>
     );
@@ -84,9 +86,10 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <>
+        <AnnouncementBar />
         <Navbar />
         <div className="flex min-h-screen flex-col items-center justify-center gap-4">
-          <h1 className="font-display text-3xl text-foreground">Ürün bulunamadı</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">Ürün bulunamadı</h1>
           <Link to="/" className="font-body text-sm text-accent hover:underline">
             Ana sayfaya dön
           </Link>
@@ -100,18 +103,19 @@ const ProductDetail = () => {
 
   return (
     <>
+      <AnnouncementBar />
       <Navbar />
-      <main className="min-h-screen bg-background pt-24">
-        <div className="container mx-auto px-6 py-12 lg:px-12">
-          <Link to="/" className="mb-8 inline-flex items-center gap-2 font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
+      <main className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 lg:px-8 lg:py-12">
+          <Link to="/" className="mb-6 inline-flex items-center gap-2 font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
             <ArrowLeft size={16} />
             Geri Dön
           </Link>
 
-          <div className="grid gap-12 lg:grid-cols-2">
+          <div className="grid gap-10 lg:grid-cols-2">
             {/* Images */}
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-              <div className="aspect-[3/4] overflow-hidden rounded-sm bg-muted">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+              <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-muted">
                 {images[selectedImage] ? (
                   <img
                     src={images[selectedImage].node.url}
@@ -125,12 +129,12 @@ const ProductDetail = () => {
                 )}
               </div>
               {images.length > 1 && (
-                <div className="mt-4 flex gap-3">
+                <div className="mt-3 flex gap-2">
                   {images.map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSelectedImage(idx)}
-                      className={`h-20 w-20 overflow-hidden rounded-sm border-2 transition-all ${
+                      className={`h-16 w-16 overflow-hidden rounded-lg border-2 transition-all ${
                         idx === selectedImage ? "border-accent" : "border-border"
                       }`}
                     >
@@ -142,30 +146,30 @@ const ProductDetail = () => {
             </motion.div>
 
             {/* Details */}
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-              <h1 className="font-display text-4xl font-light text-foreground md:text-5xl">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+              <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
                 {product.title}
               </h1>
 
               <div className="mt-4">
-                <span className="font-display text-2xl font-semibold text-foreground">
-                  {variant ? parseFloat(variant.price.amount).toFixed(2) : parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)}{" "}
-                  {variant?.price.currencyCode || product.priceRange.minVariantPrice.currencyCode}
+                <span className="font-display text-2xl font-bold text-foreground">
+                  {variant ? parseFloat(variant.price.amount).toFixed(0) : parseFloat(product.priceRange.minVariantPrice.amount).toFixed(0)}{" "}
+                  {(variant?.price.currencyCode || product.priceRange.minVariantPrice.currencyCode) === "TRY" ? "₺" : variant?.price.currencyCode}
                 </span>
               </div>
 
               {product.description && (
-                <p className="mt-6 font-body text-base leading-relaxed text-muted-foreground">
+                <p className="mt-5 font-body text-sm leading-relaxed text-muted-foreground">
                   {product.description}
                 </p>
               )}
 
-              {/* Options / Variants */}
+              {/* Options */}
               {product.options.length > 0 && product.options[0].name !== "Title" && (
-                <div className="mt-8 space-y-4">
+                <div className="mt-6 space-y-4">
                   {product.options.map((option) => (
                     <div key={option.name}>
-                      <label className="mb-2 block font-body text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                      <label className="mb-2 block font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                         {option.name}
                       </label>
                       <div className="flex flex-wrap gap-2">
@@ -178,10 +182,10 @@ const ProductDetail = () => {
                             <button
                               key={value}
                               onClick={() => variantIdx >= 0 && setSelectedVariantIdx(variantIdx)}
-                              className={`rounded-sm border px-4 py-2 font-body text-sm transition-all ${
+                              className={`rounded-full border px-5 py-2 font-body text-sm transition-all ${
                                 isSelected
-                                  ? "border-accent bg-accent text-primary-foreground"
-                                  : "border-border text-foreground hover:border-accent"
+                                  ? "border-foreground bg-foreground text-background"
+                                  : "border-border text-foreground hover:border-foreground"
                               }`}
                             >
                               {value}
@@ -197,14 +201,14 @@ const ProductDetail = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={isCartLoading || !variant?.availableForSale}
-                className="mt-8 w-full rounded-sm bg-primary px-8 py-4 font-body text-sm font-medium uppercase tracking-widest text-primary-foreground transition-all hover:bg-accent disabled:opacity-50"
+                className="mt-8 w-full rounded-full bg-primary px-8 py-4 font-body text-sm font-semibold uppercase tracking-wider text-primary-foreground transition-all hover:bg-foreground/80 disabled:opacity-50"
               >
                 {isCartLoading ? (
                   <Loader2 className="mx-auto h-5 w-5 animate-spin" />
                 ) : variant?.availableForSale ? (
-                  "Sepete Ekle"
+                  "SEPETE EKLE"
                 ) : (
-                  "Tükendi"
+                  "TÜKENDİ"
                 )}
               </button>
             </motion.div>
