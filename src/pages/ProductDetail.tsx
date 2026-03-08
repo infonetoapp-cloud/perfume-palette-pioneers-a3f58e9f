@@ -79,10 +79,10 @@ const BreadcrumbJsonLd = ({ productTitle, handle }: { productTitle: string; hand
 };
 
 /* ── Trust Badges (no Vegan) ── */
-const TrustBadges = ({ meta }: { meta: ProductMeta | null }) => {
+const TrustBadges = () => {
   const badges = [
-    { icon: <Heart className="h-3.5 w-3.5" />, label: "Cruelty-free" },
-    { icon: <Sparkles className="h-3.5 w-3.5" />, label: "Clean Ingredients" },
+    { icon: <Sparkles className="h-3.5 w-3.5" />, label: "IFRA Compliant" },
+    { icon: <Heart className="h-3.5 w-3.5" />, label: "EU Standards" },
     { icon: <Droplets className="h-3.5 w-3.5" />, label: "Long-lasting" },
   ];
   return (
