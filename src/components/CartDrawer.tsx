@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ShoppingBag, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
+import { useI18n } from "@/lib/i18n";
 
 export const CartDrawer = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const { items, isLoading, isSyncing, updateQuantity, removeItem, getCheckoutUrl, syncCart } = useCartStore();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -23,7 +25,7 @@ export const CartDrawer = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <button aria-label="Sepet" className="relative text-foreground transition-colors hover:text-accent">
+        <button aria-label="Cart" className="relative text-foreground transition-colors hover:text-accent">
           <ShoppingBag size={20} />
           {totalItems > 0 && (
             <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
@@ -34,9 +36,9 @@ export const CartDrawer = () => {
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-background">
         <SheetHeader className="flex-shrink-0">
-          <SheetTitle className="font-display text-xl font-bold">Sepet</SheetTitle>
+          <SheetTitle className="font-display text-xl font-bold">{t("cart.title")}</SheetTitle>
           <SheetDescription className="font-body text-sm">
-            {totalItems === 0 ? "Sepetiniz boş" : `${totalItems} ürün`}
+            {totalItems === 0 ? t("cart.empty") : `${totalItems} ${totalItems !== 1 ? t("cart.items") : t("cart.item")}`}
           </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col flex-1 pt-4 min-h-0">
@@ -44,7 +46,7 @@ export const CartDrawer = () => {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <ShoppingBag className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground font-body text-sm">Sepetiniz boş</p>
+                <p className="text-muted-foreground font-body text-sm">{t("cart.empty")}</p>
               </div>
             </div>
           ) : (
@@ -62,7 +64,7 @@ export const CartDrawer = () => {
                         <h4 className="font-display text-sm font-semibold text-foreground truncate">{item.product.node.title}</h4>
                         <p className="text-xs text-muted-foreground font-body mt-0.5">{item.selectedOptions.map(o => o.value).join(' · ')}</p>
                         <p className="font-display text-sm font-bold mt-1 text-foreground">
-                          {parseFloat(item.price.amount).toFixed(0)} {item.price.currencyCode === "TRY" ? "₺" : item.price.currencyCode}
+                          ${parseFloat(item.price.amount).toFixed(0)}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <button className="h-7 w-7 flex items-center justify-center rounded-full border border-border text-foreground hover:bg-muted" onClick={() => updateQuantity(item.variantId, item.quantity - 1)}>
@@ -83,10 +85,8 @@ export const CartDrawer = () => {
               </div>
               <div className="flex-shrink-0 space-y-3 pt-4 border-t border-border">
                 <div className="flex justify-between items-center">
-                  <span className="font-display text-base font-semibold">Toplam</span>
-                  <span className="font-display text-lg font-bold">
-                    {totalPrice.toFixed(0)} {items[0]?.price.currencyCode === "TRY" ? "₺" : items[0]?.price.currencyCode || "TRY"}
-                  </span>
+                  <span className="font-display text-base font-semibold">{t("cart.total")}</span>
+                  <span className="font-display text-lg font-bold">${totalPrice.toFixed(0)}</span>
                 </div>
                 <Button
                   onClick={handleCheckout}
@@ -94,7 +94,7 @@ export const CartDrawer = () => {
                   size="lg"
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
-                  {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <><ExternalLink className="w-4 h-4 mr-2" />ÖDEMEYE GEÇ</>}
+                  {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <><ExternalLink className="w-4 h-4 mr-2" />{t("cart.checkout")}</>}
                 </Button>
               </div>
             </>
