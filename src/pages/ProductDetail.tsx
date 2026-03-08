@@ -176,8 +176,8 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
               </div>
             </>
           )}
-          <p><strong>Konsantrasyon:</strong> Eau de Parfum</p>
-          <p><strong>Boyut:</strong> 50ml / 1.7oz</p>
+          <p><strong>Concentration:</strong> Eau de Parfum</p>
+          <p><strong>Size:</strong> 50ml / 1.7oz</p>
         </div>
       </AccordionContent>
     </AccordionItem>
