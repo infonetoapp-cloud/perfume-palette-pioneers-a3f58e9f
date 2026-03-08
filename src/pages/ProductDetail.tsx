@@ -162,7 +162,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="about">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> Hakkında</span>
+        <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> About</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-3 font-body text-sm text-muted-foreground">
