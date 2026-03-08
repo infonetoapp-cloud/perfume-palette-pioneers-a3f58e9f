@@ -215,7 +215,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="returns">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4" /> İade</span>
+        <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4" /> Returns</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
