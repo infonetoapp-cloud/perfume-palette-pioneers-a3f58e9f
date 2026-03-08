@@ -219,8 +219,8 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
-          <p>Kokunuzu sevmenizi istiyoruz. Memnun kalmazsanız, siparişin teslim tarihinden itibaren 30 gün içinde iade edebilirsiniz.</p>
-          <p>Tüm siparişlerde ücretsiz değişim imkânı.</p>
+          <p>We want you to love your scent. If you're not satisfied, you can return it within 30 days of delivery.</p>
+          <p>Free exchanges on all orders.</p>
         </div>
       </AccordionContent>
     </AccordionItem>
