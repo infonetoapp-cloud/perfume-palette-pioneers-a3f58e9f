@@ -202,7 +202,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="shipping">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Package className="h-4 w-4" /> Kargo</span>
+        <span className="flex items-center gap-2"><Package className="h-4 w-4" /> Shipping</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
