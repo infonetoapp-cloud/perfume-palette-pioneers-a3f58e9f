@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import heroWoman from "@/assets/hero-woman.jpg";
-import heroMan from "@/assets/hero-man.jpg";
+import heroCombined from "@/assets/hero-combined.jpg";
 import { useI18n } from "@/lib/i18n";
 
 const HeroSection = () => {
@@ -8,28 +7,16 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[85vh] overflow-hidden bg-charcoal">
-      {/* Two images side by side filling the hero */}
-      <div className="absolute inset-0 grid grid-cols-2">
-        <div className="relative overflow-hidden">
-          <img
-            src={heroWoman}
-            alt="David Walker Women's Fragrance"
-            className="h-full w-full object-cover object-center"
-            loading="eager"
-          />
-        </div>
-        <div className="relative overflow-hidden">
-          <img
-            src={heroMan}
-            alt="David Walker Men's Fragrance"
-            className="h-full w-full object-cover object-center"
-            loading="eager"
-          />
-        </div>
-      </div>
+      {/* Full-bleed background image */}
+      <img
+        src={heroCombined}
+        alt="David Walker - Women's and Men's Fragrance"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+        loading="eager"
+      />
 
       {/* Gradient overlay for text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-black/15" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20" />
 
       {/* Center brand text */}
       <div className="relative z-10 flex min-h-[85vh] flex-col items-center justify-center text-center px-4">
