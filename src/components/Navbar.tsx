@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 
 const Navbar = () => {
-  const { t, locale, setLocale } = useI18n();
+  const { t } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
