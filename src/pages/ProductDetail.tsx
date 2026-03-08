@@ -111,9 +111,9 @@ const ScentNotes = ({ meta }: { meta: ProductMeta }) => (
     </div>
     <div className="space-y-3 text-sm">
       {[
-        { tier: "Top", desc: "İlk hissedilen notalar", notes: meta.scentNotes.top.join(", ") },
-        { tier: "Middle", desc: "Parfümün kalbi", notes: meta.scentNotes.middle.join(", ") },
-        { tier: "Base", desc: "Gün boyu kalıcı notalar", notes: meta.scentNotes.base.join(", ") },
+      { tier: "Top", desc: "The first impression", notes: meta.scentNotes.top.join(", ") },
+        { tier: "Middle", desc: "The heart of the fragrance", notes: meta.scentNotes.middle.join(", ") },
+        { tier: "Base", desc: "Long-lasting foundation", notes: meta.scentNotes.base.join(", ") },
       ].map((row) => (
         <div key={row.tier} className="flex items-start gap-3 rounded-lg bg-secondary/30 p-3">
           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-accent/10">
@@ -135,7 +135,7 @@ const ScentIntensity = ({ level = "Medium" }: { level?: "Soft" | "Medium" | "Str
   const idx = levels.indexOf(level);
   return (
     <div className="mt-4 flex items-center gap-3">
-      <span className="font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">Yoğunluk:</span>
+      <span className="font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">Intensity:</span>
       <div className="flex items-center gap-1">
         {levels.map((l, i) => (
           <div key={l} className={`h-2 w-8 rounded-full ${i <= idx ? "bg-accent" : "bg-border"}`} />
@@ -152,7 +152,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
     {meta && (
       <AccordionItem value="scent-notes">
         <AccordionTrigger className="font-display text-sm font-semibold">
-          <span className="flex items-center gap-2"><Droplets className="h-4 w-4" /> Koku Notaları</span>
+          <span className="flex items-center gap-2"><Droplets className="h-4 w-4" /> Scent Notes</span>
         </AccordionTrigger>
         <AccordionContent>
           <ScentNotes meta={meta} />
@@ -162,7 +162,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="about">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> Hakkında</span>
+        <span className="flex items-center gap-2"><Sparkles className="h-4 w-4" /> About</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-3 font-body text-sm text-muted-foreground">
@@ -171,13 +171,13 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
               <p className="text-foreground font-medium">{meta.feeling}</p>
               <p>{meta.description}</p>
               <div className="flex items-center gap-2 rounded-lg bg-secondary/40 px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">İlham:</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Inspired by:</span>
                 <span className="text-foreground">{meta.inspiredBy} — {meta.inspiredBrand}</span>
               </div>
             </>
           )}
-          <p><strong>Konsantrasyon:</strong> Eau de Parfum</p>
-          <p><strong>Boyut:</strong> 50ml / 1.7oz</p>
+          <p><strong>Concentration:</strong> Eau de Parfum</p>
+          <p><strong>Size:</strong> 50ml / 1.7oz</p>
         </div>
       </AccordionContent>
     </AccordionItem>
@@ -185,7 +185,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
     {meta && (
       <AccordionItem value="usage">
         <AccordionTrigger className="font-display text-sm font-semibold">
-          <span className="flex items-center gap-2"><Wind className="h-4 w-4" /> Kullanım Havası</span>
+          <span className="flex items-center gap-2"><Wind className="h-4 w-4" /> When to Wear</span>
         </AccordionTrigger>
         <AccordionContent>
           <div className="font-body text-sm text-muted-foreground space-y-2">
@@ -202,7 +202,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="shipping">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><Package className="h-4 w-4" /> Kargo</span>
+        <span className="flex items-center gap-2"><Package className="h-4 w-4" /> Shipping</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
@@ -215,33 +215,33 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="returns">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4" /> İade</span>
+        <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4" /> Returns</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-2 font-body text-sm text-muted-foreground">
-          <p>Kokunuzu sevmenizi istiyoruz. Memnun kalmazsanız, siparişin teslim tarihinden itibaren 30 gün içinde iade edebilirsiniz.</p>
-          <p>Tüm siparişlerde ücretsiz değişim imkânı.</p>
+          <p>We want you to love your scent. If you're not satisfied, you can return it within 30 days of delivery.</p>
+          <p>Free exchanges on all orders.</p>
         </div>
       </AccordionContent>
     </AccordionItem>
 
     <AccordionItem value="faq">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><HelpCircle className="h-4 w-4" /> SSS</span>
+        <span className="flex items-center gap-2"><HelpCircle className="h-4 w-4" /> FAQ</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-3 font-body text-sm text-muted-foreground">
           <div>
-            <p className="font-semibold text-foreground">Bu parfümler kalıcı mı?</p>
-            <p>Evet, yüksek konsantrasyonlu Eau de Parfum formülüyle uzun süre kalıcılık sağlar.</p>
+            <p className="font-semibold text-foreground">Are these fragrances long-lasting?</p>
+            <p>Yes, our Eau de Parfum concentration ensures lasting performance throughout the day.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">Hangi kokuyu seçeceğimi bilmiyorum?</p>
-            <p>Koleksiyonumuza göz atın veya bize ulaşın, size özel önerilerde bulunalım.</p>
+            <p className="font-semibold text-foreground">I don't know which scent to choose?</p>
+            <p>Browse our collection or contact us — we'll help you find your perfect match.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">Orijinal parfümlerle aynı mı?</p>
-            <p>Ürünlerimiz ilham aldığı kokuların yorumlarıdır. Aynı kalite standartlarında, daha uygun fiyatlarla sunulmaktadır.</p>
+            <p className="font-semibold text-foreground">Are these the same as the originals?</p>
+            <p>Our fragrances are inspired interpretations. They capture the essence of the original at a more accessible price point.</p>
           </div>
         </div>
       </AccordionContent>
@@ -286,7 +286,7 @@ const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
 
   return (
     <section className="mt-16 border-t border-border pt-12">
-      <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">Bunları da Sevebilirsin</h2>
+      <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">You May Also Like</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         {products.map((p) => {
           const img = p.node.images.edges[0]?.node;
@@ -455,7 +455,7 @@ const ProductDetail = () => {
               {/* Inspired By */}
               {meta && (
                 <p className="mt-2 font-body text-xs text-muted-foreground">
-                  İlham: <span className="font-semibold text-foreground">{meta.inspiredBy}</span> — {meta.inspiredBrand}
+                  Inspired by: <span className="font-semibold text-foreground">{meta.inspiredBy}</span> — {meta.inspiredBrand}
                 </p>
               )}
 
@@ -474,10 +474,10 @@ const ProductDetail = () => {
               {meta && (
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 font-body text-xs text-accent">
-                    {meta.gender === "women" ? "Kadın Parfümü" : meta.gender === "men" ? "Erkek Parfümü" : "Unisex"}
+                    {meta.gender === "women" ? "Women's Perfume" : meta.gender === "men" ? "Men's Perfume" : "Unisex"}
                   </span>
                   <span className="rounded-full border border-border px-3 py-1 font-body text-xs text-muted-foreground">
-                    Kullanım: {meta.usage.split(",")[0]}
+                    Best for: {meta.usage.split(",")[0]}
                   </span>
                 </div>
               )}
