@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, User, Menu, X, ChevronDown, Globe } from "lucide-react";
+import { Search, User, Menu, X, ChevronDown } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Link } from "react-router-dom";
 import { useI18n, Locale } from "@/lib/i18n";
