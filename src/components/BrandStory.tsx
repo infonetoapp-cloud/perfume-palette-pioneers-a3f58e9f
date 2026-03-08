@@ -16,7 +16,7 @@ const BrandStory = () => {
             transition={{ duration: 0.7 }}
             className="overflow-hidden rounded-2xl"
           >
-            <img src={brandStoryImg} alt="Perfume atelier" className="h-full w-full object-cover" loading="lazy" />
+            <img src={heroProduct} alt="Perfume atelier" className="h-full w-full object-cover" loading="lazy" />
           </motion.div>
 
           <motion.div

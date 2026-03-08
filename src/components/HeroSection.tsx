@@ -9,7 +9,7 @@ const HeroSection = () => {
 
   const slides = [
     {
-      image: heroDossier1,
+      image: heroProduct,
       badge: t("hero.badge"),
       title: t("hero.title"),
       subtitle: t("hero.subtitle"),

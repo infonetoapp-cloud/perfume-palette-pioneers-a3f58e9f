@@ -6,9 +6,9 @@ const CategoryCards = () => {
   const { t } = useI18n();
 
   const categories = [
-    { label: t("category.women"), image: categoryWomen, href: "#products" },
-    { label: t("category.men"), image: categoryMen, href: "#products" },
-    { label: t("category.unisex"), image: categoryUnisex, href: "#products" },
+    { label: t("category.women"), image: heroProduct, href: "#products" },
+    { label: t("category.men"), image: heroProduct, href: "#products" },
+    { label: t("category.unisex"), image: heroProduct, href: "#products" },
   ];
 
   return (
