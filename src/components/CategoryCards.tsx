@@ -14,7 +14,7 @@ const CategoryCards = () => {
   return (
     <section className="bg-background py-12 lg:py-16">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {categories.map((cat, i) => (
             <motion.a
               key={cat.label}
