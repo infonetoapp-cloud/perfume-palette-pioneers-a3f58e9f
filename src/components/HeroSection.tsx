@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback } from "react";
-import heroVintage from "@/assets/hero-vintage.jpg";
+import heroBg from "@/assets/hero-vintage-bg2.jpg";
+import bottleClean from "@/assets/bottle-clean.webp";
 import { useI18n } from "@/lib/i18n";
 
 interface Particle {
@@ -99,23 +100,33 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] overflow-hidden bg-charcoal">
-      {/* Full hero image */}
+    <section className="relative min-h-[85vh] overflow-hidden bg-black">
+      {/* Vintage background */}
       <img
-        src={heroVintage}
-        alt="David Walker Perfume - Vintage Studio"
+        src={heroBg}
+        alt=""
         className="absolute inset-0 h-full w-full object-cover object-center"
         loading="eager"
       />
 
+      {/* Bottle - placed on the right side on the velvet surface */}
+      <div className="absolute inset-0 flex items-end justify-end pr-[12%] md:pr-[18%] pb-[3%]">
+        <img
+          src={bottleClean}
+          alt="David Walker Perfume"
+          className="h-[45%] md:h-[58%] lg:h-[68%] object-contain drop-shadow-[0_10px_50px_rgba(0,0,0,0.7)]"
+          loading="eager"
+        />
+      </div>
+
       {/* Gradient overlay for text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
       {/* Spray clickable area & effect */}
       <div className="absolute inset-0 z-10">
         <button
           onClick={() => { handleSpray("left"); handleSpray("right"); }}
-          className="absolute left-[40%] right-[20%] top-[10%] h-[80%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
+          className="absolute right-[10%] top-[15%] w-[25%] h-[70%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
           aria-label="Spray bottle"
         />
         <SprayEffect side="left" isActive={sprayLeft} />
