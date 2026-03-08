@@ -483,7 +483,7 @@ const ProductDetail = () => {
               )}
 
               <ScentIntensity level={meta?.intensity || "Medium"} />
-              <TrustBadges meta={meta} />
+              <TrustBadges />
 
               {/* Variant Selector */}
               {product.options.length > 0 && product.options[0].name !== "Title" && (
