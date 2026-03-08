@@ -109,12 +109,13 @@ const HeroSection = () => {
         loading="eager"
       />
 
-      {/* Single bottle centered on surface */}
-      <div className="absolute inset-0 flex items-end justify-center pb-[2%]">
+      {/* Single bottle on the tray */}
+      <div className="absolute inset-0 flex items-end justify-center" style={{ paddingBottom: '4%', paddingLeft: '2%' }}>
         <img
           src={bottleCutout}
           alt="David Walker Perfume"
-          className="h-[55%] md:h-[65%] lg:h-[75%] object-contain mix-blend-lighten drop-shadow-[0_8px_50px_rgba(0,0,0,0.6)]"
+          className="h-[50%] md:h-[62%] lg:h-[72%] object-contain drop-shadow-[0_10px_60px_rgba(0,0,0,0.7)]"
+          style={{ marginLeft: '-8%' }}
           loading="eager"
         />
       </div>
