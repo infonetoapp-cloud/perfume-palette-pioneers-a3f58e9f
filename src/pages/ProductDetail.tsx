@@ -185,7 +185,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
     {meta && (
       <AccordionItem value="usage">
         <AccordionTrigger className="font-display text-sm font-semibold">
-          <span className="flex items-center gap-2"><Wind className="h-4 w-4" /> Kullanım Havası</span>
+          <span className="flex items-center gap-2"><Wind className="h-4 w-4" /> When to Wear</span>
         </AccordionTrigger>
         <AccordionContent>
           <div className="font-body text-sm text-muted-foreground space-y-2">
