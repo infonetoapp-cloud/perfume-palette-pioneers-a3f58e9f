@@ -101,13 +101,29 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[85vh] overflow-hidden bg-charcoal">
-      {/* Full-bleed background image */}
+      {/* Bokeh background */}
       <img
-        src={heroCombined}
-        alt="David Walker - Women's and Men's Fragrance"
+        src={heroBg}
+        alt=""
         className="absolute inset-0 h-full w-full object-cover object-center"
         loading="eager"
       />
+
+      {/* Two bottles on top of background */}
+      <div className="absolute inset-0 flex items-end justify-between px-[4%] md:px-[8%] lg:px-[12%] pb-[8%]">
+        <img
+          src={bottleCutout}
+          alt="David Walker Perfume"
+          className="h-[50%] md:h-[65%] lg:h-[75%] object-contain drop-shadow-[0_5px_30px_rgba(0,0,0,0.3)]"
+          loading="eager"
+        />
+        <img
+          src={bottleCutout}
+          alt="David Walker Perfume"
+          className="h-[50%] md:h-[65%] lg:h-[75%] object-contain drop-shadow-[0_5px_30px_rgba(0,0,0,0.3)]"
+          loading="eager"
+        />
+      </div>
 
       {/* Gradient overlay for text */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20" />
