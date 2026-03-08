@@ -111,9 +111,9 @@ const ScentNotes = ({ meta }: { meta: ProductMeta }) => (
     </div>
     <div className="space-y-3 text-sm">
       {[
-        { tier: "Top", desc: "İlk hissedilen notalar", notes: meta.scentNotes.top.join(", ") },
-        { tier: "Middle", desc: "Parfümün kalbi", notes: meta.scentNotes.middle.join(", ") },
-        { tier: "Base", desc: "Gün boyu kalıcı notalar", notes: meta.scentNotes.base.join(", ") },
+      { tier: "Top", desc: "The first impression", notes: meta.scentNotes.top.join(", ") },
+        { tier: "Middle", desc: "The heart of the fragrance", notes: meta.scentNotes.middle.join(", ") },
+        { tier: "Base", desc: "Long-lasting foundation", notes: meta.scentNotes.base.join(", ") },
       ].map((row) => (
         <div key={row.tier} className="flex items-start gap-3 rounded-lg bg-secondary/30 p-3">
           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-accent/10">
