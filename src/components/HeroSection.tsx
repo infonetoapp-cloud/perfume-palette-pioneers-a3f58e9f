@@ -100,27 +100,13 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[85vh] overflow-hidden bg-charcoal">
-      {/* Dark background with subtle radial glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#111] to-[#0a0a0a]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,220,180,0.06)_0%,transparent_60%)]" />
-
-      {/* Two bottles */}
-      <div className="absolute inset-0 flex items-center justify-between px-[5%] md:px-[10%] lg:px-[15%]">
-        {/* Left bottle - mirrored so nozzle faces right */}
-        <img
-          src={bottleCutout}
-          alt="David Walker Perfume"
-          className="h-[55%] md:h-[65%] object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.1)] scale-x-[-1]"
-          loading="eager"
-        />
-        {/* Right bottle - original orientation, nozzle faces left */}
-        <img
-          src={bottleCutout}
-          alt="David Walker Perfume"
-          className="h-[55%] md:h-[65%] object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.1)]"
-          loading="eager"
-        />
-      </div>
+      {/* Full-bleed background image */}
+      <img
+        src={heroCombined}
+        alt="David Walker - Women's and Men's Fragrance"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+        loading="eager"
+      />
 
       {/* Gradient overlay for text */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20" />
