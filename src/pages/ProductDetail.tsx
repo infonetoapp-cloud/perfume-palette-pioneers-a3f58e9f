@@ -171,8 +171,6 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
               <p className="text-foreground font-medium">{meta.feeling}</p>
               <p>{meta.description}</p>
             </>
-
-            </>
           )}
           <p><strong>Concentration:</strong> Eau de Parfum</p>
           <p><strong>Size:</strong> 50ml / 1.7oz</p>
