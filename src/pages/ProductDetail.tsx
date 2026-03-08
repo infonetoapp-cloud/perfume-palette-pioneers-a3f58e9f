@@ -227,7 +227,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
     <AccordionItem value="faq">
       <AccordionTrigger className="font-display text-sm font-semibold">
-        <span className="flex items-center gap-2"><HelpCircle className="h-4 w-4" /> SSS</span>
+        <span className="flex items-center gap-2"><HelpCircle className="h-4 w-4" /> FAQ</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="space-y-3 font-body text-sm text-muted-foreground">
