@@ -123,12 +123,12 @@ const HeroSection = () => {
       </div>
 
       {/* Center brand text */}
-      <div className="relative z-20 flex min-h-[85vh] flex-col items-center justify-center text-center px-4">
+      <div className="relative z-20 flex min-h-[85vh] flex-col items-start justify-center text-left px-8 md:px-16 lg:px-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col items-center"
+          className="flex flex-col items-start max-w-[50%] md:max-w-[40%]"
         >
           <h1 className="font-display text-5xl font-bold text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] md:text-7xl lg:text-8xl xl:text-9xl tracking-wide">
             DAVID WALKER
@@ -136,7 +136,7 @@ const HeroSection = () => {
           <p className="mt-3 font-body text-sm font-light uppercase tracking-[0.3em] text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)] md:text-base lg:text-lg">
             {t("hero.subtitle")}
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#products"
               className="rounded-full bg-white px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-foreground transition-all hover:bg-secondary"
