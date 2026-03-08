@@ -232,16 +232,16 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
       <AccordionContent>
         <div className="space-y-3 font-body text-sm text-muted-foreground">
           <div>
-            <p className="font-semibold text-foreground">Bu parfümler kalıcı mı?</p>
-            <p>Evet, yüksek konsantrasyonlu Eau de Parfum formülüyle uzun süre kalıcılık sağlar.</p>
+            <p className="font-semibold text-foreground">Are these fragrances long-lasting?</p>
+            <p>Yes, our Eau de Parfum concentration ensures lasting performance throughout the day.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">Hangi kokuyu seçeceğimi bilmiyorum?</p>
-            <p>Koleksiyonumuza göz atın veya bize ulaşın, size özel önerilerde bulunalım.</p>
+            <p className="font-semibold text-foreground">I don't know which scent to choose?</p>
+            <p>Browse our collection or contact us — we'll help you find your perfect match.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">Orijinal parfümlerle aynı mı?</p>
-            <p>Ürünlerimiz ilham aldığı kokuların yorumlarıdır. Aynı kalite standartlarında, daha uygun fiyatlarla sunulmaktadır.</p>
+            <p className="font-semibold text-foreground">Are these the same as the originals?</p>
+            <p>Our fragrances are inspired interpretations. They capture the essence of the original at a more accessible price point.</p>
           </div>
         </div>
       </AccordionContent>
