@@ -1,24 +1,122 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Real Scents | Seçkin Parfümler & Lüks Kokular</title>
-    <meta name="description" content="Real Scents ile dünyanın en seçkin parfümlerini keşfedin. Kadın ve erkek için özenle küratörlenmiş lüks koku koleksiyonları. Ücretsiz kargo." />
+
+    <!-- Primary SEO -->
+    <title>Real Scents | Premium Curated Perfumes & Luxury Fragrances</title>
+    <meta name="description" content="Shop premium curated perfumes at Real Scents. Discover luxury fragrances for women, men & unisex. Free shipping across the US. Cruelty-free & non-toxic scents crafted with the finest ingredients." />
+    <meta name="keywords" content="perfume, fragrance, luxury perfume, women's perfume, men's cologne, unisex fragrance, premium scents, curated perfumes, cruelty-free fragrance, non-toxic perfume" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://realscents.com" />
-    <meta property="og:title" content="Real Scents | Seçkin Parfümler & Lüks Kokular" />
-    <meta property="og:description" content="Dünyanın en seçkin parfümlerini keşfedin. Özenle küratörlenmiş lüks koku koleksiyonları." />
+
+    <!-- Hreflang for multi-language -->
+    <link rel="alternate" hreflang="en" href="https://realscents.com" />
+    <link rel="alternate" hreflang="es" href="https://realscents.com?lang=es" />
+    <link rel="alternate" hreflang="x-default" href="https://realscents.com" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Real Scents" />
+    <meta property="og:title" content="Real Scents | Premium Curated Perfumes & Luxury Fragrances" />
+    <meta property="og:description" content="Discover luxury fragrances curated with care. Premium perfumes for women, men & unisex. Free US shipping. Cruelty-free & non-toxic." />
+    <meta property="og:url" content="https://realscents.com" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Real Scents | Premium Curated Perfumes" />
+    <meta name="twitter:description" content="Shop luxury fragrances curated with care. Free US shipping. Cruelty-free & non-toxic perfumes." />
+
+    <!-- Geo targeting -->
+    <meta name="geo.region" content="US" />
+    <meta name="geo.placename" content="United States" />
+
+    <!-- JSON-LD: Organization + Store -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Store",
         "name": "Real Scents",
-        "description": "Seçkin parfümler ve lüks kokular mağazası",
+        "description": "Premium curated perfumes and luxury fragrances. Cruelty-free, non-toxic scents for women, men, and unisex.",
         "url": "https://realscents.com",
-        "priceRange": "₺₺₺"
+        "logo": "https://realscents.com/favicon.ico",
+        "priceRange": "$$",
+        "currenciesAccepted": "USD",
+        "paymentAccepted": "Credit Card, Debit Card",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United States"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Perfume Collection",
+          "itemListElement": [
+            {
+              "@type": "OfferCatalog",
+              "name": "Women's Perfumes"
+            },
+            {
+              "@type": "OfferCatalog",
+              "name": "Men's Colognes"
+            },
+            {
+              "@type": "OfferCatalog",
+              "name": "Unisex Fragrances"
+            }
+          ]
+        },
+        "sameAs": []
       }
     </script>
+
+    <!-- JSON-LD: Website with SearchAction -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Real Scents",
+        "url": "https://realscents.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://realscents.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        "inLanguage": ["en-US", "es-US"]
+      }
+    </script>
+
+    <!-- JSON-LD: BreadcrumbList -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://realscents.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Perfumes",
+            "item": "https://realscents.com/#products"
+          }
+        ]
+      }
+    </script>
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.shopify.com" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
     <div id="root"></div>
