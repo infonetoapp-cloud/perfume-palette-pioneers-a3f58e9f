@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import brandStoryImg from "@/assets/brand-story.jpg";
+import heroProduct from "@/assets/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
 
 const BrandStory = () => {
@@ -16,7 +16,7 @@ const BrandStory = () => {
             transition={{ duration: 0.7 }}
             className="overflow-hidden rounded-2xl"
           >
-            <img src={brandStoryImg} alt="Perfume atelier" className="h-full w-full object-cover" loading="lazy" />
+            <img src={heroProduct} alt="Perfume atelier" className="h-full w-full object-cover" loading="lazy" />
           </motion.div>
 
           <motion.div

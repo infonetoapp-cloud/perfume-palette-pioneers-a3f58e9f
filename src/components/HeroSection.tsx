@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import heroDossier1 from "@/assets/hero-dossier-1.jpg";
+import heroProduct from "@/assets/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
 
 const HeroSection = () => {
@@ -9,7 +9,7 @@ const HeroSection = () => {
 
   const slides = [
     {
-      image: heroDossier1,
+      image: heroProduct,
       badge: t("hero.badge"),
       title: t("hero.title"),
       subtitle: t("hero.subtitle"),
