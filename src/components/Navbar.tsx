@@ -90,34 +90,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Language switcher */}
-          <div className="relative">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 rounded-full border border-border px-2.5 py-1.5 font-body text-xs font-medium text-foreground transition-all hover:bg-muted"
-            >
-              <Globe size={14} />
-              <span className="uppercase">{locale}</span>
-            </button>
-            {langOpen && (
-              <div className="absolute right-0 top-full mt-1 rounded-xl border border-border bg-background p-1 shadow-elevated z-50">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      setLocale(lang.code);
-                      setLangOpen(false);
-                    }}
-                    className={`block w-full rounded-lg px-4 py-2 text-left font-body text-sm transition-all hover:bg-muted ${
-                      locale === lang.code ? "font-semibold text-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           <button
             aria-label={t("nav.search")}
