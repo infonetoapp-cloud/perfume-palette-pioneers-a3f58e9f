@@ -11,7 +11,6 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
 
   const navLinks = [
     { label: t("nav.perfumes"), href: "#products", hasDropdown: true },
