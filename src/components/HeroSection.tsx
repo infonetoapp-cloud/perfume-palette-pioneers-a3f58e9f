@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import heroWoman from "@/assets/hero-woman.jpg";
-import heroMan from "@/assets/hero-man.jpg";
+import heroCombined from "@/assets/hero-combined.jpg";
 import { useI18n } from "@/lib/i18n";
 
 const HeroSection = () => {
