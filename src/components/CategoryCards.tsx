@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import categoryWomen from "@/assets/category-women.jpg";
 import heroProduct from "@/assets/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
 
@@ -6,9 +7,8 @@ const CategoryCards = () => {
   const { t } = useI18n();
 
   const categories = [
-    { label: t("category.women"), image: heroProduct, href: "#products" },
+    { label: t("category.women"), image: categoryWomen, href: "#products" },
     { label: t("category.men"), image: heroProduct, href: "#products" },
-    { label: t("category.unisex"), image: heroProduct, href: "#products" },
   ];
 
   return (
