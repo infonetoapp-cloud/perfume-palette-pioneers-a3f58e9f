@@ -149,17 +149,6 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <div className="mt-2 flex gap-2 px-3">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => { setLocale(lang.code); setMenuOpen(false); }}
-                    className={`rounded-full border px-4 py-2 font-body text-sm ${locale === lang.code ? "border-foreground bg-foreground text-background" : "border-border text-foreground"}`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
             </div>
           </motion.div>
         )}
