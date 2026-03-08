@@ -8,7 +8,7 @@ const CategoryCards = () => {
 
   const categories = [
     { label: t("category.women"), image: categoryWomen, href: "#products" },
-    { label: t("category.men"), image: heroProduct, href: "#products" },
+    { label: t("category.men"), image: categoryMen, href: "#products" },
   ];
 
   return (
