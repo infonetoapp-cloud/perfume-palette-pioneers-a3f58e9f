@@ -21,8 +21,6 @@ const productMetadata: Record<string, ProductMeta> = {
   // ── MEN'S COLLECTION ──
   e49: {
     code: "E49",
-    inspiredBy: "Euphoria",
-    inspiredBrand: "Calvin Klein",
     gender: "men",
     feeling: "Mysterious, modern, and deeply captivating.",
     description: "Opens quietly with a sharp hit of ginger and pepper, then quickly builds into a rich, aromatic depth. Black basil and sage lend a herbal sophistication at the heart, while a warm base of amber, suede, Brazilian redwood, and patchouli creates a smooth, earthy trail that lingers for hours. A woody aromatic fragrance ideal for confident evening appearances.",
@@ -42,8 +40,6 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   e82: {
     code: "E82",
-    inspiredBy: "Polo Blue",
-    inspiredBrand: "Ralph Lauren",
     gender: "men",
     feeling: "Fresh, clean, and effortlessly confident.",
     description: "A crisp opening of cucumber and melon with a zesty touch of mandarin orange gives way to an aromatic heart of basil, sage, and geranium. The dry-down settles into a refined base of suede, woodsy notes, and musk — creating a clean, well-groomed impression that lasts all day. An aromatic fougère fragrance perfect for everyday wear.",
@@ -63,8 +59,6 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   e145: {
     code: "E145",
-    inspiredBy: "Guilty",
-    inspiredBrand: "Gucci",
     gender: "men",
     feeling: "Urban, warm, and self-assured.",
     description: "A refined opening of lavender and bright Amalfi lemon leads into a smooth, elegant heart of African orange flower. The base warms up beautifully with Virginia cedar, patchouli, and a subtle hint of vanilla — creating a woody aromatic character that's polished yet inviting. A versatile scent that transitions effortlessly from day to night.",
@@ -84,8 +78,6 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   e148: {
     code: "E148",
-    inspiredBy: "Invictus",
-    inspiredBrand: "Paco Rabanne",
     gender: "men",
     feeling: "Energetic, bold, and instantly noticeable.",
     description: "Bursts open with fresh grapefruit and invigorating sea notes alongside bright mandarin orange. The heart brings aromatic depth with bay leaf and delicate jasmine, while the base grounds everything with ambergris, guaiac wood, oakmoss, and patchouli. A woody aquatic fragrance built for athletic energy and magnetic confidence.",
@@ -105,8 +97,6 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   e153: {
     code: "E153",
-    inspiredBy: "Aventus",
-    inspiredBrand: "Creed",
     gender: "men",
     feeling: "Powerful, prestigious, and commanding.",
     description: "Opens with a luxurious burst of bergamot, black currant, apple, lemon, and pink pepper — fruity yet refined. The heart deepens with pineapple, patchouli, and Moroccan jasmine, delivering a smoky-sweet complexity. The base of birch, musk, oakmoss, cedarwood, and ambroxan provides a rich, leathery foundation that lingers with authority. A chypre fruity masterpiece for the man who leads.",
@@ -126,11 +116,9 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   e155: {
     code: "E155",
-    inspiredBy: "Eros",
-    inspiredBrand: "Versace",
     gender: "men",
     feeling: "Passionate, vibrant, and magnetically seductive.",
-    description: "A bold opening of fresh mint, green apple, and lemon creates an immediate energizing effect. The heart reveals tonka bean, ambroxan, and geranium — adding warmth and a classic fougère twist. The base settles into a rich blend of Madagascar vanilla, Virginian cedar, Atlas cedar, vetiver, and oakmoss for a long-lasting, sensual trail. An aromatic fougère fragrance inspired by the Greek god of love.",
+    description: "A bold opening of fresh mint, green apple, and lemon creates an immediate energizing effect. The heart reveals tonka bean, ambroxan, and geranium — adding warmth and a classic fougère twist. The base settles into a rich blend of Madagascar vanilla, Virginian cedar, Atlas cedar, vetiver, and oakmoss for a long-lasting, sensual trail. An aromatic fougère fragrance that embodies passion and desire.",
     usage: "Night out, social events, when you want to be noticed.",
     scentNotes: {
       top: ["Mint", "Green Apple", "Lemon"],
@@ -149,8 +137,6 @@ const productMetadata: Record<string, ProductMeta> = {
   // ── WOMEN'S COLLECTION ──
   k197: {
     code: "K197",
-    inspiredBy: "Black Opium",
-    inspiredBrand: "Yves Saint Laurent",
     gender: "women",
     feeling: "A warm, sweet, and addictive scent designed for bold evenings and unforgettable nights.",
     description: "Opens with a crisp burst of pear and a subtle kick of pink pepper, softened by delicate orange blossom. The heart reveals a rich, creamy coffee accord intertwined with jasmine, bitter almond, and a hint of licorice — creating an irresistibly warm core. The base settles into a deep, enveloping blend of vanilla, patchouli, cashmere wood, and cedar that lingers for hours. An oriental vanilla fragrance best suited for fall and winter evenings.",
@@ -170,8 +156,6 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   k206: {
     code: "K206",
-    inspiredBy: "Good Girl",
-    inspiredBrand: "Carolina Herrera",
     gender: "women",
     feeling: "Feminine, powerful, and unapologetically bold.",
     description: "Opens with a tempting blend of almond and coffee brightened by bergamot and lemon. The heart is an opulent white-floral bouquet of tuberose, jasmine sambac, orange blossom, Bulgarian rose, and orris — layered and deeply sensual. The base descends into a rich, addictive blend of tonka bean, cacao, vanilla, praline, sandalwood, musk, amber, cashmere wood, patchouli, cinnamon, and cedar. An oriental floral fragrance that commands attention and leaves a lasting impression.",
@@ -191,8 +175,6 @@ const productMetadata: Record<string, ProductMeta> = {
   },
   k225: {
     code: "K225",
-    inspiredBy: "Burberry Her",
-    inspiredBrand: "Burberry",
     gender: "women",
     feeling: "Cheerful, soft, and effortlessly modern.",
     description: "Bursts open with a juicy crush of strawberry, raspberry, blackberry, sour cherry, and black currant, accented with mandarin orange and lemon. The heart offers a gentle floral embrace of violet and jasmine. The base wraps everything in a warm, cozy blanket of musk, vanilla, cashmeran, woody notes, amber, oakmoss, and patchouli. A floral fruity gourmand fragrance that's youthful, lovable, and perfect for everyday wear.",
