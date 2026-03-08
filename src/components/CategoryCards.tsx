@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
-import categoryWomen from "@/assets/category-women.jpg";
-import categoryMen from "@/assets/category-men.jpg";
-import categoryUnisex from "@/assets/category-unisex.jpg";
+import heroProduct from "@/assets/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
 
 const CategoryCards = () => {
