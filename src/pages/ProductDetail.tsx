@@ -425,19 +425,26 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-muted">
-                {images[selectedImage] ? (
-                  <img src={images[selectedImage].node.url} alt={images[selectedImage].node.altText || product.title} className="h-full w-full object-cover" />
+              {/* Hero image - large */}
+              <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-muted cursor-pointer" onClick={() => setSelectedImage(0)}>
+                {images[0] ? (
+                  <img src={images[0].node.url} alt={images[0].node.altText || product.title} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full items-center justify-center"><ShoppingBag className="h-16 w-16 text-muted-foreground" /></div>
                 )}
               </div>
+
+              {/* 2-column grid of remaining images */}
               {images.length > 1 && (
-                <div className="mt-3 flex gap-2 overflow-x-auto">
-                  {images.map((img, idx) => (
-                    <button key={idx} onClick={() => setSelectedImage(idx)} className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all ${idx === selectedImage ? "border-accent" : "border-border"}`}>
-                      <img src={img.node.url} alt="" className="h-full w-full object-cover" loading="lazy" />
-                    </button>
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  {images.slice(1).map((img, idx) => (
+                    <div
+                      key={idx + 1}
+                      onClick={() => setSelectedImage(idx + 1)}
+                      className={`aspect-square overflow-hidden rounded-xl bg-muted cursor-pointer border-2 transition-all ${selectedImage === idx + 1 ? "border-accent" : "border-transparent hover:border-accent/40"}`}
+                    >
+                      <img src={img.node.url} alt={img.node.altText || `${product.title} - ${idx + 2}`} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+                    </div>
                   ))}
                 </div>
               )}
