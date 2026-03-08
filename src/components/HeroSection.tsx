@@ -109,18 +109,12 @@ const HeroSection = () => {
         loading="eager"
       />
 
-      {/* Two bottles on vintage surface */}
-      <div className="absolute inset-0 flex items-end justify-center gap-[8%] md:gap-[12%] pb-[3%]">
+      {/* Single bottle centered on surface */}
+      <div className="absolute inset-0 flex items-end justify-center pb-[2%]">
         <img
           src={bottleCutout}
           alt="David Walker Perfume"
-          className="h-[45%] md:h-[60%] lg:h-[70%] object-contain drop-shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
-          loading="eager"
-        />
-        <img
-          src={bottleCutout}
-          alt="David Walker Perfume"
-          className="h-[45%] md:h-[60%] lg:h-[70%] object-contain drop-shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
+          className="h-[55%] md:h-[65%] lg:h-[75%] object-contain mix-blend-lighten drop-shadow-[0_8px_50px_rgba(0,0,0,0.6)]"
           loading="eager"
         />
       </div>
@@ -128,21 +122,13 @@ const HeroSection = () => {
       {/* Gradient overlay for text */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30" />
 
-      {/* Spray clickable areas & effects */}
+      {/* Spray clickable area & effect - single bottle */}
       <div className="absolute inset-0 z-10">
-        {/* Left bottle click area */}
         <button
           onClick={() => handleSpray("left")}
-          className="absolute left-[3%] top-[15%] w-[18%] h-[70%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
-          aria-label="Spray left bottle"
+          className="absolute left-[35%] right-[35%] top-[15%] h-[70%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
+          aria-label="Spray bottle"
         />
-        {/* Right bottle click area */}
-        <button
-          onClick={() => handleSpray("right")}
-          className="absolute right-[3%] top-[15%] w-[18%] h-[70%] cursor-pointer bg-transparent border-none outline-none hover:bg-white/5 rounded-xl transition-colors duration-200"
-          aria-label="Spray right bottle"
-        />
-
         <SprayEffect side="left" isActive={sprayLeft} />
         <SprayEffect side="right" isActive={sprayRight} />
       </div>
