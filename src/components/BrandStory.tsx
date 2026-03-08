@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import brandStoryImg from "@/assets/brand-story.jpg";
+import heroProduct from "@/assets/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
 
 const BrandStory = () => {
