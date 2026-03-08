@@ -135,7 +135,7 @@ const ScentIntensity = ({ level = "Medium" }: { level?: "Soft" | "Medium" | "Str
   const idx = levels.indexOf(level);
   return (
     <div className="mt-4 flex items-center gap-3">
-      <span className="font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">Yoğunluk:</span>
+      <span className="font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">Intensity:</span>
       <div className="flex items-center gap-1">
         {levels.map((l, i) => (
           <div key={l} className={`h-2 w-8 rounded-full ${i <= idx ? "bg-accent" : "bg-border"}`} />
