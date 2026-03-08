@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
+import { CartDrawer } from "@/components/CartDrawer";
 
 const navLinks = [
-  { label: "Parfümler", href: "#scent-families" },
-  { label: "Kadın", href: "#women" },
-  { label: "Erkek", href: "#men" },
+  { label: "Parfümler", href: "#products" },
+  { label: "Koku Aileleri", href: "#scent-families" },
   { label: "Hakkımızda", href: "#about" },
 ];
 
@@ -31,11 +31,10 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-6 py-4 lg:px-12">
-        <a href="#" className="font-display text-2xl font-semibold tracking-wide text-foreground">
+        <a href="/" className="font-display text-2xl font-semibold tracking-wide text-foreground">
           Real Scents
         </a>
 
-        {/* Desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a
@@ -49,17 +48,12 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button aria-label="Search" className="text-foreground transition-colors hover:text-accent">
+          <button aria-label="Arama" className="text-foreground transition-colors hover:text-accent">
             <Search size={20} />
           </button>
-          <button aria-label="Cart" className="relative text-foreground transition-colors hover:text-accent">
-            <ShoppingBag size={20} />
-            <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-primary-foreground">
-              0
-            </span>
-          </button>
+          <CartDrawer />
           <button
-            aria-label="Menu"
+            aria-label="Menü"
             className="text-foreground md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -68,7 +62,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
