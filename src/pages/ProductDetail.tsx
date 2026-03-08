@@ -286,7 +286,7 @@ const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
 
   return (
     <section className="mt-16 border-t border-border pt-12">
-      <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">Bunları da Sevebilirsin</h2>
+      <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">You May Also Like</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         {products.map((p) => {
           const img = p.node.images.edges[0]?.node;
