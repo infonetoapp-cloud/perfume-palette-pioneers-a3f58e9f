@@ -152,7 +152,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
     {meta && (
       <AccordionItem value="scent-notes">
         <AccordionTrigger className="font-display text-sm font-semibold">
-          <span className="flex items-center gap-2"><Droplets className="h-4 w-4" /> Koku Notaları</span>
+          <span className="flex items-center gap-2"><Droplets className="h-4 w-4" /> Scent Notes</span>
         </AccordionTrigger>
         <AccordionContent>
           <ScentNotes meta={meta} />
