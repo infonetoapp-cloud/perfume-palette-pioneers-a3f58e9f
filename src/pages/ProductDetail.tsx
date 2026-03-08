@@ -474,10 +474,10 @@ const ProductDetail = () => {
               {meta && (
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 font-body text-xs text-accent">
-                    {meta.gender === "women" ? "Kadın Parfümü" : meta.gender === "men" ? "Erkek Parfümü" : "Unisex"}
+                    {meta.gender === "women" ? "Women's Perfume" : meta.gender === "men" ? "Men's Perfume" : "Unisex"}
                   </span>
                   <span className="rounded-full border border-border px-3 py-1 font-body text-xs text-muted-foreground">
-                    Kullanım: {meta.usage.split(",")[0]}
+                    Best for: {meta.usage.split(",")[0]}
                   </span>
                 </div>
               )}
