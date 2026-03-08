@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logo from "@/assets/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, User, Menu, X, ChevronDown, Globe } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -60,9 +61,7 @@ const Navbar = () => {
 
         {/* Center: Logo */}
         <Link to="/" className="absolute left-1/2 -translate-x-1/2">
-          <span className="font-display text-xl font-bold tracking-tight text-foreground md:text-2xl">
-            Real Scents
-          </span>
+          <img src={logo} alt="Real Scents" className="h-6 md:h-8 w-auto" />
         </Link>
 
         {/* Right: Actions */}
