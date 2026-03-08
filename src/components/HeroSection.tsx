@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback } from "react";
-import heroBg from "@/assets/hero-minimal-bg.jpg";
-import bottleClean from "@/assets/bottle-clean.webp";
+import heroStudio from "@/assets/hero-studio.jpg";
 import { useI18n } from "@/lib/i18n";
 
 interface Particle {
