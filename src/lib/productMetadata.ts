@@ -3,8 +3,6 @@
 
 export interface ProductMeta {
   code: string;
-  inspiredBy: string;
-  inspiredBrand: string;
   gender: "women" | "men" | "unisex";
   feeling: string;
   description: string;

@@ -170,10 +170,8 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
             <>
               <p className="text-foreground font-medium">{meta.feeling}</p>
               <p>{meta.description}</p>
-              <div className="flex items-center gap-2 rounded-lg bg-secondary/40 px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Inspired by:</span>
-                <span className="text-foreground">{meta.inspiredBy} — {meta.inspiredBrand}</span>
-              </div>
+            </>
+
             </>
           )}
           <p><strong>Concentration:</strong> Eau de Parfum</p>
