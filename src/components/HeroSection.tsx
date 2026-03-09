@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback } from "react";
+import heroMobile from "@/assets/hero/hero-mobile.jpg";
 import heroStudio from "@/assets/hero/hero-studio.jpg";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "react-router-dom";
@@ -104,14 +105,20 @@ const HeroSection = () => {
     <section className="relative min-h-[85vh] overflow-hidden bg-[#c8b8a8]">
       {/* Studio background with bottle */}
       <img
+        src={heroMobile}
+        alt="David Walker Perfume - Mobile Studio"
+        className="absolute inset-0 h-full w-full object-cover object-[56%_center] md:hidden"
+        loading="eager"
+      />
+      <img
         src={heroStudio}
         alt="David Walker Perfume - Studio"
-        className="absolute inset-0 h-full w-full object-cover object-center"
+        className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
         loading="eager"
       />
 
       {/* Subtle gradient for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-transparent md:from-black/20" />
 
       {/* Spray clickable area & effect */}
       <div className="absolute inset-0 z-10">
@@ -130,7 +137,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col items-start max-w-[50%] md:max-w-[45%]"
+          className="flex max-w-[78%] flex-col items-start sm:max-w-[68%] md:max-w-[45%]"
         >
           <h1 className="font-display text-4xl font-bold text-charcoal md:text-6xl lg:text-7xl xl:text-8xl tracking-wide">
             DAVID WALKER

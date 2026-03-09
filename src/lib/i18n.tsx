@@ -16,7 +16,7 @@ const translations = {
 
     "hero.badge": "NEW",
     "hero.title": "Curated scents:",
-    "hero.subtitle": "Authorized David Walker fragrances for the U.S. market.",
+    "hero.subtitle": "Real Scents is an authorized David Walker retailer for the U.S. market.",
     "hero.cta1": "SHOP ALL PERFUMES",
     "hero.cta2": "SHOP BEST SELLERS",
 
@@ -26,7 +26,7 @@ const translations = {
     "category.shopNow": "Shop Now",
 
     "products.title": "Featured perfumes",
-    "products.subtitle": "Best-selling David Walker fragrances, ready for online purchase",
+    "products.subtitle": "Best-selling David Walker fragrances, curated by Real Scents for online purchase",
     "products.viewAll": "View All",
     "products.addToCart": "ADD TO CART",
     "products.soldOut": "SOLD OUT",
@@ -38,7 +38,7 @@ const translations = {
     "brand.title2": "HOUSE",
     "brand.title3": "FOR ONLINE",
     "brand.titleAccent": "DISCOVERY",
-    "brand.desc": "David Walker Eau de Parfum, presented with clear scent notes, premium visuals, and straightforward U.S. delivery.",
+    "brand.desc": "Real Scents presents David Walker Eau de Parfum with clear scent notes, premium visuals, and straightforward U.S. delivery.",
     "brand.learnMore": "Learn More",
     "brand.standardsTitle1": "BUILT FOR",
     "brand.standardsTitle2": "& DISCOVERY",
@@ -50,7 +50,7 @@ const translations = {
     "newsletter.subscribe": "Subscribe",
     "newsletter.privacy": "We respect your privacy. Unsubscribe anytime.",
 
-    "footer.tagline": "Authorized David Walker retailer for customers shopping from the United States.",
+    "footer.tagline": "Real Scents is an authorized David Walker retailer for customers shopping from the United States.",
     "footer.shop": "Shop",
     "footer.shopAll": "All Perfumes",
     "footer.shopWomen": "Women",
@@ -63,7 +63,7 @@ const translations = {
     "footer.terms": "Terms of Service",
     "footer.faq": "FAQ",
     "footer.social": "Social",
-    "footer.copyright": "Copyright 2026 David Walker Fragrances. All rights reserved.",
+    "footer.copyright": "Copyright 2026 Real Scents. All rights reserved.",
 
     "cart.title": "Cart",
     "cart.empty": "Your cart is empty",
@@ -95,7 +95,7 @@ const translations = {
 
     "hero.badge": "NUEVO",
     "hero.title": "Aromas selectos:",
-    "hero.subtitle": "Fragancias autorizadas de David Walker para el mercado de Estados Unidos.",
+    "hero.subtitle": "Real Scents es un minorista autorizado de David Walker para el mercado de Estados Unidos.",
     "hero.cta1": "VER TODOS LOS PERFUMES",
     "hero.cta2": "VER LOS MAS VENDIDOS",
 
@@ -105,7 +105,7 @@ const translations = {
     "category.shopNow": "Comprar Ahora",
 
     "products.title": "Perfumes destacados",
-    "products.subtitle": "Fragancias David Walker mas vendidas y listas para compra online",
+    "products.subtitle": "Fragancias David Walker mas vendidas, seleccionadas por Real Scents para compra online",
     "products.viewAll": "Ver Todos",
     "products.addToCart": "ANADIR AL CARRITO",
     "products.soldOut": "AGOTADO",
@@ -117,7 +117,7 @@ const translations = {
     "brand.title2": "PERFUMES",
     "brand.title3": "PARA DESCUBRIR",
     "brand.titleAccent": "ONLINE",
-    "brand.desc": "Eau de Parfum de David Walker con notas claras, visuales premium y una experiencia de compra pensada para Estados Unidos.",
+    "brand.desc": "Real Scents presenta Eau de Parfum de David Walker con notas claras, visuales premium y una experiencia de compra pensada para Estados Unidos.",
     "brand.learnMore": "Saber Mas",
     "brand.standardsTitle1": "HECHO PARA",
     "brand.standardsTitle2": "& DESCUBRIR",
@@ -129,7 +129,7 @@ const translations = {
     "newsletter.subscribe": "Suscribirse",
     "newsletter.privacy": "Respetamos tu privacidad. Cancela cuando quieras.",
 
-    "footer.tagline": "Minorista autorizado de David Walker para clientes que compran desde Estados Unidos.",
+    "footer.tagline": "Real Scents es un minorista autorizado de David Walker para clientes que compran desde Estados Unidos.",
     "footer.shop": "Tienda",
     "footer.shopAll": "Todos los Perfumes",
     "footer.shopWomen": "Mujer",
@@ -142,7 +142,7 @@ const translations = {
     "footer.terms": "Terminos del Servicio",
     "footer.faq": "Preguntas Frecuentes",
     "footer.social": "Social",
-    "footer.copyright": "Copyright 2026 David Walker Fragrances. Todos los derechos reservados.",
+    "footer.copyright": "Copyright 2026 Real Scents. Todos los derechos reservados.",
 
     "cart.title": "Carrito",
     "cart.empty": "Tu carrito esta vacio",

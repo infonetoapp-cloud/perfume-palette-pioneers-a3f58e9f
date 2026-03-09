@@ -30,7 +30,7 @@ const Index = () => {
             },
             hasOfferCatalog: {
               "@type": "OfferCatalog",
-              name: "David Walker Collection",
+              name: "David Walker Collection at Real Scents",
             },
           },
           {

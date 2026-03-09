@@ -24,15 +24,15 @@ interface InfoPageContent {
 
 const pageContent: Record<InfoSlug, InfoPageContent> = {
   about: {
-    title: "About David Walker Fragrances",
+    title: "About Real Scents",
     eyebrow: "Brand Overview",
     description:
-      "Learn how this U.S.-focused David Walker storefront is organized around scent notes, easy discovery, and clear fragrance shopping information.",
+      "Learn how the Real Scents storefront is organized around David Walker fragrances, clear scent notes, easy discovery, and straightforward fragrance shopping information.",
     lastUpdated: "March 9, 2026",
     sections: [
       {
         heading: "Authorized retail focus",
-        body: "This storefront is designed to present David Walker fragrances clearly to shoppers in the United States, with direct product pages, organized collections, and consistent scent information.",
+        body: "Real Scents is designed to present David Walker fragrances clearly to shoppers in the United States, with direct product pages, organized collections, and consistent scent information.",
       },
       {
         heading: "Built for product discovery",
@@ -48,7 +48,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Shipping & Returns",
     eyebrow: "Order Policies",
     description:
-      "Review free U.S. shipping, processing, delivery, return timing, and refund expectations for David Walker fragrance orders.",
+      "Review free U.S. shipping, processing, delivery, return timing, and refund expectations for fragrance orders placed through Real Scents.",
     lastUpdated: "March 9, 2026",
     sections: [
       {
@@ -134,7 +134,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Frequently Asked Questions",
     eyebrow: "Customer Help",
     description:
-      "Common questions about fragrance shopping, free U.S. shipping, returns, order handling, and product use on the David Walker storefront.",
+      "Common questions about fragrance shopping, free U.S. shipping, returns, order handling, and product use on the Real Scents storefront.",
     lastUpdated: "March 9, 2026",
     sections: [
       {
@@ -167,7 +167,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Terms of Service",
     eyebrow: "Store Terms",
     description:
-      "Review the general terms that apply to browsing this storefront, placing orders, using content, and interacting with David Walker Fragrances online.",
+      "Review the general terms that apply to browsing Real Scents, placing orders, using content, and interacting with the storefront online.",
     lastUpdated: "March 9, 2026",
     sections: [
       {

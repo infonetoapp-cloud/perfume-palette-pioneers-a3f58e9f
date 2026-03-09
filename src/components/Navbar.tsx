@@ -60,7 +60,7 @@ const Navbar = () => {
         {/* Center: Logo */}
         <Link to="/" className="absolute left-1/2 -translate-x-1/2 text-center">
           <span className="font-display text-lg font-semibold uppercase tracking-[0.32em] text-foreground md:text-xl">
-            David Walker
+            Real Scents
           </span>
           <span className="sr-only">{SITE_NAME}</span>
         </Link>

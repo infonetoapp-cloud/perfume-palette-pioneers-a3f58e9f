@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import { useRef, type MouseEvent, type PointerEvent, type WheelEvent } from "react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -12,7 +12,13 @@ const FeaturedProducts = () => {
   const addItem = useCartStore((s) => s.addItem);
   const isCartLoading = useCartStore((s) => s.isLoading);
   const products = getCatalogProductsForCollection("best-sellers").slice(0, 12);
-  const marqueeProducts = [...products, ...products];
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const dragStateRef = useRef({
+    isDragging: false,
+    pointerId: -1,
+    startX: 0,
+    startScrollLeft: 0,
+  });
 
   const handleAddToCart = async (e: MouseEvent, product: CatalogProduct) => {
     e.preventDefault();
@@ -30,6 +36,44 @@ const FeaturedProducts = () => {
 
     toast.success(t("cart.added"), { description: getProductDisplayCopy(product).shortTitle });
   };
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse" || !scrollerRef.current) return;
+
+    dragStateRef.current = {
+      isDragging: true,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: scrollerRef.current.scrollLeft,
+    };
+
+    scrollerRef.current.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!scrollerRef.current || !dragStateRef.current.isDragging) return;
+    if (event.pointerId !== dragStateRef.current.pointerId) return;
+
+    const deltaX = event.clientX - dragStateRef.current.startX;
+    scrollerRef.current.scrollLeft = dragStateRef.current.startScrollLeft - deltaX;
+  };
+
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (!scrollerRef.current) return;
+    if (dragStateRef.current.pointerId !== event.pointerId) return;
+
+    dragStateRef.current.isDragging = false;
+    scrollerRef.current.releasePointerCapture(event.pointerId);
+  };
+
+  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (!scrollerRef.current) return;
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+
+    event.preventDefault();
+    scrollerRef.current.scrollLeft += event.deltaY;
+  };
+
   if (products.length === 0) {
     return (
       <section id="products" className="bg-background py-16 lg:py-24">
@@ -56,25 +100,29 @@ const FeaturedProducts = () => {
           </div>
         </div>
 
-        <div className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
-
-          <div className="featured-marquee-track flex w-max gap-5 pb-4">
-            {marqueeProducts.map((product, i) => (
-              <div
-                key={`${product.id}-${i}`}
-                className="w-[280px] flex-shrink-0 md:w-[300px]"
-              >
-                <ProductCard
-                  product={product}
-                  index={i % products.length}
-                  isCartLoading={isCartLoading}
-                  onAddToCart={handleAddToCart}
-                />
-              </div>
-            ))}
-          </div>
+        <div
+          ref={scrollerRef}
+          className="featured-scroll flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pr-4 [scrollbar-width:none] [-ms-overflow-style:none] cursor-grab active:cursor-grabbing"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          onWheel={handleWheel}
+        >
+          {products.map((product, i) => (
+            <div
+              key={product.id}
+              className="w-[280px] flex-shrink-0 snap-start md:w-[300px]"
+            >
+              <ProductCard
+                product={product}
+                index={i}
+                isCartLoading={isCartLoading}
+                onAddToCart={handleAddToCart}
+              />
+            </div>
+          ))}
+          <div className="w-px flex-shrink-0" aria-hidden="true" />
         </div>
       </div>
     </section>

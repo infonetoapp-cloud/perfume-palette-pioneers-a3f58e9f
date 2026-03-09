@@ -86,18 +86,12 @@
   animation: marquee 30s linear infinite;
 }
 
-@keyframes featured-marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.featured-scroll {
+  -webkit-overflow-scrolling: touch;
 }
 
-.featured-marquee-track {
-  animation: featured-marquee 36s linear infinite;
-  will-change: transform;
-}
-
-.featured-marquee-track:hover {
-  animation-play-state: paused;
+.featured-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 @layer utilities {

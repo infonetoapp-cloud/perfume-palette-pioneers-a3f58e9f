@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="font-display text-lg font-bold text-foreground">David Walker Fragrances</h3>
+            <h3 className="font-display text-lg font-bold text-foreground">Real Scents</h3>
             <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">{t("footer.tagline")}</p>
           </div>
           <div>

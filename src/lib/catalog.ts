@@ -76,7 +76,7 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     title: "All Perfumes",
     eyebrow: "Full Collection",
     description:
-      "Explore the full David Walker catalog for women and men, organized for fragrance shopping in the U.S. market.",
+      "Explore the full David Walker catalog for women and men at Real Scents, organized for fragrance shopping in the U.S. market.",
   },
   women: {
     slug: "women",
@@ -103,7 +103,7 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     title: "Best Sellers",
     eyebrow: "Customer Favorites",
     description:
-      "Shop the most giftable and versatile David Walker fragrances across men's and women's collections.",
+      "Shop the most giftable and versatile David Walker fragrances curated by Real Scents across men's and women's collections.",
   },
 };
 
@@ -251,7 +251,7 @@ function formatFamilySummary(families: ScentFamily[]): string {
 
 function buildMetaDescription(title: string, meta: ProductMeta | null, noteHighlights: string[], categoryLabel: string): string {
   if (!meta) {
-    return `${title}. Shop premium David Walker ${categoryLabel.toLowerCase()} online in the United States.`;
+    return `${title}. Shop premium David Walker ${categoryLabel.toLowerCase()} online at Real Scents in the United States.`;
   }
 
   const notes = noteHighlights.join(", ");
@@ -260,7 +260,7 @@ function buildMetaDescription(title: string, meta: ProductMeta | null, noteHighl
     return `${title} in 50ml Eau de Parfum. ${meta.feeling} A ${familySummary} ${categoryLabel.toLowerCase()} with notes like ${notes}. Free U.S. shipping available.`;
   }
 
-  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop with a U.S.-focused David Walker retailer.`;
+  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop with Real Scents, a U.S.-focused authorized David Walker retailer.`;
 }
 
 export function getCollectionDefinition(slug: string | undefined): CollectionDefinition {
