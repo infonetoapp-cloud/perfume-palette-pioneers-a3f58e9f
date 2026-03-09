@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type PointerEvent, type WheelEvent } from "react";
+import { useRef, type MouseEvent, type WheelEvent } from "react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -13,12 +13,6 @@ const FeaturedProducts = () => {
   const isCartLoading = useCartStore((s) => s.isLoading);
   const products = getCatalogProductsForCollection("best-sellers").slice(0, 12);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const dragStateRef = useRef({
-    isDragging: false,
-    pointerId: -1,
-    startX: 0,
-    startScrollLeft: 0,
-  });
 
   const handleAddToCart = async (e: MouseEvent, product: CatalogProduct) => {
     e.preventDefault();
@@ -35,35 +29,6 @@ const FeaturedProducts = () => {
     });
 
     toast.success(t("cart.added"), { description: getProductDisplayCopy(product).shortTitle });
-  };
-
-  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== "mouse" || !scrollerRef.current) return;
-
-    dragStateRef.current = {
-      isDragging: true,
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startScrollLeft: scrollerRef.current.scrollLeft,
-    };
-
-    scrollerRef.current.setPointerCapture(event.pointerId);
-  };
-
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (!scrollerRef.current || !dragStateRef.current.isDragging) return;
-    if (event.pointerId !== dragStateRef.current.pointerId) return;
-
-    const deltaX = event.clientX - dragStateRef.current.startX;
-    scrollerRef.current.scrollLeft = dragStateRef.current.startScrollLeft - deltaX;
-  };
-
-  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    if (!scrollerRef.current) return;
-    if (dragStateRef.current.pointerId !== event.pointerId) return;
-
-    dragStateRef.current.isDragging = false;
-    scrollerRef.current.releasePointerCapture(event.pointerId);
   };
 
   const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
@@ -102,11 +67,7 @@ const FeaturedProducts = () => {
 
         <div
           ref={scrollerRef}
-          className="featured-scroll flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pr-4 [scrollbar-width:none] [-ms-overflow-style:none] cursor-grab active:cursor-grabbing"
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
+          className="featured-scroll flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pr-4 [scrollbar-width:none] [-ms-overflow-style:none]"
           onWheel={handleWheel}
         >
           {products.map((product, i) => (
