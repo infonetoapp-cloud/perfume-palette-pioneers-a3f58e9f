@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback } from "react";
-import heroStudio from "@/assets/hero-studio.jpg";
+import heroStudio from "@/assets/hero/hero-studio.jpg";
 import { useI18n } from "@/lib/i18n";
 
 interface Particle {

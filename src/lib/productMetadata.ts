@@ -1,5 +1,5 @@
 // Product metadata — researched from Fragrantica for accurate scent profiles
-// Keys match product code patterns found in Shopify handles (e.g. "k197", "e49")
+// Keys match product code patterns found in Shopify handles (e.g. "b197", "e49")
 
 export interface ProductMeta {
   code: string;
@@ -440,8 +440,8 @@ const productMetadata: Record<string, ProductMeta> = {
   },
 
   // ── WOMEN'S COLLECTION ──
-  k197: {
-    code: "K197",
+  b197: {
+    code: "B197",
     gender: "women",
     feeling: "A warm, sweet, and addictive scent designed for bold evenings and unforgettable nights.",
     description: "Opens with a crisp burst of pear and a subtle kick of pink pepper, softened by delicate orange blossom. The heart reveals a rich, creamy coffee accord intertwined with jasmine, bitter almond, and a hint of licorice — creating an irresistibly warm core. The base settles into a deep, enveloping blend of vanilla, patchouli, cashmere wood, and cedar that lingers for hours. An oriental vanilla fragrance best suited for fall and winter evenings.",
@@ -459,8 +459,8 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Strong",
     badges: ["Night Wear", "Fall & Winter"],
   },
-  k206: {
-    code: "K206",
+  b206: {
+    code: "B206",
     gender: "women",
     feeling: "Feminine, powerful, and unapologetically bold.",
     description: "Opens with a tempting blend of almond and coffee brightened by bergamot and lemon. The heart is an opulent white-floral bouquet of tuberose, jasmine sambac, orange blossom, Bulgarian rose, and orris — layered and deeply sensual. The base descends into a rich, addictive blend of tonka bean, cacao, vanilla, praline, sandalwood, musk, amber, cashmere wood, patchouli, cinnamon, and cedar. An oriental floral fragrance that commands attention and leaves a lasting impression.",
@@ -478,8 +478,8 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Strong",
     badges: ["Evening Wear", "Bold"],
   },
-  k225: {
-    code: "K225",
+  b225: {
+    code: "B225",
     gender: "women",
     feeling: "Cheerful, soft, and effortlessly modern.",
     description: "Bursts open with a juicy crush of strawberry, raspberry, blackberry, sour cherry, and black currant, accented with mandarin orange and lemon. The heart offers a gentle floral embrace of violet and jasmine. The base wraps everything in a warm, cozy blanket of musk, vanilla, cashmeran, woody notes, amber, oakmoss, and patchouli. A floral fruity gourmand fragrance that's youthful, lovable, and perfect for everyday wear.",
@@ -499,14 +499,14 @@ const productMetadata: Record<string, ProductMeta> = {
   },
 };
 
-// B-series aliases
-productMetadata["b197"] = productMetadata["k197"];
-productMetadata["b206"] = productMetadata["k206"];
-productMetadata["b225"] = productMetadata["k225"];
+// Legacy K-series aliases kept for backwards compatibility with old handles.
+productMetadata["k197"] = productMetadata["b197"];
+productMetadata["k206"] = productMetadata["b206"];
+productMetadata["k225"] = productMetadata["b225"];
 
 /**
  * Extract product code from a Shopify handle
- * e.g. "david-walker-k197-womens-eau-de-parfum-50ml" -> "k197"
+ * e.g. "david-walker-b197-womens-eau-de-parfum-50ml" -> "b197"
  */
 export function extractCodeFromHandle(handle: string): string | null {
   const match = handle.match(/([ekb]\d{2,3})/i);

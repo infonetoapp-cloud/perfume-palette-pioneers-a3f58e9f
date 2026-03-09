@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/brand/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, User, Menu, X, ChevronDown } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
