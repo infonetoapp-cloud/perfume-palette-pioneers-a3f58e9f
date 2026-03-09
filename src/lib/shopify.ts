@@ -1,9 +1,6 @@
 import { toast } from "sonner";
 
-const SHOPIFY_API_VERSION = '2025-07';
-const SHOPIFY_STORE_PERMANENT_DOMAIN = '7ymkg5-gx.myshopify.com';
-const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = '4dfb9a77a17285ce363925e9c446fd23';
+const SHOPIFY_PROXY_URL = "/api/shopify";
 
 export interface ShopifyProduct {
   node: {
@@ -50,18 +47,17 @@ export interface ShopifyProduct {
 }
 
 export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
-  const response = await fetch(SHOPIFY_STOREFRONT_URL, {
-    method: 'POST',
+  const response = await fetch(SHOPIFY_PROXY_URL, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ query, variables }),
   });
 
   if (response.status === 402) {
-    toast.error("Shopify: Ödeme gerekli", {
-      description: "Shopify API erişimi aktif bir abonelik gerektirir. admin.shopify.com adresinden yükseltin.",
+    toast.error("Shopify payment required", {
+      description: "The Shopify Storefront API needs an active plan before it can serve product data.",
     });
     return;
   }
@@ -72,7 +68,7 @@ export async function storefrontApiRequest(query: string, variables: Record<stri
 
   const data = await response.json();
   if (data.errors) {
-    throw new Error(`Shopify API hatası: ${data.errors.map((e: { message: string }) => e.message).join(', ')}`);
+    throw new Error(`Shopify API error: ${data.errors.map((error: { message: string }) => error.message).join(", ")}`);
   }
 
   return data;
@@ -174,7 +170,6 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
-// Cart mutations
 const CART_QUERY = `
   query cart($id: ID!) {
     cart(id: $id) { id totalQuantity }
@@ -227,7 +222,7 @@ const CART_LINES_REMOVE_MUTATION = `
 function formatCheckoutUrl(checkoutUrl: string): string {
   try {
     const url = new URL(checkoutUrl);
-    url.searchParams.set('channel', 'online_store');
+    url.searchParams.set("channel", "online_store");
     return url.toString();
   } catch {
     return checkoutUrl;
@@ -235,7 +230,7 @@ function formatCheckoutUrl(checkoutUrl: string): string {
 }
 
 function isCartNotFoundError(userErrors: Array<{ field: string[] | null; message: string }>): boolean {
-  return userErrors.some(e => e.message.toLowerCase().includes('cart not found') || e.message.toLowerCase().includes('does not exist'));
+  return userErrors.some((error) => error.message.toLowerCase().includes("cart not found") || error.message.toLowerCase().includes("does not exist"));
 }
 
 export async function createShopifyCart(item: { variantId: string; quantity: number }): Promise<{ cartId: string; checkoutUrl: string; lineId: string } | null> {
@@ -244,7 +239,7 @@ export async function createShopifyCart(item: { variantId: string; quantity: num
   });
 
   if (data?.data?.cartCreate?.userErrors?.length > 0) {
-    console.error('Cart creation failed:', data.data.cartCreate.userErrors);
+    console.error("Cart creation failed:", data.data.cartCreate.userErrors);
     return null;
   }
 
@@ -268,7 +263,7 @@ export async function addLineToShopifyCart(cartId: string, item: { variantId: st
   if (userErrors.length > 0) return { success: false };
 
   const lines = data?.data?.cartLinesAdd?.cart?.lines?.edges || [];
-  const newLine = lines.find((l: { node: { id: string; merchandise: { id: string } } }) => l.node.merchandise.id === item.variantId);
+  const newLine = lines.find((line: { node: { id: string; merchandise: { id: string } } }) => line.node.merchandise.id === item.variantId);
   return { success: true, lineId: newLine?.node?.id };
 }
 

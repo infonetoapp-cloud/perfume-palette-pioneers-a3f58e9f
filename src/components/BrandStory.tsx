@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import heroProduct from "@/assets/hero/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
+import { Link } from "react-router-dom";
+import { getCollectionPath } from "@/lib/catalog";
 
 const BrandStory = () => {
   const { t } = useI18n();
@@ -37,9 +39,9 @@ const BrandStory = () => {
             <p className="mt-6 max-w-md font-body text-base leading-relaxed text-muted-foreground">
               {t("brand.desc")}
             </p>
-            <a href="#" className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
+            <Link to="/about" className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
               {t("brand.learnMore")}
-            </a>
+            </Link>
           </motion.div>
         </div>
 
@@ -59,9 +61,9 @@ const BrandStory = () => {
             <p className="mt-6 font-body text-base leading-relaxed text-muted-foreground">
               {t("brand.standardsDesc")}
             </p>
-            <a href="#" className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
+            <Link to={getCollectionPath("best-sellers")} className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
               {t("brand.learnMore")}
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>

@@ -1,5 +1,11 @@
-// Product metadata — researched from Fragrantica for accurate scent profiles
-// Keys match product code patterns found in Shopify handles (e.g. "b197", "e49")
+export type ScentFamily =
+  | "fresh"
+  | "woody"
+  | "vanilla"
+  | "floral"
+  | "citrus"
+  | "amber"
+  | "aromatic";
 
 export interface ProductMeta {
   code: string;
@@ -7,24 +13,71 @@ export interface ProductMeta {
   feeling: string;
   description: string;
   usage: string;
+  scentFamilies: ScentFamily[];
   scentNotes: {
     top: string[];
     middle: string[];
     base: string[];
   };
-  mainNotes: Array<{ name: string; icon: "floral" | "sweet" | "warm" | "fresh" | "woody" | "spicy" | "citrus" | "musky" }>;
+  mainNotes: Array<{
+    name: string;
+    icon: "floral" | "sweet" | "warm" | "fresh" | "woody" | "spicy" | "citrus" | "musky";
+  }>;
   intensity: "Soft" | "Medium" | "Strong";
   badges: string[];
 }
 
 const productMetadata: Record<string, ProductMeta> = {
-  // ── MEN'S COLLECTION ──
+  e1: {
+    code: "E1",
+    gender: "men",
+    feeling: "Fresh, airy, and deeply evocative of the sea.",
+    description:
+      "A bright opening of lemon, bergamot, and sweet lime evokes a Mediterranean breeze. The heart is a marine-floral blend with cyclamen, freesia, and watery freshness, while the base dries down into cedar, oakmoss, musk, and patchouli. A clean aquatic-woody style with an easy, polished summer feel.",
+    usage: "Summer days, coastal trips, casual daytime wear.",
+    scentFamilies: ["fresh", "citrus", "woody"],
+    scentNotes: {
+      top: ["Lemon", "Bergamot", "Sweet Lime"],
+      middle: ["Marine Notes", "Cyclamen", "Freesia"],
+      base: ["Cedar", "Oakmoss", "Musk", "Patchouli"],
+    },
+    mainNotes: [
+      { name: "Marine", icon: "fresh" },
+      { name: "Citrus", icon: "citrus" },
+      { name: "Fresh", icon: "fresh" },
+    ],
+    intensity: "Medium",
+    badges: ["Summer Essential", "Day Wear"],
+  },
+  e6: {
+    code: "E6",
+    gender: "men",
+    feeling: "Nostalgic, warm, and distinctly masculine.",
+    description:
+      "Green apple, mint, and lavender create a clean aromatic start before clove, clary sage, and geranium deepen the scent. The base blends pine needles, vetiver, patchouli, and oakmoss into a refined barbershop-style finish. A classic fougere profile with vintage character and strong everyday appeal.",
+    usage: "Autumn days, smart-casual wear, signature scent rotation.",
+    scentFamilies: ["aromatic", "woody", "fresh"],
+    scentNotes: {
+      top: ["Green Apple", "Mint", "Lavender"],
+      middle: ["Clove", "Clary Sage", "Geranium"],
+      base: ["Pine Needles", "Vetiver", "Patchouli", "Oakmoss"],
+    },
+    mainNotes: [
+      { name: "Aromatic", icon: "spicy" },
+      { name: "Woody", icon: "woody" },
+      { name: "Vintage", icon: "warm" },
+    ],
+    intensity: "Medium",
+    badges: ["Vintage", "Signature"],
+  },
   e49: {
     code: "E49",
     gender: "men",
     feeling: "Mysterious, modern, and deeply captivating.",
-    description: "Opens quietly with a sharp hit of ginger and pepper, then quickly builds into a rich, aromatic depth. Black basil and sage lend a herbal sophistication at the heart, while a warm base of amber, suede, Brazilian redwood, and patchouli creates a smooth, earthy trail that lingers for hours. A woody aromatic fragrance ideal for confident evening appearances.",
-    usage: "Evening events, dark-toned outfits, sophisticated occasions.",
+    description:
+      "Ginger and pepper give the opening a dry spicy spark before black basil, sage, and cedar bring aromatic depth through the heart. Amber, suede, Brazilian redwood, and patchouli in the base create a smooth woody trail with evening presence. A woody-spiced profile built for confident night wear.",
+    usage: "Evening events, dark-toned outfits, after-hours settings.",
+    scentFamilies: ["woody", "amber"],
     scentNotes: {
       top: ["Ginger", "Pepper"],
       middle: ["Black Basil", "Sage", "Cedar"],
@@ -38,12 +91,35 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Strong",
     badges: ["Long-lasting", "Night Wear"],
   },
+  e71: {
+    code: "E71",
+    gender: "men",
+    feeling: "Fresh, cool, and effortlessly charismatic.",
+    description:
+      "Mint, lavender, bergamot, and cardamom create a brisk opening that feels clean and classic. Orange blossom and cinnamon warm the heart, while vanilla, tonka bean, amber, and sandalwood bring a smooth sensual finish. A fresh-to-warm masculine style with strong day-to-night versatility.",
+    usage: "Day-to-night wear, date nights, signature scent rotation.",
+    scentFamilies: ["fresh", "vanilla", "aromatic"],
+    scentNotes: {
+      top: ["Mint", "Lavender", "Bergamot", "Cardamom"],
+      middle: ["Orange Blossom", "Cinnamon"],
+      base: ["Vanilla", "Tonka Bean", "Amber", "Sandalwood"],
+    },
+    mainNotes: [
+      { name: "Fresh", icon: "fresh" },
+      { name: "Vanilla", icon: "sweet" },
+      { name: "Aromatic", icon: "spicy" },
+    ],
+    intensity: "Medium",
+    badges: ["Signature", "Day to Night"],
+  },
   e82: {
     code: "E82",
     gender: "men",
     feeling: "Fresh, clean, and effortlessly confident.",
-    description: "A crisp opening of cucumber and melon with a zesty touch of mandarin orange gives way to an aromatic heart of basil, sage, and geranium. The dry-down settles into a refined base of suede, woodsy notes, and musk — creating a clean, well-groomed impression that lasts all day. An aromatic fougère fragrance perfect for everyday wear.",
+    description:
+      "Cucumber, melon, and mandarin orange open the scent with cool freshness before basil, sage, and geranium bring crisp aromatic structure. Suede, woods, and musk in the base keep the finish clean and well-groomed. A light aromatic-fresh profile made for everyday use.",
     usage: "Daily wear, office, spring and summer outings.",
+    scentFamilies: ["fresh", "citrus", "aromatic"],
     scentNotes: {
       top: ["Cucumber", "Melon", "Mandarin Orange"],
       middle: ["Basil", "Sage", "Geranium"],
@@ -61,8 +137,10 @@ const productMetadata: Record<string, ProductMeta> = {
     code: "E145",
     gender: "men",
     feeling: "Urban, warm, and self-assured.",
-    description: "A refined opening of lavender and bright Amalfi lemon leads into a smooth, elegant heart of African orange flower. The base warms up beautifully with Virginia cedar, patchouli, and a subtle hint of vanilla — creating a woody aromatic character that's polished yet inviting. A versatile scent that transitions effortlessly from day to night.",
+    description:
+      "Lavender and bright Amalfi lemon make the opening crisp and polished, while African orange flower softens the heart. Cedar, patchouli, and a touch of vanilla in the base add warmth without losing the clean aromatic profile. A woody-aromatic scent that moves easily from day into night.",
     usage: "Late afternoon, city life, smart-casual outfits.",
+    scentFamilies: ["aromatic", "woody", "citrus"],
     scentNotes: {
       top: ["Lavender", "Amalfi Lemon"],
       middle: ["African Orange Flower"],
@@ -76,50 +154,14 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Medium",
     badges: ["Versatile", "Smart Casual"],
   },
-  e148: {
-    code: "E148",
-    gender: "men",
-    feeling: "Energetic, bold, and instantly noticeable.",
-    description: "Bursts open with fresh grapefruit and invigorating sea notes alongside bright mandarin orange. The heart brings aromatic depth with bay leaf and delicate jasmine, while the base grounds everything with ambergris, guaiac wood, oakmoss, and patchouli. A woody aquatic fragrance built for athletic energy and magnetic confidence.",
-    usage: "Post-gym, weekends, youthful and dynamic occasions.",
-    scentNotes: {
-      top: ["Sea Notes", "Grapefruit", "Mandarin Orange"],
-      middle: ["Bay Leaf", "Jasmine"],
-      base: ["Ambergris", "Guaiac Wood", "Oakmoss", "Patchouli"],
-    },
-    mainNotes: [
-      { name: "Sporty", icon: "fresh" },
-      { name: "Citrus", icon: "citrus" },
-      { name: "Powerful", icon: "spicy" },
-    ],
-    intensity: "Strong",
-    badges: ["Sport", "Day Wear"],
-  },
-  e153: {
-    code: "E153",
-    gender: "men",
-    feeling: "Powerful, prestigious, and commanding.",
-    description: "Opens with a luxurious burst of bergamot, black currant, apple, lemon, and pink pepper — fruity yet refined. The heart deepens with pineapple, patchouli, and Moroccan jasmine, delivering a smoky-sweet complexity. The base of birch, musk, oakmoss, cedarwood, and ambroxan provides a rich, leathery foundation that lingers with authority. A chypre fruity masterpiece for the man who leads.",
-    usage: "Business meetings, special occasions, when a strong first impression matters.",
-    scentNotes: {
-      top: ["Bergamot", "Black Currant", "Apple", "Lemon", "Pink Pepper"],
-      middle: ["Pineapple", "Patchouli", "Moroccan Jasmine"],
-      base: ["Birch", "Musk", "Oakmoss", "Cedarwood", "Ambroxan"],
-    },
-    mainNotes: [
-      { name: "Prestigious", icon: "woody" },
-      { name: "Fruity", icon: "citrus" },
-      { name: "Charismatic", icon: "warm" },
-    ],
-    intensity: "Strong",
-    badges: ["Premium", "Signature Scent"],
-  },
   e155: {
     code: "E155",
     gender: "men",
     feeling: "Passionate, vibrant, and magnetically seductive.",
-    description: "A bold opening of fresh mint, green apple, and lemon creates an immediate energizing effect. The heart reveals tonka bean, ambroxan, and geranium — adding warmth and a classic fougère twist. The base settles into a rich blend of Madagascar vanilla, Virginian cedar, Atlas cedar, vetiver, and oakmoss for a long-lasting, sensual trail. An aromatic fougère fragrance that embodies passion and desire.",
+    description:
+      "Mint, green apple, and lemon create an energetic opening before tonka bean, ambroxan, and geranium add warmth through the heart. Vanilla, cedar, vetiver, and oakmoss in the base make the dry-down creamy, woody, and memorable. A bold aromatic-fougere style for people who want presence.",
     usage: "Night out, social events, when you want to be noticed.",
+    scentFamilies: ["aromatic", "vanilla", "fresh"],
     scentNotes: {
       top: ["Mint", "Green Apple", "Lemon"],
       middle: ["Tonka Bean", "Ambroxan", "Geranium"],
@@ -133,319 +175,77 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Strong",
     badges: ["Night Out", "Attention Grabber"],
   },
-
-  e1: {
-    code: "E1",
+  e176: {
+    code: "E176",
     gender: "men",
-    feeling: "Fresh, airy, and deeply evocative of the sea.",
-    description: "A bright opening of lemon, bergamot, and sweet lime evokes a Mediterranean breeze. The heart is a complex marine harmony wrapped in subtle florals like cyclamen, freesia, and hyacinth. The base settles into a sophisticated dry-down of cedar, oakmoss, musk, and patchouli. An aquatic woody fragrance that smells like a sophisticated summer escape.",
-    usage: "Summer days, beach clubs, casual white linen outfits.",
+    feeling: "Bright, polished, and confidently modern.",
+    description:
+      "Blood orange, Sicilian lemon, juniper berry, and cardamom deliver a bright Mediterranean opening. Fig milk, lavender, clary sage, and pimento in the heart add texture and aromatic smoothness, while cedarwood, patchouli, and vetiver keep the base dry and masculine. A fresh citrus-aromatic style with premium daytime energy.",
+    usage: "Warm weather, smart-casual dressing, daytime confidence.",
+    scentFamilies: ["citrus", "aromatic", "woody"],
     scentNotes: {
-      top: ["Lemon", "Bergamot", "Lime", "Jasmine"],
-      middle: ["Marine Notes", "Cyclamen", "Freesia", "Hyacinth"],
-      base: ["Cedar", "Oakmoss", "Musk", "Patchouli"],
-    },
-    mainNotes: [
-      { name: "Marine", icon: "fresh" },
-      { name: "Citrus", icon: "citrus" },
-      { name: "Fresh", icon: "fresh" },
-    ],
-    intensity: "Medium",
-    badges: ["Summer Essential", "Day Wear"],
-  },
-  e2: {
-    code: "E2",
-    gender: "men",
-    feeling: "Warm, sophisticated, and deeply romantic.",
-    description: "Opens with a striking blend of grapefruit, coriander, and fresh basil for an energetic start. The heart quickly warms up with ginger, cardamom, and subtle orange blossom. The real magic happens in the base, where amber, cedar, and tobacco create an incredibly seductive and long-lasting trail. A spicy woody fragrance perfect for date nights.",
-    usage: "Evening wear, date nights, elegant dinners.",
-    scentNotes: {
-      top: ["Grapefruit", "Coriander", "Basil"],
-      middle: ["Ginger", "Cardamom", "Orange Blossom"],
-      base: ["Amber", "Tobacco", "Cedar"],
-    },
-    mainNotes: [
-      { name: "Warm", icon: "warm" },
-      { name: "Spicy", icon: "spicy" },
-      { name: "Woody", icon: "woody" },
-    ],
-    intensity: "Strong",
-    badges: ["Date Night", "Seductive"],
-  },
-  e3: {
-    code: "E3",
-    gender: "men",
-    feeling: "Earthy, green, and naturally charismatic.",
-    description: "A fresh and green opening featuring mint, lavender, and grapefruit. The aromatic heart introduces clary sage, pine, and geranium, while a base of oakmoss, vetiver, and patchouli provides a classic, grounding masculine foundation. A fougère aromatic fragrance that feels completely in tune with nature.",
-    usage: "Spring and fall days, outdoor events, signature everyday scent.",
-    scentNotes: {
-      top: ["Mint", "Lavender", "Grapefruit"],
-      middle: ["Clary Sage", "Pine", "Geranium"],
-      base: ["Oakmoss", "Vetiver", "Patchouli"],
-    },
-    mainNotes: [
-      { name: "Green", icon: "fresh" },
-      { name: "Aromatic", icon: "spicy" },
-      { name: "Woody", icon: "woody" },
-    ],
-    intensity: "Medium",
-    badges: ["Classic", "Versatile"],
-  },
-  e4: {
-    code: "E4",
-    gender: "men",
-    feeling: "Dark, luxurious, and quietly powerful.",
-    description: "Starts with a unique blend of sage, lemon, and a hint of dark plum. The heart reveals rich spices including cinnamon, black pepper, and cardamom. The dry-down is a dark, opulent blend of black ebony wood, patchouli, and Brazilian rosewood. A spicy woody oriental fragrance for those who command the room.",
-    usage: "Formal events, winter evenings, sharp suits.",
-    scentNotes: {
-      top: ["Sage", "Lemon", "Plum"],
-      middle: ["Cinnamon", "Black Pepper", "Cardamom"],
-      base: ["Ebony Wood", "Patchouli", "Rosewood"],
-    },
-    mainNotes: [
-      { name: "Dark", icon: "woody" },
-      { name: "Spicy", icon: "spicy" },
-      { name: "Rich", icon: "warm" },
-    ],
-    intensity: "Strong",
-    badges: ["Formal", "Winter"],
-  },
-  e5: {
-    code: "E5",
-    gender: "men",
-    feeling: "Modern, uplifting, and effortlessly stylish.",
-    description: "A bright, crisp opening of yuzu, bergamot, and lemon leaves an immediate clean impression. The heart introduces a surprising coffee accord alongside nutmeg and violet leaf. The base remains fresh but grounded with cedar, sandalwood, and light musk. A fresh aromatic fragrance that balances energy with calm.",
-    usage: "Office wear, brunch, everyday confidence.",
-    scentNotes: {
-      top: ["Yuzu", "Bergamot", "Lemon"],
-      middle: ["Coffee Accord", "Nutmeg", "Violet Leaf"],
-      base: ["Cedar", "Sandalwood", "Musk"],
-    },
-    mainNotes: [
-      { name: "Clean", icon: "fresh" },
-      { name: "Citrus", icon: "citrus" },
-      { name: "Uplifting", icon: "spicy" },
-    ],
-    intensity: "Medium",
-    badges: ["Office Safe", "Uplifting"],
-  },
-  e6: {
-    code: "E6",
-    gender: "men",
-    feeling: "Nostalgic, warm, and distinctly masculine.",
-    description: "An invigorating start of green apple, mint, and lavender gives way to a heart of clove, clary sage, and geranium leaves. The base is an unforgettable blend of pine needles, vetiver, patchouli, and oakmoss that smells like a high-end vintage barbershop. A classic fougère that never goes out of style.",
-    usage: "Autumn days, smart casual wear, signature scent.",
-    scentNotes: {
-      top: ["Green Apple", "Mint", "Lavender"],
-      middle: ["Clove", "Clary Sage", "Geranium"],
-      base: ["Pine Needles", "Vetiver", "Oakmoss"],
-    },
-    mainNotes: [
-      { name: "Aromatic", icon: "spicy" },
-      { name: "Woody", icon: "woody" },
-      { name: "Vintage", icon: "warm" },
-    ],
-    intensity: "Medium",
-    badges: ["Vintage", "Signature"],
-  },
-  e7: {
-    code: "E7",
-    gender: "men",
-    feeling: "Crisp, energetic, and purely refreshing.",
-    description: "An explosive citrus opening of bergamot, mandarin, and grapefruit creates an immediate rush of energy. The heart softens with neroli, rosemary, and subtle jasmine. The dry-down features light white musk and cedarwood to anchor the freshness. A citrus aromatic fragrance perfect for high heat.",
-    usage: "High summer, gym bag, morning refresh.",
-    scentNotes: {
-      top: ["Bergamot", "Mandarin", "Grapefruit"],
-      middle: ["Neroli", "Rosemary", "Jasmine"],
-      base: ["White Musk", "Cedarwood"],
+      top: ["Blood Orange", "Sicilian Lemon", "Juniper Berry", "Cardamom"],
+      middle: ["Fig Milk", "Lavender", "Clary Sage", "Pimento"],
+      base: ["Cedarwood", "Patchouli", "Vetiver"],
     },
     mainNotes: [
       { name: "Citrus", icon: "citrus" },
-      { name: "Fresh", icon: "fresh" },
-      { name: "Clean", icon: "fresh" },
+      { name: "Aromatic", icon: "fresh" },
+      { name: "Woody", icon: "woody" },
     ],
-    intensity: "Soft",
-    badges: ["Summer", "Gym"],
+    intensity: "Medium",
+    badges: ["Warm Weather", "Smart Casual"],
   },
-  e8: {
-    code: "E8",
+  e184: {
+    code: "E184",
     gender: "men",
-    feeling: "Deep, mysterious, and richly complex.",
-    description: "Opens with an intriguing mix of saffron, black pepper, and rose. The heart is a dense, smoky blend of incense, labdanum, and dark woods. The base reveals a luxurious combination of amber, oud, and leather that lasts well into the next day. An oriental woody fragrance for the bold.",
-    usage: "Special occasions, black tie, deep winter.",
+    feeling: "Boozy, magnetic, and wrapped in warm vanilla woods.",
+    description:
+      "Rum accord and bergamot open with a dressed-up, rich tone before lavender and elemi keep the heart refined and aromatic. Cedarwood, Madagascar vanilla, and ambered woods build a dense, smooth dry-down with strong evening character. A woody-vanilla scent made for colder nights and dressed-up settings.",
+    usage: "Night outs, colder evenings, dressed-up occasions.",
+    scentFamilies: ["woody", "vanilla", "amber"],
     scentNotes: {
-      top: ["Saffron", "Black Pepper", "Rose"],
-      middle: ["Incense", "Labdanum", "Dark Woods"],
-      base: ["Amber", "Oud", "Leather"],
+      top: ["Rum Accord", "Bergamot"],
+      middle: ["Lavender", "Elemi"],
+      base: ["Cedarwood", "Madagascar Vanilla", "Amber Woods"],
     },
     mainNotes: [
-      { name: "Oud", icon: "woody" },
-      { name: "Smoky", icon: "warm" },
-      { name: "Leather", icon: "woody" },
-    ],
-    intensity: "Strong",
-    badges: ["Luxury", "Long-lasting"],
-  },
-  e9: {
-    code: "E9",
-    gender: "men",
-    feeling: "Sweet, seductive, and deeply inviting.",
-    description: "A smooth opening of vanilla and almond leads into a heart of tonka bean, heliotrope, and subtle floral notes. The base is an addictive blend of rich amber, sandalwood, and creamy musk. An oriental vanilla fragrance that draws people in.",
-    usage: "Intimate settings, cool evenings, close encounters.",
-    scentNotes: {
-      top: ["Vanilla", "Almond"],
-      middle: ["Tonka Bean", "Heliotrope"],
-      base: ["Amber", "Sandalwood", "Musk"],
-    },
-    mainNotes: [
-      { name: "Sweet", icon: "sweet" },
+      { name: "Rum", icon: "spicy" },
       { name: "Vanilla", icon: "sweet" },
-      { name: "Warm", icon: "warm" },
-    ],
-    intensity: "Medium",
-    badges: ["Intimate", "Cozy"],
-  },
-  e10: {
-    code: "E10",
-    gender: "men",
-    feeling: "Cool, profound, and endlessly deep.",
-    description: "Opens with a striking blast of oceanic notes, sea salt, and grapefruit. The heart plunges deeper with seaweed, bay leaf, and geranium. The base anchors the aquatic theme with dark ambergris, guaiac wood, and wet slate. An intense aquatic woody fragrance.",
-    usage: "Coastal evenings, summer nights, bold everyday wear.",
-    scentNotes: {
-      top: ["Oceanic Notes", "Sea Salt", "Grapefruit"],
-      middle: ["Seaweed", "Bay Leaf", "Geranium"],
-      base: ["Ambergris", "Guaiac Wood", "Wet Slate"],
-    },
-    mainNotes: [
-      { name: "Aquatic", icon: "fresh" },
-      { name: "Deep", icon: "woody" },
-      { name: "Salty", icon: "citrus" },
-    ],
-    intensity: "Strong",
-    badges: ["Oceanic", "Bold"],
-  },
-  e11: {
-    code: "E11",
-    gender: "men",
-    feeling: "Dark, prestigious, and commanding.",
-    description: "An opulent opening of precious woods and rare spices immediately sets a tone of luxury. The heart is a masterful blend of rich leather and dark floral undertones. The base is an unapologetically bold trail of authentic oud wood, dark amber, and black musk. A leather oud masterpiece for those who demand the best.",
-    usage: "High-end events, executive meetings, when making a statement.",
-    scentNotes: {
-      top: ["Precious Woods", "Spices"],
-      middle: ["Leather", "Dark Florals"],
-      base: ["Oud Wood", "Dark Amber", "Black Musk"],
-    },
-    mainNotes: [
-      { name: "Oud", icon: "woody" },
-      { name: "Leather", icon: "woody" },
-      { name: "Prestigious", icon: "warm" },
-    ],
-    intensity: "Strong",
-    badges: ["Luxury", "Commanding"],
-  },
-  e12: {
-    code: "E12",
-    gender: "men",
-    feeling: "Bright, energetic, and purely revitalizing.",
-    description: "Bursts open with crushed mint leaves, lime, and crisp green apple. The heart reveals a clean aromatic blend of rosemary, thyme, and fresh cotton. The base settles into a transparent, soapy musk and light cedar that feels like stepping out of a premium shower. A fresh aromatic built for pure clean energy.",
-    usage: "Post-workout, hot summer days, office safe.",
-    scentNotes: {
-      top: ["Mint", "Lime", "Green Apple"],
-      middle: ["Rosemary", "Thyme", "Cotton Accord"],
-      base: ["White Musk", "Light Cedar"],
-    },
-    mainNotes: [
-      { name: "Fresh", icon: "fresh" },
-      { name: "Herbal", icon: "spicy" },
-      { name: "Clean", icon: "fresh" },
-    ],
-    intensity: "Medium",
-    badges: ["Fresh", "Sport"],
-  },
-  e13: {
-    code: "E13",
-    gender: "men",
-    feeling: "Modern, sharp, and brilliantly balanced.",
-    description: "A razor-sharp opening of Sicilian lemon and bergamot peel. The heart transitions into a sophisticated woody-floral middle with cedarwood and subtle jasmine. The base is an elegant, long-lasting blend of vetiver, sandalwood, and clean musk. A citrus woody fragrance that defines modern masculine elegance.",
-    usage: "Signature scent, boardroom to bar, year-round.",
-    scentNotes: {
-      top: ["Sicilian Lemon", "Bergamot Peel"],
-      middle: ["Cedarwood", "Jasmine"],
-      base: ["Vetiver", "Sandalwood", "Clean Musk"],
-    },
-    mainNotes: [
-      { name: "Citrus", icon: "citrus" },
       { name: "Woody", icon: "woody" },
-      { name: "Sharp", icon: "fresh" },
-    ],
-    intensity: "Medium",
-    badges: ["Signature", "Versatile"],
-  },
-  e14: {
-    code: "E14",
-    gender: "men",
-    feeling: "Fiery, exotic, and fiercely magnetic.",
-    description: "An intoxicating start of cinnamon, cardamom, and star anise grabs attention immediately. The heart is a rich, sweet blend of dates, myrrh, and roasted tonka. The dry-down is an absolute powerhouse of golden amber, vanilla bean, and dark woods. A spicy amber fragrance meant to mesmerize.",
-    usage: "Late nights, winter dates, bold outfits.",
-    scentNotes: {
-      top: ["Cinnamon", "Cardamom", "Star Anise"],
-      middle: ["Dates", "Myrrh", "Tonka"],
-      base: ["Golden Amber", "Vanilla Bean", "Dark Woods"],
-    },
-    mainNotes: [
-      { name: "Spicy", icon: "spicy" },
-      { name: "Amber", icon: "warm" },
-      { name: "Sweet", icon: "sweet" },
     ],
     intensity: "Strong",
-    badges: ["Magnetic", "Night Out"],
+    badges: ["Night Wear", "Cold Weather"],
   },
-  e15: {
-    code: "E15",
+  e185: {
+    code: "E185",
     gender: "men",
-    feeling: "Breezy, open, and boundlessly free.",
-    description: "An invigorating splash of sea mist, yuzu, and ozone. The heart captures the essence of the coast with sea salt, driftwood, and blue lotus. The base is a clean, airy combination of white musk and coastal cedar. A marine fresh fragrance that smells like pure freedom.",
-    usage: "Vacation, weekend getaways, casual days.",
+    feeling: "Rich, golden, and made for high-impact nights.",
+    description:
+      "Apple, davana, and rose bring a sweet polished opening that feels warm from the start. Cedar and osmanthus create a smooth woody-floral heart, while vanilla, tonka bean, and patchouli give the base a creamy and lingering density. A luxurious sweet-woody profile with clear nightlife energy.",
+    usage: "Evening wear, statement nights, colder seasons.",
+    scentFamilies: ["vanilla", "amber", "woody"],
     scentNotes: {
-      top: ["Sea Mist", "Yuzu", "Ozone"],
-      middle: ["Sea Salt", "Driftwood", "Blue Lotus"],
-      base: ["White Musk", "Coastal Cedar"],
+      top: ["Apple", "Davana", "Rose"],
+      middle: ["Cedar", "Osmanthus"],
+      base: ["Vanilla", "Tonka Bean", "Patchouli"],
     },
     mainNotes: [
-      { name: "Marine", icon: "fresh" },
-      { name: "Airy", icon: "fresh" },
-      { name: "Salty", icon: "citrus" },
-    ],
-    intensity: "Soft",
-    badges: ["Vacation", "Airy"],
-  },
-  e16: {
-    code: "E16",
-    gender: "men",
-    feeling: "Vintage, cozy, and highly distinguished.",
-    description: "Opens with a rich, boozy blast of rum and spices. The heart is an incredibly realistic, warm pipe tobacco note blended with leather and dark cacao. The base lingers for ages with vanilla, tonka bean, and sweet woods. A warm tobacco fragrance that feels like an exclusive gentleman's club.",
-    usage: "Autumn and winter evenings, leather jackets, intimate gatherings.",
-    scentNotes: {
-      top: ["Rum", "Spices"],
-      middle: ["Pipe Tobacco", "Leather", "Cacao"],
-      base: ["Vanilla", "Tonka Bean", "Sweet Woods"],
-    },
-    mainNotes: [
-      { name: "Tobacco", icon: "warm" },
-      { name: "Boozy", icon: "spicy" },
       { name: "Vanilla", icon: "sweet" },
+      { name: "Tonka", icon: "warm" },
+      { name: "Woody", icon: "woody" },
     ],
     intensity: "Strong",
-    badges: ["Distinguished", "Cozy"],
+    badges: ["Evening Wear", "Statement Scent"],
   },
-
-  // ── WOMEN'S COLLECTION ──
   b197: {
     code: "B197",
     gender: "women",
-    feeling: "A warm, sweet, and addictive scent designed for bold evenings and unforgettable nights.",
-    description: "Opens with a crisp burst of pear and a subtle kick of pink pepper, softened by delicate orange blossom. The heart reveals a rich, creamy coffee accord intertwined with jasmine, bitter almond, and a hint of licorice — creating an irresistibly warm core. The base settles into a deep, enveloping blend of vanilla, patchouli, cashmere wood, and cedar that lingers for hours. An oriental vanilla fragrance best suited for fall and winter evenings.",
+    feeling: "Warm, sweet, and addictive with unmistakable evening glamour.",
+    description:
+      "Pear, pink pepper, and orange blossom create a bright first impression before coffee, jasmine, bitter almond, and licorice make the heart denser and creamier. Vanilla, patchouli, cashmere wood, and cedar keep the base deep, sensual, and long-wearing. A warm floral-gourmand style with clear nighttime appeal.",
     usage: "Evening events, date nights, bold all-black outfits.",
+    scentFamilies: ["vanilla", "floral", "amber"],
     scentNotes: {
       top: ["Pear", "Pink Pepper", "Orange Blossom"],
       middle: ["Coffee", "Jasmine", "Bitter Almond", "Licorice"],
@@ -457,14 +257,16 @@ const productMetadata: Record<string, ProductMeta> = {
       { name: "White Floral", icon: "floral" },
     ],
     intensity: "Strong",
-    badges: ["Night Wear", "Fall & Winter"],
+    badges: ["Night Wear", "Fall and Winter"],
   },
   b206: {
     code: "B206",
     gender: "women",
     feeling: "Feminine, powerful, and unapologetically bold.",
-    description: "Opens with a tempting blend of almond and coffee brightened by bergamot and lemon. The heart is an opulent white-floral bouquet of tuberose, jasmine sambac, orange blossom, Bulgarian rose, and orris — layered and deeply sensual. The base descends into a rich, addictive blend of tonka bean, cacao, vanilla, praline, sandalwood, musk, amber, cashmere wood, patchouli, cinnamon, and cedar. An oriental floral fragrance that commands attention and leaves a lasting impression.",
-    usage: "Special evenings, elegant outfits, high-heeled confidence.",
+    description:
+      "Almond, coffee, bergamot, and lemon open the scent with instant richness. The heart blooms into tuberose, jasmine sambac, orange blossom, Bulgarian rose, and orris, giving it a full floral body with strong presence. Tonka bean, cacao, vanilla, praline, sandalwood, musk, amber, and woods in the base leave a luxurious and lasting trail.",
+    usage: "Special evenings, elegant outfits, dressed-up occasions.",
+    scentFamilies: ["floral", "vanilla", "amber"],
     scentNotes: {
       top: ["Almond", "Coffee", "Bergamot", "Lemon"],
       middle: ["Tuberose", "Jasmine Sambac", "Orange Blossom", "Bulgarian Rose", "Orris"],
@@ -478,12 +280,77 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Strong",
     badges: ["Evening Wear", "Bold"],
   },
+  b222: {
+    code: "B222",
+    gender: "women",
+    feeling: "Bold, polished, and couture-like with a sensual floral lift.",
+    description:
+      "French lavender and bright citrus give the opening a fresh modern edge, while orange blossom and jasmine keep the heart radiant and elegant. Musk and warm vanilla soften the finish without losing structure. A floral-aromatic style that wears clean through the day and more sensual by evening.",
+    usage: "Day-to-night wear, polished office looks, confident evenings.",
+    scentFamilies: ["floral", "aromatic", "vanilla"],
+    scentNotes: {
+      top: ["French Lavender", "Citrus Peel"],
+      middle: ["Orange Blossom", "Jasmine Accord"],
+      base: ["Musk", "Warm Vanilla"],
+    },
+    mainNotes: [
+      { name: "Lavender", icon: "fresh" },
+      { name: "Orange Blossom", icon: "floral" },
+      { name: "Vanilla", icon: "sweet" },
+    ],
+    intensity: "Strong",
+    badges: ["Statement Floral", "Day to Night"],
+  },
+  b223: {
+    code: "B223",
+    gender: "women",
+    feeling: "Luminous, feminine, and smoothly sophisticated.",
+    description:
+      "Bergamot and orange blossom create a bright airy opening before tuberose and jasmine add creamy floral depth through the heart. Cedarwood, vanilla, and white musk in the base keep the finish soft, clean, and polished. A modern white-floral profile with easy elegance and strong everyday wearability.",
+    usage: "Brunches, weddings, daily luxury, smooth evening transitions.",
+    scentFamilies: ["floral", "vanilla", "citrus"],
+    scentNotes: {
+      top: ["Bergamot", "Orange Blossom"],
+      middle: ["Tuberose", "Jasmine"],
+      base: ["Cedarwood", "Vanilla", "White Musk"],
+    },
+    mainNotes: [
+      { name: "Orange Blossom", icon: "floral" },
+      { name: "Tuberose", icon: "floral" },
+      { name: "Vanilla", icon: "sweet" },
+    ],
+    intensity: "Medium",
+    badges: ["Versatile", "Polished"],
+  },
+  b224: {
+    code: "B224",
+    gender: "women",
+    feeling: "Radiant, airy, and polished with a clean floral glow.",
+    description:
+      "A citrus-led opening lifts the fragrance before a smooth rose-and-jasmine heart takes over. White musk keeps the floral body weightless and modern, while soft vanilla adds a subtle warm finish underneath. A clean floral style with a luminous and office-friendly presence.",
+    usage: "Office wear, daytime elegance, spring dressing.",
+    scentFamilies: ["floral", "fresh", "citrus"],
+    scentNotes: {
+      top: ["Citrus Accord"],
+      middle: ["Rose", "Jasmine"],
+      base: ["White Musk", "Vanilla"],
+    },
+    mainNotes: [
+      { name: "Rose", icon: "floral" },
+      { name: "Jasmine", icon: "floral" },
+      { name: "Clean Musk", icon: "musky" },
+    ],
+    intensity: "Soft",
+    badges: ["Office Friendly", "Elegant"],
+  },
   b225: {
     code: "B225",
     gender: "women",
     feeling: "Cheerful, soft, and effortlessly modern.",
-    description: "Bursts open with a juicy crush of strawberry, raspberry, blackberry, sour cherry, and black currant, accented with mandarin orange and lemon. The heart offers a gentle floral embrace of violet and jasmine. The base wraps everything in a warm, cozy blanket of musk, vanilla, cashmeran, woody notes, amber, oakmoss, and patchouli. A floral fruity gourmand fragrance that's youthful, lovable, and perfect for everyday wear.",
+    description:
+      "Strawberry, raspberry, blackberry, sour cherry, and black currant create a bright juicy opening with playful energy. Violet and jasmine soften the heart, while musk, vanilla, cashmeran, woods, amber, oakmoss, and patchouli add a warm fuzzy base. A fruity-floral gourmand style for easy everyday wear.",
     usage: "Everyday elegance, spring vibes, light-toned outfits.",
+    scentFamilies: ["floral", "fresh", "vanilla"],
     scentNotes: {
       top: ["Strawberry", "Raspberry", "Blackberry", "Sour Cherry", "Black Currant"],
       middle: ["Violet", "Jasmine"],
@@ -499,17 +366,12 @@ const productMetadata: Record<string, ProductMeta> = {
   },
 };
 
-// Legacy K-series aliases kept for backwards compatibility with old handles.
 productMetadata["k197"] = productMetadata["b197"];
 productMetadata["k206"] = productMetadata["b206"];
 productMetadata["k225"] = productMetadata["b225"];
 
-/**
- * Extract product code from a Shopify handle
- * e.g. "david-walker-b197-womens-eau-de-parfum-50ml" -> "b197"
- */
 export function extractCodeFromHandle(handle: string): string | null {
-  const match = handle.match(/([ekb]\d{2,3})/i);
+  const match = handle.match(/([ekb]\d{1,3})/i);
   return match ? match[1].toLowerCase() : null;
 }
 

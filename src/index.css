@@ -36,7 +36,7 @@
 
     --radius: 0.5rem;
 
-    /* Dossier-inspired tokens */
+    /* Brand tokens */
     --coral: 8 85% 65%;
     --coral-light: 8 85% 75%;
     --cream: 30 20% 96%;
@@ -76,7 +76,7 @@
   }
 }
 
-/* Dossier-style announcement bar marquee */
+/* Announcement bar marquee */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -84,6 +84,20 @@
 
 .animate-marquee {
   animation: marquee 30s linear infinite;
+}
+
+@keyframes featured-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.featured-marquee-track {
+  animation: featured-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+.featured-marquee-track:hover {
+  animation-play-state: paused;
 }
 
 @layer utilities {

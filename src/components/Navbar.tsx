@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import logo from "@/assets/brand/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, User, Menu, X, ChevronDown } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
+import { getCollectionPath } from "@/lib/catalog";
+import { SITE_NAME } from "@/lib/site";
 
 const Navbar = () => {
   const { t } = useI18n();
@@ -13,8 +14,10 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const navLinks = [
-    { label: t("nav.perfumes"), href: "#products", hasDropdown: true },
-    { label: t("nav.about"), href: "#about", hasDropdown: false },
+    { label: t("nav.perfumes"), to: getCollectionPath("all-perfumes"), hasDropdown: false },
+    { label: t("category.women"), to: getCollectionPath("women"), hasDropdown: false },
+    { label: t("category.men"), to: getCollectionPath("men"), hasDropdown: false },
+    { label: t("nav.about"), to: "/about", hasDropdown: false },
   ];
 
   useEffect(() => {
@@ -34,14 +37,14 @@ const Navbar = () => {
         {/* Left: Nav links (desktop) */}
         <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
+              to={link.to}
               className="flex items-center gap-1 rounded-full border border-border px-4 py-2 font-body text-sm font-medium text-foreground transition-all hover:bg-muted"
             >
               {link.label}
               {link.hasDropdown && <ChevronDown size={14} />}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -55,8 +58,11 @@ const Navbar = () => {
         </button>
 
         {/* Center: Logo */}
-        <Link to="/" className="absolute left-1/2 -translate-x-1/2">
-          <img src={logo} alt="Real Scents" className="h-[7.5rem] md:h-[8.5rem] w-auto" />
+        <Link to="/" className="absolute left-1/2 -translate-x-1/2 text-center">
+          <span className="font-display text-lg font-semibold uppercase tracking-[0.32em] text-foreground md:text-xl">
+            David Walker
+          </span>
+          <span className="sr-only">{SITE_NAME}</span>
         </Link>
 
         {/* Right: Actions */}
@@ -140,14 +146,14 @@ const Navbar = () => {
           >
             <div className="flex flex-col gap-1 px-4 py-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.to}
                   onClick={() => setMenuOpen(false)}
                   className="rounded-lg px-3 py-3 font-body text-base font-medium text-foreground transition-colors hover:bg-muted"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </motion.div>

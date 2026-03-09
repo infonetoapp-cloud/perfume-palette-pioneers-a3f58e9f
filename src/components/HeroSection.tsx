@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback } from "react";
 import heroStudio from "@/assets/hero/hero-studio.jpg";
 import { useI18n } from "@/lib/i18n";
+import { Link } from "react-router-dom";
+import { getCollectionPath } from "@/lib/catalog";
 
 interface Particle {
   id: number;
@@ -137,18 +139,18 @@ const HeroSection = () => {
             {t("hero.subtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#products"
+            <Link
+              to={getCollectionPath("all-perfumes")}
               className="rounded-full bg-charcoal px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all hover:bg-charcoal/80"
             >
               {t("hero.cta1")}
-            </a>
-            <a
-              href="#products"
+            </Link>
+            <Link
+              to={getCollectionPath("best-sellers")}
               className="rounded-full border-2 border-charcoal/30 bg-transparent px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-charcoal transition-all hover:border-charcoal hover:bg-charcoal/5"
             >
               {t("hero.cta2")}
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>

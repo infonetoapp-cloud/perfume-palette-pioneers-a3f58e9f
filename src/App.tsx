@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCartSync } from "@/hooks/useCartSync";
 import { I18nProvider } from "@/lib/i18n";
 import Index from "./pages/Index";
+import CollectionPage from "./pages/CollectionPage";
+import InfoPage from "./pages/InfoPage";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
@@ -16,6 +18,12 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
+      <Route path="/about" element={<InfoPage />} />
+      <Route path="/shipping" element={<InfoPage />} />
+      <Route path="/privacy" element={<InfoPage />} />
+      <Route path="/terms" element={<InfoPage />} />
+      <Route path="/faq" element={<InfoPage />} />
+      <Route path="/collections/:slug" element={<CollectionPage />} />
       <Route path="/product/:handle" element={<ProductDetail />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
