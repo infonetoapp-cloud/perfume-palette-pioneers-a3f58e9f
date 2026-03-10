@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import CategoryCards from "@/components/CategoryCards";
 import ScentFamilySection from "@/components/ScentFamilySection";
