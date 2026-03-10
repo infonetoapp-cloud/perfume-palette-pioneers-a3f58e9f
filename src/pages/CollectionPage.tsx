@@ -1,7 +1,7 @@
 import { type MouseEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import AnnouncementBar from "@/components/AnnouncementBar";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";

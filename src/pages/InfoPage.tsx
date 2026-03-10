@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import AnnouncementBar from "@/components/AnnouncementBar";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Seo from "@/components/Seo";

@@ -20,7 +20,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
-import AnnouncementBar from "@/components/AnnouncementBar";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
