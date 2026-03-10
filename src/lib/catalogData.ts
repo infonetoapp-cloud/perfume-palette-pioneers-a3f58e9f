@@ -1,4 +1,12 @@
-import { STOCKED_PRODUCT_CODES, matchesCollection, sortProductsForCollection, type CollectionSlug } from "@/lib/catalog";
+import {
+  STOCKED_PRODUCT_CODES,
+  getProductDisplayCopy,
+  getStockPriority,
+  matchesCollection,
+  sortProductsForCollection,
+  type CollectionSlug,
+} from "@/lib/catalog";
+import { getBaseFragrancePriceAmount } from "@/lib/promotions";
 import { getProductMeta, type ProductMeta } from "@/lib/productMetadata";
 
 export interface CatalogMoney {
@@ -60,24 +68,9 @@ const PRODUCT_IMAGE_MODULES = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const PRODUCT_PRICE_USD: Record<(typeof STOCKED_PRODUCT_CODES)[number], string> = {
-  e155: "50.00",
-  e49: "50.00",
-  e145: "50.00",
-  e82: "50.00",
-  e185: "50.00",
-  e184: "50.00",
-  e176: "50.00",
-  e71: "50.00",
-  e6: "50.00",
-  e1: "50.00",
-  b206: "50.00",
-  b197: "50.00",
-  b224: "50.00",
-  b223: "50.00",
-  b222: "50.00",
-  b225: "50.00",
-};
+const PRODUCT_PRICE_USD: Record<(typeof STOCKED_PRODUCT_CODES)[number], string> = Object.fromEntries(
+  STOCKED_PRODUCT_CODES.map((code) => [code, getBaseFragrancePriceAmount()]),
+) as Record<(typeof STOCKED_PRODUCT_CODES)[number], string>;
 
 const IMAGE_ROLE_PRIORITY: Record<string, number> = {
   hero: 0,
@@ -137,7 +130,19 @@ function getImageRole(path: string, code: string): string {
 }
 
 function formatImageAlt(title: string, role: string): string {
-  const label = role.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  const normalizedRole = role.toLowerCase();
+  const roleLabels: Record<string, string> = {
+    hero: "Hero image",
+    bottle: "Bottle image",
+    png: "Bottle image",
+    detail: "Detail image",
+    lifestyle: "Lifestyle image",
+    mood1: "Mood image 1",
+    mood2: "Mood image 2",
+    image: "Product image",
+  };
+  const label = roleLabels[normalizedRole]
+    ?? normalizedRole.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
   return `${title} ${label}`.trim();
 }
 
@@ -236,15 +241,74 @@ export function getCatalogProductByHandle(handle: string | undefined): CatalogPr
   return PRODUCT_LOOKUP.get(handle.toLowerCase()) ?? null;
 }
 
+export function searchCatalogProducts(query: string, limit = 6): CatalogProduct[] {
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return [];
+
+  return [...CATALOG_PRODUCTS]
+    .map((product) => {
+      const copy = getProductDisplayCopy(product);
+      const meta = getProductMeta(product.handle);
+      const searchableNotes = meta
+        ? [...meta.scentNotes.top, ...meta.scentNotes.middle, ...meta.scentNotes.base, ...meta.mainNotes.map((note) => note.name)]
+        : [];
+
+      let score = 0;
+      const exactCode = product.code.toLowerCase() === normalizedQuery;
+      const shortTitle = copy.shortTitle.toLowerCase();
+      const fullTitle = copy.title.toLowerCase();
+      const subtitle = copy.subtitle.toLowerCase();
+      const description = copy.description.toLowerCase();
+      const familyMatch = copy.familyLabels.some((label) => label.toLowerCase().includes(normalizedQuery));
+      const noteMatch = searchableNotes.some((note) => note.toLowerCase().includes(normalizedQuery));
+
+      if (exactCode) score += 120;
+      if (shortTitle.startsWith(normalizedQuery)) score += 70;
+      if (fullTitle.includes(normalizedQuery)) score += 55;
+      if (subtitle.includes(normalizedQuery)) score += 35;
+      if (familyMatch) score += 35;
+      if (noteMatch) score += 30;
+      if (description.includes(normalizedQuery)) score += 10;
+
+      return { product, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      return left.product.title.localeCompare(right.product.title);
+    })
+    .slice(0, limit)
+    .map((entry) => entry.product);
+}
+
 export function getRelatedCatalogProducts(handle: string | undefined, limit = 4): CatalogProduct[] {
   const currentProduct = getCatalogProductByHandle(handle);
   if (!currentProduct) return [];
+  const currentMeta = getProductMeta(currentProduct.handle);
 
-  const sameGender = getCatalogProductsForCollection(currentProduct.gender === "women" ? "women" : "men")
-    .filter((product) => product.handle !== currentProduct.handle);
+  return getCatalogProducts()
+    .filter((product) => product.handle !== currentProduct.handle)
+    .map((product) => {
+      const meta = getProductMeta(product.handle);
+      const sharedFamilyCount = currentMeta && meta
+        ? meta.scentFamilies.filter((family) => currentMeta.scentFamilies.includes(family)).length
+        : 0;
+      const sharedMainNoteCount = currentMeta && meta
+        ? meta.mainNotes.filter((note) => currentMeta.mainNotes.some((currentNote) => currentNote.name === note.name)).length
+        : 0;
 
-  const fallback = getCatalogProducts()
-    .filter((product) => product.handle !== currentProduct.handle && product.gender !== currentProduct.gender);
+      let score = 0;
+      if (product.gender === currentProduct.gender) score += 40;
+      score += sharedFamilyCount * 35;
+      score += sharedMainNoteCount * 10;
+      if (currentMeta && meta && meta.intensity === currentMeta.intensity) score += 15;
 
-  return [...sameGender, ...fallback].slice(0, limit);
+      return { product, score };
+    })
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      return getStockPriority(left.product.handle) - getStockPriority(right.product.handle);
+    })
+    .slice(0, limit)
+    .map((entry) => entry.product);
 }

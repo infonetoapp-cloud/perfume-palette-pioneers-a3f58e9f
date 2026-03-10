@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Seo from "@/components/Seo";
-import { getAbsoluteUrl, SITE_NAME } from "@/lib/site";
+import { getAbsoluteUrl, SITE_DOMAIN, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
 
 type InfoSlug = "about" | "shipping" | "privacy" | "faq" | "terms";
 
@@ -27,11 +27,11 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "About Real Scents",
     eyebrow: "Brand Overview",
     description:
-      "Learn how the Real Scents storefront is organized around David Walker fragrances, clear scent notes, easy discovery, and straightforward fragrance shopping information.",
-    lastUpdated: "March 9, 2026",
+      "Learn how Real Scents presents David Walker fragrances online for the United States, with clear scent notes, free U.S. shipping, and direct customer support.",
+    lastUpdated: "March 10, 2026",
     sections: [
       {
-        heading: "Authorized retail focus",
+        heading: "Storefront focus",
         body: "Real Scents is designed to present David Walker fragrances clearly to shoppers in the United States, with direct product pages, organized collections, and consistent scent information.",
       },
       {
@@ -42,14 +42,18 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         heading: "Launch-ready catalog structure",
         body: "Collections are separated into all perfumes, women's fragrances, men's fragrances, and best sellers so the catalog remains easy to browse and ready to scale.",
       },
+      {
+        heading: "Support and contact",
+        body: `Customer support is available at ${SITE_SUPPORT_EMAIL}. Real Scents operates online at ${SITE_DOMAIN} and is structured to make ordering, shipping questions, and fragrance discovery straightforward for U.S. customers.`,
+      },
     ],
   },
   shipping: {
-    title: "Shipping & Returns",
+    title: "Shipping Policy",
     eyebrow: "Order Policies",
     description:
-      "Review free U.S. shipping, processing, delivery, return timing, and refund expectations for fragrance orders placed through Real Scents.",
-    lastUpdated: "March 9, 2026",
+      "Review free U.S. shipping, processing timing, customer support details, and final sale terms for fragrance orders placed through Real Scents.",
+    lastUpdated: "March 10, 2026",
     sections: [
       {
         heading: "Free U.S. shipping",
@@ -57,11 +61,11 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Processing and delivery timing",
-        body: "Most in-stock orders should be processed within 1 to 3 business days. Delivery times may vary by destination, carrier capacity, weather conditions, and holiday volume.",
+        body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery times may vary by destination, carrier capacity, weather conditions, and holiday volume.",
         items: [
           "Orders are processed on business days only.",
           "A shipping confirmation and tracking update should be sent once the order leaves the warehouse.",
-          "Delivery estimates are not guarantees and may change if a carrier experiences delays.",
+          "If there is a material shipping delay after checkout, the customer should be notified using the contact details provided with the order.",
         ],
       },
       {
@@ -69,17 +73,21 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         body: "Customers are responsible for entering a complete and accurate shipping address. Orders may be delayed, adjusted, or canceled if payment review, fraud checks, or address verification issues arise.",
       },
       {
-        heading: "Returns and exchanges",
-        body: "Return requests should be made within 30 days of delivery. Returned items should be unused, in saleable condition, and sent back with original packaging where possible. If an item arrives damaged or incorrect, contact the store promptly so the issue can be reviewed.",
+        heading: "Final sale policy",
+        body: "All fragrance purchases are final sale. Returns and exchanges are not accepted for change-of-mind purchases, scent preference, gift orders, duplicate orders, opened items, or standard order mistakes after checkout is completed.",
         items: [
-          "Refunds are typically issued back to the original payment method after the return is received and inspected.",
-          "Items showing significant use, abuse, or missing original components may be refused.",
-          "Where offered, exchanges are subject to product availability.",
+          "Customers should review product details carefully before completing checkout.",
+          `If an order arrives damaged, defective, or incorrect, the issue should be reported promptly to ${SITE_SUPPORT_EMAIL} for review.`,
+          "Support may request the order number, shipping name, and clear photos of the issue before next steps are provided.",
         ],
       },
       {
         heading: "Taxes and order totals",
         body: "Applicable sales tax may be calculated based on the shipping destination and the requirements of the relevant U.S. jurisdiction. Final taxes and charges should always be reviewed before checkout is completed.",
+      },
+      {
+        heading: "Customer support",
+        body: `Questions about shipping, delivery status, damaged packages, or order issues can be sent to ${SITE_SUPPORT_EMAIL}. Support is available before and after purchase even though fragrance sales are final.`,
       },
     ],
   },
@@ -88,7 +96,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     eyebrow: "Customer Privacy",
     description:
       "Read how this storefront may collect, use, store, and protect customer information for orders, support, analytics, and lawful business operations.",
-    lastUpdated: "March 9, 2026",
+    lastUpdated: "March 10, 2026",
     sections: [
       {
         heading: "Information collected",
@@ -100,7 +108,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         items: [
           "To process and deliver orders",
           "To send transactional updates such as confirmations and shipping notices",
-          "To respond to questions, returns, or support requests",
+          "To respond to questions, order issues, or support requests",
           "To monitor performance, security, and fraud prevention",
         ],
       },
@@ -114,7 +122,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Your choices and rights",
-        body: "Depending on applicable U.S. state privacy law, customers may have the right to request access to personal information, request correction or deletion, and ask questions about how personal information is used. To make a privacy request, customers should use the support contact information published by the store.",
+        body: `Depending on applicable U.S. state privacy law, customers may have the right to request access to personal information, request correction or deletion, and ask questions about how personal information is used. Privacy requests can be sent to ${SITE_SUPPORT_EMAIL}.`,
       },
       {
         heading: "Children's privacy",
@@ -134,8 +142,8 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Frequently Asked Questions",
     eyebrow: "Customer Help",
     description:
-      "Common questions about fragrance shopping, free U.S. shipping, returns, order handling, and product use on the Real Scents storefront.",
-    lastUpdated: "March 9, 2026",
+      "Common questions about fragrance shopping, free U.S. shipping, final sale terms, order support, and product use on the Real Scents storefront.",
+    lastUpdated: "March 10, 2026",
     sections: [
       {
         heading: "How do I choose the right fragrance?",
@@ -150,16 +158,36 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery timing depends on the destination, carrier, and seasonal volume.",
       },
       {
-        heading: "Can I return a fragrance?",
-        body: "Return requests should be made within 30 days of delivery. Returned items should be unused and sent back in saleable condition. Damaged or incorrect deliveries should be reported promptly for review.",
+        heading: "How does the 2 for $119.90 offer work?",
+        body: "Qualifying fragrance orders receive automatic bundle pricing for every pair of perfumes in the cart. A cart with 2 fragrances prices the pair at $119.90 before tax. A cart with 3 fragrances prices two bottles at the bundle rate and the third at the standard single-bottle price.",
+      },
+      {
+        heading: "Can I use SCENT10 with the 2 for $119.90 offer?",
+        body: "No. SCENT10 cannot be combined with the 2-for-$119.90 promotion. Customers can use the bundle rate or the code-based discount, but not both on the same order.",
+      },
+      {
+        heading: "Do I get a free car fragrance with every order?",
+        body: "Yes. Each qualifying order includes one complimentary car fragrance. It is a promotional gift, not part of the item price, and it is limited to one per order.",
+      },
+      {
+        heading: "Can I return a fragrance order?",
+        body: `No. Fragrance purchases are final sale. Returns and exchanges are not accepted for change-of-mind purchases, scent preference, or standard order mistakes after checkout.`,
+      },
+      {
+        heading: "What if my order arrives damaged or incorrect?",
+        body: `If an order arrives damaged, defective, or incorrect, email ${SITE_SUPPORT_EMAIL} promptly with the order number and clear photos so support can review the issue.`,
+      },
+      {
+        heading: "How do I contact support?",
+        body: `For order questions, shipping issues, privacy requests, or general help, email ${SITE_SUPPORT_EMAIL}.`,
       },
       {
         heading: "How should I apply fragrance?",
         body: "For most Eau de Parfum styles, two to four sprays on pulse points is enough. Allow the fragrance to dry naturally on skin instead of rubbing it in.",
       },
       {
-        heading: "Are the product details final?",
-        body: "Product pages are already structured for launch, but details such as final payment flow, support contact information, and any optional rush delivery settings may still be refined before the store goes fully live.",
+        heading: "Where do you sell online?",
+        body: `The Real Scents storefront operates at ${SITE_DOMAIN} and is structured for customers shopping within the United States.`,
       },
     ],
   },
@@ -168,7 +196,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     eyebrow: "Store Terms",
     description:
       "Review the general terms that apply to browsing Real Scents, placing orders, using content, and interacting with the storefront online.",
-    lastUpdated: "March 9, 2026",
+    lastUpdated: "March 10, 2026",
     sections: [
       {
         heading: "Use of the storefront",
@@ -183,6 +211,14 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         body: "Submitting an order request does not guarantee acceptance. The store may decline, limit, or cancel orders in cases involving suspected fraud, payment problems, inventory issues, shipping restrictions, suspected resale abuse, or incorrect listing information.",
       },
       {
+        heading: "Final sale merchandise",
+        body: `Fragrance purchases are sold on a final sale basis. Returns and exchanges are not accepted for change-of-mind purchases, opened items, or scent preference. Damaged, defective, or incorrect orders should be reported promptly to ${SITE_SUPPORT_EMAIL} for review.`,
+      },
+      {
+        heading: "Promotional offers",
+        body: "Bundle pricing, complimentary gifts, and discount codes may be changed or suspended at any time. Promotional gifts are not part of the item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic bundle offers.",
+      },
+      {
         heading: "Intellectual property",
         body: "Storefront content, including branding, design, copy, product photography, graphics, and page structure, belongs to the store or its licensors and may not be copied, redistributed, or used without permission except as allowed by applicable law.",
       },
@@ -193,6 +229,10 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       {
         heading: "Policy changes",
         body: "These terms may be revised at any time by posting an updated version on the storefront. Continued use of the site after updates are published means the updated terms apply going forward.",
+      },
+      {
+        heading: "Contact",
+        body: `Questions about these terms or the operation of the storefront can be sent to ${SITE_SUPPORT_EMAIL}.`,
       },
     ],
   },
@@ -207,10 +247,17 @@ function resolveInfoSlug(pathname: string): InfoSlug {
   return "about";
 }
 
+function toSchemaDate(value: string): string | undefined {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return undefined;
+  return parsed.toISOString().split("T")[0];
+}
+
 const InfoPage = () => {
   const location = useLocation();
   const slug = resolveInfoSlug(location.pathname);
   const content = pageContent[slug];
+  const schemaDate = toSchemaDate(content.lastUpdated);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -220,6 +267,28 @@ const InfoPage = () => {
       { "@type": "ListItem", position: 2, name: content.title, item: getAbsoluteUrl(`/${slug}`) },
     ],
   };
+  const pageJsonLd =
+    slug === "faq"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: content.sections.map((section) => ({
+            "@type": "Question",
+            name: section.heading,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: section.body,
+            },
+          })),
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": slug === "about" ? "AboutPage" : "WebPage",
+          name: content.title,
+          description: content.description,
+          url: getAbsoluteUrl(`/${slug}`),
+          ...(schemaDate ? { dateModified: schemaDate } : {}),
+        };
 
   return (
     <>
@@ -227,7 +296,7 @@ const InfoPage = () => {
         title={`${content.title} | ${SITE_NAME}`}
         description={content.description}
         path={`/${slug}`}
-        jsonLd={breadcrumbJsonLd}
+        jsonLd={[breadcrumbJsonLd, pageJsonLd]}
       />
       <Navbar />
       <main className="min-h-screen bg-background pt-28">

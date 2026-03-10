@@ -3,6 +3,7 @@ import heroProduct from "@/assets/hero/hero-product.jpg";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "react-router-dom";
 import { getCollectionPath } from "@/lib/catalog";
+import { getMotionInitial } from "@/lib/motion";
 
 const BrandStory = () => {
   const { t } = useI18n();
@@ -12,7 +13,7 @@ const BrandStory = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={getMotionInitial({ opacity: 0, x: -30 })}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
@@ -22,7 +23,7 @@ const BrandStory = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={getMotionInitial({ opacity: 0, x: 30 })}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
@@ -46,7 +47,7 @@ const BrandStory = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={getMotionInitial({ opacity: 0, y: 40 })}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}

@@ -1,21 +1,16 @@
-import { useI18n } from "@/lib/i18n";
+import { BUNDLE_PRICE_USD, GIFT_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
 
 const AnnouncementBar = () => {
-  const { t } = useI18n();
-
   const separator = "|";
   const messages = [
-    t("announcement.freeShipping"),
+    `Buy any 2 perfumes for ${formatUsd(BUNDLE_PRICE_USD)}`,
     separator,
-    t("announcement.discount"),
+    `Use ${PROMO_CODE} for 10% off single-bottle orders`,
     separator,
-    t("announcement.newCollection"),
+    `${GIFT_LABEL} with every order`,
     separator,
-    t("announcement.freeShipping"),
+    "Free U.S. shipping",
     separator,
-    t("announcement.discount"),
-    separator,
-    t("announcement.newCollection"),
     separator,
   ];
 

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 export type Locale = "en" | "es";
 
@@ -12,11 +12,16 @@ const translations = {
     "nav.about": "About",
     "nav.search": "Search",
     "nav.searchPlaceholder": "Search perfumes...",
+    "nav.searchHelper": "Search by code, note, or scent family.",
+    "nav.searchResults": "Matching fragrances",
+    "nav.searchEmpty": "No fragrances matched your search.",
+    "nav.searchEmptyHint": "Try a code like E155, a note like vanilla, or a family like woody.",
+    "nav.searchBrowseAll": "Browse all perfumes",
     "nav.account": "Account",
 
     "hero.badge": "NEW",
     "hero.title": "Curated scents:",
-    "hero.subtitle": "Real Scents is an authorized David Walker retailer for the U.S. market.",
+    "hero.subtitle": "Curated David Walker fragrances for the U.S. market.",
     "hero.cta1": "SHOP ALL PERFUMES",
     "hero.cta2": "SHOP BEST SELLERS",
 
@@ -41,7 +46,7 @@ const translations = {
     "brand.desc": "Real Scents presents David Walker Eau de Parfum with clear scent notes, premium visuals, and straightforward U.S. delivery.",
     "brand.learnMore": "Learn More",
     "brand.standardsTitle1": "BUILT FOR",
-    "brand.standardsTitle2": "& DISCOVERY",
+    "brand.standardsTitle2": "ONLINE DISCOVERY",
     "brand.standardsDesc": "Every listing is organized around scent profile, notes, and wearing occasion so customers can shop by mood instead of guessing from a code alone.",
 
     "newsletter.title": "Be the first to know",
@@ -49,8 +54,12 @@ const translations = {
     "newsletter.placeholder": "Your email address",
     "newsletter.subscribe": "Subscribe",
     "newsletter.privacy": "We respect your privacy. Unsubscribe anytime.",
+    "newsletter.status": "Email signup opens at launch.",
+    "newsletter.comingSoon":
+      "The opt-in flow is not live yet. Final contact details and subscription setup will be added before launch.",
+    "newsletter.browse": "Browse all perfumes",
 
-    "footer.tagline": "Real Scents is an authorized David Walker retailer for customers shopping from the United States.",
+    "footer.tagline": "Shop David Walker fragrances at Real Scents with clear scent notes and free U.S. shipping.",
     "footer.shop": "Shop",
     "footer.shopAll": "All Perfumes",
     "footer.shopWomen": "Women",
@@ -58,11 +67,12 @@ const translations = {
     "footer.shopNew": "Best Sellers",
     "footer.info": "Info",
     "footer.aboutUs": "About Us",
-    "footer.shipping": "Shipping & Returns",
+    "footer.shipping": "Shipping Policy",
     "footer.privacy": "Privacy Policy",
     "footer.terms": "Terms of Service",
     "footer.faq": "FAQ",
     "footer.social": "Social",
+    "footer.socialNote": "Social links will be added at launch.",
     "footer.copyright": "Copyright 2026 Real Scents. All rights reserved.",
 
     "cart.title": "Cart",
@@ -72,7 +82,7 @@ const translations = {
     "cart.total": "Total",
     "cart.checkout": "CHECKOUT",
     "cart.previewCheckout": "CHECKOUT OPENS AT LAUNCH",
-    "cart.previewNote": "The store is running in preview mode. Cart editing works now, and checkout will be enabled when the launch setup is complete.",
+    "cart.previewNote": "The store is running in preview mode. Campaign pricing is shown here now, and Shopify checkout will be connected when launch setup is complete.",
     "cart.added": "Added to cart",
 
     "product.back": "Back",
@@ -91,11 +101,16 @@ const translations = {
     "nav.about": "Nosotros",
     "nav.search": "Buscar",
     "nav.searchPlaceholder": "Buscar perfumes...",
+    "nav.searchHelper": "Busca por codigo, nota o familia olfativa.",
+    "nav.searchResults": "Fragancias relacionadas",
+    "nav.searchEmpty": "No se encontraron fragancias para esa busqueda.",
+    "nav.searchEmptyHint": "Prueba con un codigo como E155, una nota como vainilla o una familia como amaderado.",
+    "nav.searchBrowseAll": "Ver todos los perfumes",
     "nav.account": "Cuenta",
 
     "hero.badge": "NUEVO",
     "hero.title": "Aromas selectos:",
-    "hero.subtitle": "Real Scents es un minorista autorizado de David Walker para el mercado de Estados Unidos.",
+    "hero.subtitle": "Fragancias David Walker seleccionadas para el mercado de Estados Unidos.",
     "hero.cta1": "VER TODOS LOS PERFUMES",
     "hero.cta2": "VER LOS MAS VENDIDOS",
 
@@ -120,7 +135,7 @@ const translations = {
     "brand.desc": "Real Scents presenta Eau de Parfum de David Walker con notas claras, visuales premium y una experiencia de compra pensada para Estados Unidos.",
     "brand.learnMore": "Saber Mas",
     "brand.standardsTitle1": "HECHO PARA",
-    "brand.standardsTitle2": "& DESCUBRIR",
+    "brand.standardsTitle2": "DESCUBRIMIENTO ONLINE",
     "brand.standardsDesc": "Cada ficha esta organizada por perfil olfativo, notas y ocasion de uso para que la compra online sea mas clara y directa.",
 
     "newsletter.title": "Se el primero en enterarte",
@@ -128,8 +143,12 @@ const translations = {
     "newsletter.placeholder": "Tu correo electronico",
     "newsletter.subscribe": "Suscribirse",
     "newsletter.privacy": "Respetamos tu privacidad. Cancela cuando quieras.",
+    "newsletter.status": "El registro por email se abrira en el lanzamiento.",
+    "newsletter.comingSoon":
+      "El flujo de suscripcion aun no esta activo. Los datos finales de contacto y el formulario se agregaran antes del lanzamiento.",
+    "newsletter.browse": "Ver todos los perfumes",
 
-    "footer.tagline": "Real Scents es un minorista autorizado de David Walker para clientes que compran desde Estados Unidos.",
+    "footer.tagline": "Compra fragancias David Walker en Real Scents con notas olfativas claras y envio gratuito en Estados Unidos.",
     "footer.shop": "Tienda",
     "footer.shopAll": "Todos los Perfumes",
     "footer.shopWomen": "Mujer",
@@ -137,11 +156,12 @@ const translations = {
     "footer.shopNew": "Mas Vendidos",
     "footer.info": "Informacion",
     "footer.aboutUs": "Sobre Nosotros",
-    "footer.shipping": "Envios y Devoluciones",
+    "footer.shipping": "Politica de Envio",
     "footer.privacy": "Politica de Privacidad",
     "footer.terms": "Terminos del Servicio",
     "footer.faq": "Preguntas Frecuentes",
     "footer.social": "Social",
+    "footer.socialNote": "Los enlaces sociales se anadiran en el lanzamiento.",
     "footer.copyright": "Copyright 2026 Real Scents. Todos los derechos reservados.",
 
     "cart.title": "Carrito",
@@ -151,7 +171,7 @@ const translations = {
     "cart.total": "Total",
     "cart.checkout": "PAGAR",
     "cart.previewCheckout": "PAGO DISPONIBLE EN EL LANZAMIENTO",
-    "cart.previewNote": "La tienda esta en modo previo. El carrito funciona ahora y el pago se activara cuando termine la configuracion del lanzamiento.",
+    "cart.previewNote": "La tienda esta en modo previo. La campana promocional ya se muestra aqui y el pago de Shopify se conectara cuando termine la configuracion del lanzamiento.",
     "cart.added": "Anadido al carrito",
 
     "product.back": "Volver",
@@ -173,17 +193,33 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
+function getInitialLocale(): Locale {
+  if (typeof window === "undefined") {
+    return "en";
+  }
+
+  const storedLocale = window.localStorage.getItem("locale");
+  if (storedLocale === "en" || storedLocale === "es") {
+    return storedLocale;
+  }
+
+  const browserLanguage = window.navigator.language?.slice(0, 2);
+  return browserLanguage === "es" ? "es" : "en";
+}
+
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocaleState] = useState<Locale>(() => {
-    const browserLanguage = navigator.language?.slice(0, 2);
-    return browserLanguage === "es" ? "es" : "en";
-  });
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
 
   const setLocale = useCallback((nextLocale: Locale) => {
     setLocaleState(nextLocale);
-    localStorage.setItem("locale", nextLocale);
-    document.documentElement.lang = nextLocale;
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    window.localStorage.setItem("locale", locale);
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   const t = useCallback(
     (key: TranslationKey): string => {

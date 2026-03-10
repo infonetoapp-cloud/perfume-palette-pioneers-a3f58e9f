@@ -261,7 +261,7 @@ function buildMetaDescription(title: string, meta: ProductMeta | null, noteHighl
     return `${title} in 50ml Eau de Parfum. ${meta.feeling} A ${familySummary} ${categoryLabel.toLowerCase()} with notes like ${notes}. Free U.S. shipping available.`;
   }
 
-  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop with Real Scents, a U.S.-focused authorized David Walker retailer.`;
+  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop David Walker fragrances online at Real Scents with free U.S. shipping.`;
 }
 
 export function getCollectionDefinition(slug: string | undefined): CollectionDefinition {

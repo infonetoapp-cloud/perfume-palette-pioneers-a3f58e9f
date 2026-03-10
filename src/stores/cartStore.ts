@@ -13,20 +13,33 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
+  promoCode: string;
   isLoading: boolean;
   isSyncing: boolean;
   addItem: (item: CartItem) => Promise<void>;
   updateQuantity: (variantId: string, quantity: number) => Promise<void>;
   removeItem: (variantId: string) => Promise<void>;
+  setPromoCode: (promoCode: string) => void;
+  clearPromoCode: () => void;
   clearCart: () => void;
   syncCart: () => Promise<void>;
   getCheckoutUrl: () => string | null;
 }
 
+const memoryStorage: Storage = {
+  getItem: () => null,
+  setItem: () => undefined,
+  removeItem: () => undefined,
+  clear: () => undefined,
+  key: () => null,
+  length: 0,
+};
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      promoCode: "",
       isLoading: false,
       isSyncing: false,
 
@@ -81,14 +94,16 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
+      setPromoCode: (promoCode) => set({ promoCode }),
+      clearPromoCode: () => set({ promoCode: "" }),
       clearCart: () => set({ items: [] }),
       syncCart: async () => undefined,
       getCheckoutUrl: () => null,
     }),
     {
       name: "david-walker-local-cart-v1",
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ items: state.items }),
+      storage: createJSONStorage(() => (typeof window === "undefined" ? memoryStorage : window.localStorage)),
+      partialize: (state) => ({ items: state.items, promoCode: state.promoCode }),
     },
   ),
 );

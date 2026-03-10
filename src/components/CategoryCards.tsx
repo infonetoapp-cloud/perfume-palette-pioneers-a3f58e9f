@@ -4,6 +4,7 @@ import categoryMen from "@/assets/categories/category-men.jpg";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "react-router-dom";
 import { getCollectionPath } from "@/lib/catalog";
+import { getMotionInitial } from "@/lib/motion";
 
 const CategoryCards = () => {
   const { t } = useI18n();
@@ -20,7 +21,7 @@ const CategoryCards = () => {
           {categories.map((cat, i) => (
             <motion.div
               key={cat.label}
-              initial={{ opacity: 0, y: 30 }}
+              initial={getMotionInitial({ opacity: 0, y: 30 })}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}

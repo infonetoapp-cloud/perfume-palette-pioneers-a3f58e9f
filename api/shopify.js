@@ -1,11 +1,18 @@
 const SHOPIFY_API_VERSION = process.env.SHOPIFY_API_VERSION || "2025-07";
-const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || "7ymkg5-gx.myshopify.com";
-const SHOPIFY_STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_TOKEN || "4dfb9a77a17285ce363925e9c446fd23";
+const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
+const SHOPIFY_STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_TOKEN;
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  if (!SHOPIFY_STORE_DOMAIN || !SHOPIFY_STOREFRONT_TOKEN) {
+    return res.status(500).json({
+      error: "Shopify proxy is not configured",
+      detail: "Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN in the deployment environment.",
+    });
   }
 
   try {

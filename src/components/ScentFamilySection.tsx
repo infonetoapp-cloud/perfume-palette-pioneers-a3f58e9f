@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Citrus, Flame, Flower2, Leaf, Sparkles, TreePine, Wind } from "lucide-react";
 import { getCollectionDefinition, getCollectionPath, SCENT_FAMILY_SLUGS, type ScentFamily } from "@/lib/catalog";
 import { getCatalogProductsForCollection } from "@/lib/catalogData";
+import { getMotionInitial } from "@/lib/motion";
 
 const FAMILY_IMAGE_MODULES = import.meta.glob("../assets/scent-families/*.{png,jpg,jpeg,webp}", {
   eager: true,
@@ -57,7 +58,7 @@ const ScentFamilySection = () => {
           {families.map(({ slug, definition, count, Icon, image }, index) => (
             <motion.div
               key={slug}
-              initial={{ opacity: 0, y: 24 }}
+              initial={getMotionInitial({ opacity: 0, y: 24 })}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: index * 0.05 }}

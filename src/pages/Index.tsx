@@ -7,7 +7,7 @@ import BrandStory from "@/components/BrandStory";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
-import { getAbsoluteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import { getAbsoluteUrl, SITE_BRAND, SITE_DESCRIPTION, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
 
 const Index = () => {
   return (
@@ -19,10 +19,31 @@ const Index = () => {
         jsonLd={[
           {
             "@context": "https://schema.org",
-            "@type": "Store",
+            "@type": "Organization",
+            name: SITE_NAME,
+            brand: SITE_BRAND,
+            url: getAbsoluteUrl("/"),
+            email: SITE_SUPPORT_EMAIL,
+            description: SITE_DESCRIPTION,
+            areaServed: {
+              "@type": "Country",
+              name: "United States",
+            },
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              email: SITE_SUPPORT_EMAIL,
+              areaServed: "US",
+              availableLanguage: ["en"],
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "OnlineStore",
             name: SITE_NAME,
             description: SITE_DESCRIPTION,
             url: getAbsoluteUrl("/"),
+            email: SITE_SUPPORT_EMAIL,
             areaServed: {
               "@type": "Country",
               name: "United States",
@@ -37,6 +58,7 @@ const Index = () => {
             "@type": "WebSite",
             name: SITE_NAME,
             url: getAbsoluteUrl("/"),
+            inLanguage: "en-US",
           },
         ]}
       />

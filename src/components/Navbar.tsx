@@ -1,18 +1,52 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, User, Menu, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
-import { getCollectionPath } from "@/lib/catalog";
+import { getCollectionPath, getProductDisplayCopy } from "@/lib/catalog";
+import { searchCatalogProducts, type CatalogProduct } from "@/lib/catalogData";
+import { formatUsd } from "@/lib/promotions";
 import { SITE_NAME } from "@/lib/site";
 import AnnouncementBar from "@/components/AnnouncementBar";
 
+const SearchResultLink = ({ product, onSelect }: { product: CatalogProduct; onSelect: () => void }) => {
+  const copy = getProductDisplayCopy(product);
+  const image = product.images[0];
+
+  return (
+    <Link
+      to={`/product/${product.handle}`}
+      onClick={onSelect}
+      className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/70 p-3 transition-colors hover:border-accent/40 hover:bg-secondary/40"
+    >
+      <div className="h-16 w-14 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
+        {image ? (
+          <img src={image.url} alt={image.altText} className="h-full w-full object-cover" loading="lazy" />
+        ) : null}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          {copy.eyebrow}
+        </p>
+        <p className="mt-1 truncate font-display text-sm font-semibold text-foreground">{copy.shortTitle}</p>
+        <p className="mt-1 line-clamp-1 font-body text-xs text-muted-foreground">{copy.subtitle}</p>
+      </div>
+      <span className="font-display text-sm font-bold text-foreground">{formatUsd(parseFloat(product.price.amount))}</span>
+    </Link>
+  );
+};
+
 const Navbar = () => {
   const { t } = useI18n();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const isHome = location.pathname === "/";
+  const useTransparentNav = isHome && !scrolled && !searchOpen && !menuOpen;
 
   const navLinks = [
     { label: t("nav.perfumes"), to: getCollectionPath("all-perfumes") },
@@ -20,12 +54,47 @@ const Navbar = () => {
     { label: t("category.men"), to: getCollectionPath("men") },
     { label: t("nav.about"), to: "/about" },
   ];
+  const trimmedQuery = searchQuery.trim();
+  const searchResults = trimmedQuery.length >= 2 ? searchCatalogProducts(trimmedQuery, 6) : [];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setSearchOpen(false);
+    setSearchQuery("");
+  }, [location.pathname]);
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  const toggleSearch = () => {
+    if (searchOpen) {
+      closeSearch();
+      return;
+    }
+
+    setMenuOpen(false);
+    setSearchOpen(true);
+  };
+
+  const handleMenuToggle = () => {
+    closeSearch();
+    setMenuOpen((current) => !current);
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (searchResults.length === 0) return;
+    navigate(`/product/${searchResults[0].handle}`);
+    closeSearch();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -41,9 +110,7 @@ const Navbar = () => {
       {/* Main nav */}
       <nav
         className={`transition-all duration-500 ${
-          scrolled
-            ? "bg-background/95 backdrop-blur-md shadow-soft"
-            : "bg-transparent"
+          useTransparentNav ? "bg-transparent" : "bg-background/95 backdrop-blur-md shadow-soft"
         }`}
       >
         <div className="container mx-auto flex items-center justify-between px-5 py-4 lg:px-8">
@@ -51,7 +118,7 @@ const Navbar = () => {
           <Link to="/" className="relative z-10">
             <span
               className={`font-display text-lg font-semibold uppercase tracking-[0.32em] transition-colors duration-500 md:text-xl ${
-                scrolled ? "text-foreground" : "text-white"
+                useTransparentNav ? "text-white" : "text-foreground"
               }`}
             >
               Real Scents
@@ -66,9 +133,9 @@ const Navbar = () => {
                 key={link.label}
                 to={link.to}
                 className={`rounded-full px-4 py-2 font-body text-sm font-medium transition-all duration-500 ${
-                  scrolled
-                    ? "text-foreground hover:bg-muted"
-                    : "text-white/90 hover:text-white hover:bg-white/10"
+                  useTransparentNav
+                    ? "text-white/90 hover:bg-white/10 hover:text-white"
+                    : "text-foreground hover:bg-muted"
                 }`}
               >
                 {link.label}
@@ -79,61 +146,42 @@ const Navbar = () => {
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center">
-              {searchOpen ? (
-                <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 200, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  className="flex items-center gap-2 rounded-full border border-white/20 bg-black/20 backdrop-blur-sm px-3 py-1.5"
-                >
-                  <Search size={16} className="text-white/70" />
-                  <input
-                    type="text"
-                    placeholder={t("nav.searchPlaceholder")}
-                    className="w-full bg-transparent font-body text-sm text-white outline-none placeholder:text-white/50"
-                    autoFocus
-                    onBlur={() => setSearchOpen(false)}
-                  />
-                </motion.div>
-              ) : (
-                <button
-                  onClick={() => setSearchOpen(true)}
-                  className={`transition-colors duration-500 ${
-                    scrolled ? "text-foreground hover:text-accent" : "text-white/90 hover:text-white"
-                  }`}
-                >
-                  <Search size={20} />
-                </button>
-              )}
+              <button
+                aria-label={t("nav.search")}
+                onClick={toggleSearch}
+                className={`transition-colors duration-500 ${
+                  useTransparentNav ? "text-white/90 hover:text-white" : "text-foreground hover:text-accent"
+                }`}
+              >
+                <Search size={20} />
+              </button>
             </div>
 
             <button
               aria-label={t("nav.search")}
               className={`md:hidden transition-colors duration-500 ${
-                scrolled ? "text-foreground" : "text-white"
+                useTransparentNav ? "text-white" : "text-foreground"
               }`}
-              onClick={() => setSearchOpen(!searchOpen)}
+              onClick={toggleSearch}
             >
               <Search size={20} />
             </button>
 
-            <button
-              aria-label={t("nav.account")}
-              className={`hidden md:block transition-colors duration-500 ${
-                scrolled ? "text-foreground hover:text-accent" : "text-white/90 hover:text-white"
-              }`}
-            >
-              <User size={20} />
-            </button>
-
-            <CartDrawer />
+            <CartDrawer
+              onOpenChange={(open) => {
+                if (open) {
+                  setMenuOpen(false);
+                  closeSearch();
+                }
+              }}
+            />
 
             <button
               aria-label="Menu"
               className={`md:hidden transition-colors duration-500 ${
-                scrolled ? "text-foreground" : "text-white"
+                useTransparentNav ? "text-white" : "text-foreground"
               }`}
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={handleMenuToggle}
             >
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -144,19 +192,61 @@ const Navbar = () => {
         <AnimatePresence>
           {searchOpen && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="border-t border-white/10 px-4 py-3 md:hidden bg-black/40 backdrop-blur-md"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              className="border-t border-border bg-background/95 px-4 py-4 backdrop-blur-md"
             >
-              <div className="flex items-center gap-2 rounded-full border border-white/20 px-3 py-2">
-                <Search size={16} className="text-white/60" />
-                <input
-                  type="text"
-                  placeholder={t("nav.searchPlaceholder")}
-                  className="w-full bg-transparent font-body text-sm text-white outline-none placeholder:text-white/50"
-                  autoFocus
-                />
+              <div className="mx-auto max-w-3xl">
+                <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-3 shadow-soft">
+                  <Search size={16} className="text-muted-foreground" />
+                  <input
+                    type="search"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder={t("nav.searchPlaceholder")}
+                    className="w-full bg-transparent font-body text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={closeSearch}
+                    className="rounded-full px-2 py-1 font-body text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Close
+                  </button>
+                </form>
+
+                <div className="mt-3 rounded-3xl border border-border bg-card/95 p-4 shadow-soft">
+                  {trimmedQuery.length < 2 ? (
+                    <p className="font-body text-sm text-muted-foreground">{t("nav.searchHelper")}</p>
+                  ) : searchResults.length > 0 ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between gap-4">
+                        <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                          {t("nav.searchResults")}
+                        </p>
+                        <Link
+                          to={getCollectionPath("all-perfumes")}
+                          onClick={closeSearch}
+                          className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-foreground transition-colors hover:text-accent"
+                        >
+                          {t("nav.searchBrowseAll")}
+                        </Link>
+                      </div>
+                      <div className="space-y-2">
+                        {searchResults.map((product) => (
+                          <SearchResultLink key={product.id} product={product} onSelect={closeSearch} />
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <p className="font-body text-sm font-medium text-foreground">{t("nav.searchEmpty")}</p>
+                      <p className="font-body text-sm text-muted-foreground">{t("nav.searchEmptyHint")}</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}

@@ -8,6 +8,7 @@ import ProductCard from "@/components/ProductCard";
 import Seo from "@/components/Seo";
 import { getCollectionDefinition, getCollectionPath, getProductDisplayCopy, SCENT_FAMILY_SLUGS } from "@/lib/catalog";
 import { getCatalogProductsForCollection, type CatalogProduct } from "@/lib/catalogData";
+import { getProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_NAME } from "@/lib/site";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -18,6 +19,18 @@ const CollectionPage = () => {
   const addItem = useCartStore((state) => state.addItem);
   const isCartLoading = useCartStore((state) => state.isLoading);
   const filteredProducts = getCatalogProductsForCollection(collection.slug);
+  const familyCounts = SCENT_FAMILY_SLUGS
+    .map((family) => ({
+      family,
+      count: filteredProducts.filter((product) => getProductMeta(product.handle)?.scentFamilies.includes(family)).length,
+    }))
+    .filter((entry) => entry.count > 0)
+    .sort((left, right) => {
+      if (left.family === collection.slug) return -1;
+      if (right.family === collection.slug) return 1;
+      if (right.count !== left.count) return right.count - left.count;
+      return left.family.localeCompare(right.family);
+    });
 
   const handleAddToCart = async (event: MouseEvent, product: CatalogProduct) => {
     event.preventDefault();
@@ -77,8 +90,8 @@ const CollectionPage = () => {
       />
       <Navbar />
       <main className="min-h-screen bg-background pt-28">
-        <section className="border-b border-border bg-secondary/30">
-          <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
+        <section className="bg-background">
+          <div className="container mx-auto px-4 py-10 lg:px-8 lg:py-14">
             <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-1.5 font-body text-xs text-muted-foreground">
               <Link to="/" className="transition-colors hover:text-foreground">Home</Link>
               <ChevronRight className="h-3 w-3" />
@@ -90,39 +103,44 @@ const CollectionPage = () => {
             <p className="mt-4 font-body text-sm font-medium text-foreground">{filteredProducts.length} fragrances in this collection</p>
 
             {collection.kind === "family" && (
-              <div className="mt-8 grid gap-4 lg:grid-cols-3">
-                <article className="rounded-3xl border border-border bg-card p-5 shadow-soft">
+              <div className="mt-8 max-w-4xl space-y-5">
+                <article>
                   <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-accent">What It Smells Like</p>
-                  <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">{collection.story}</p>
+                  <p className="mt-3 max-w-3xl font-body text-[15px] leading-8 text-foreground/80">{collection.story}</p>
                 </article>
-                <article className="rounded-3xl border border-border bg-card p-5 shadow-soft">
+                <article>
                   <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-accent">Common Notes</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {(collection.commonNotes ?? []).map((note) => (
-                      <span key={note} className="rounded-full border border-border bg-secondary/40 px-3 py-1 font-body text-xs text-foreground">
+                      <span key={note} className="rounded-full border border-border bg-secondary/30 px-3 py-1.5 font-body text-xs font-medium text-foreground">
                         {note}
                       </span>
                     ))}
                   </div>
                 </article>
-                <article className="rounded-3xl border border-border bg-card p-5 shadow-soft">
+                <article className="border-t border-border/70 pt-4">
                   <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-accent">Best For</p>
-                  <p className="mt-3 font-body text-sm leading-relaxed text-muted-foreground">{collection.wearMoments}</p>
+                  <p className="mt-3 max-w-3xl font-body text-sm leading-7 text-muted-foreground">{collection.wearMoments}</p>
                 </article>
               </div>
             )}
 
-            {collection.slug === "all-perfumes" && (
-              <div className="mt-8 flex flex-wrap gap-2">
-                {SCENT_FAMILY_SLUGS.map((family) => {
+            {familyCounts.length > 0 && (
+              <div className="scrollbar-none mt-8 flex gap-2 overflow-x-auto pb-1 md:flex-wrap">
+                {familyCounts.map(({ family, count }) => {
                   const familyDefinition = getCollectionDefinition(family);
+                  const isActive = collection.slug === family;
                   return (
                     <Link
                       key={family}
                       to={getCollectionPath(family)}
-                      className="rounded-full border border-border bg-card px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.16em] text-foreground transition-colors hover:border-accent hover:text-accent"
+                      className={`shrink-0 rounded-full border px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
+                        isActive
+                          ? "border-foreground bg-foreground text-background"
+                          : "border-border bg-transparent text-foreground hover:border-foreground hover:text-foreground"
+                      }`}
                     >
-                      {familyDefinition.label}
+                      {familyDefinition.label} ({count})
                     </Link>
                   );
                 })}

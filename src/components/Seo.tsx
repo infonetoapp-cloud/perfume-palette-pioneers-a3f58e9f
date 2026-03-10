@@ -1,11 +1,13 @@
 import { useEffect } from "react";
-import { getAbsoluteUrl, SITE_NAME } from "@/lib/site";
+import { SITE_DEFAULT_SOCIAL_IMAGE_ALT, SITE_NAME } from "@/lib/site";
+import { resolveSeoData, useSeoCollector } from "@/lib/seoContext";
 
 interface SeoProps {
   title: string;
   description: string;
   path?: string;
   image?: string;
+  imageAlt?: string;
   type?: "website" | "product";
   noindex?: boolean;
   jsonLd?: Array<Record<string, unknown>> | Record<string, unknown>;
@@ -37,41 +39,57 @@ function upsertLink(selector: string, attributes: Record<string, string>) {
   });
 }
 
-const Seo = ({ title, description, path = "/", image, type = "website", noindex = false, jsonLd }: SeoProps) => {
+const Seo = ({
+  title,
+  description,
+  path = "/",
+  image,
+  imageAlt = SITE_DEFAULT_SOCIAL_IMAGE_ALT,
+  type = "website",
+  noindex = false,
+  jsonLd,
+}: SeoProps) => {
+  const collector = useSeoCollector();
+  const resolved = resolveSeoData({ title, description, path, image, imageAlt, type, noindex, jsonLd });
+
+  if (collector) {
+    collector.register(resolved);
+  }
+
   useEffect(() => {
-    const absoluteUrl = getAbsoluteUrl(path);
-    const absoluteImage = image ? getAbsoluteUrl(image) : undefined;
+    document.title = resolved.title;
 
-    document.title = title;
-
-    upsertMeta('meta[name="description"]', { name: "description", content: description });
+    upsertMeta('meta[name="description"]', { name: "description", content: resolved.description });
+    upsertMeta('meta[name="application-name"]', { name: "application-name", content: SITE_NAME });
+    upsertMeta('meta[name="apple-mobile-web-app-title"]', { name: "apple-mobile-web-app-title", content: SITE_NAME });
+    upsertMeta('meta[name="theme-color"]', { name: "theme-color", content: "#f3ede4" });
     upsertMeta('meta[name="robots"]', {
       name: "robots",
-      content: noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      content: resolved.robots,
     });
+    upsertMeta('meta[property="og:locale"]', { property: "og:locale", content: "en_US" });
     upsertMeta('meta[property="og:site_name"]', { property: "og:site_name", content: SITE_NAME });
-    upsertMeta('meta[property="og:type"]', { property: "og:type", content: type });
-    upsertMeta('meta[property="og:title"]', { property: "og:title", content: title });
-    upsertMeta('meta[property="og:description"]', { property: "og:description", content: description });
-    upsertMeta('meta[property="og:url"]', { property: "og:url", content: absoluteUrl });
+    upsertMeta('meta[property="og:type"]', { property: "og:type", content: resolved.type });
+    upsertMeta('meta[property="og:title"]', { property: "og:title", content: resolved.title });
+    upsertMeta('meta[property="og:description"]', { property: "og:description", content: resolved.description });
+    upsertMeta('meta[property="og:url"]', { property: "og:url", content: resolved.canonicalUrl });
     upsertMeta('meta[name="twitter:card"]', {
       name: "twitter:card",
-      content: absoluteImage ? "summary_large_image" : "summary",
+      content: "summary_large_image",
     });
-    upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: title });
-    upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: description });
-    upsertLink('link[rel="canonical"]', { rel: "canonical", href: absoluteUrl });
-
-    if (absoluteImage) {
-      upsertMeta('meta[property="og:image"]', { property: "og:image", content: absoluteImage });
-      upsertMeta('meta[name="twitter:image"]', { name: "twitter:image", content: absoluteImage });
-    }
+    upsertMeta('meta[name="twitter:site"]', { name: "twitter:site", content: SITE_NAME });
+    upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: resolved.title });
+    upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: resolved.description });
+    upsertLink('link[rel="canonical"]', { rel: "canonical", href: resolved.canonicalUrl });
+    upsertMeta('meta[property="og:image"]', { property: "og:image", content: resolved.imageUrl });
+    upsertMeta('meta[property="og:image:alt"]', { property: "og:image:alt", content: resolved.imageAlt });
+    upsertMeta('meta[name="twitter:image"]', { name: "twitter:image", content: resolved.imageUrl });
+    upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt", content: resolved.imageAlt });
 
     document.head.querySelectorAll('script[data-seo-managed="true"]').forEach((script) => script.remove());
 
-    if (jsonLd) {
-      const payloads = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
-      payloads.forEach((payload) => {
+    if (resolved.jsonLd.length > 0) {
+      resolved.jsonLd.forEach((payload) => {
         const script = document.createElement("script");
         script.type = "application/ld+json";
         script.dataset.seoManaged = "true";
@@ -79,7 +97,7 @@ const Seo = ({ title, description, path = "/", image, type = "website", noindex 
         document.head.appendChild(script);
       });
     }
-  }, [description, image, jsonLd, noindex, path, title, type]);
+  }, [resolved]);
 
   return null;
 };

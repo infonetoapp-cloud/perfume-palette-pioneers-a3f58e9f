@@ -1,0 +1,40 @@
+export const staticPaths = [
+  "/",
+  "/about",
+  "/shipping",
+  "/privacy",
+  "/terms",
+  "/faq",
+  "/collections/all-perfumes",
+  "/collections/women",
+  "/collections/men",
+  "/collections/best-sellers",
+  "/collections/fresh",
+  "/collections/woody",
+  "/collections/vanilla",
+  "/collections/floral",
+  "/collections/citrus",
+  "/collections/amber",
+  "/collections/aromatic",
+];
+
+export const productPaths = [
+  "/product/david-walker-e155-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e49-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e145-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e82-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e185-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e184-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e176-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e71-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e6-mens-eau-de-parfum-50ml",
+  "/product/david-walker-e1-mens-eau-de-parfum-50ml",
+  "/product/david-walker-b206-womens-eau-de-parfum-50ml",
+  "/product/david-walker-b197-womens-eau-de-parfum-50ml",
+  "/product/david-walker-b224-womens-eau-de-parfum-50ml",
+  "/product/david-walker-b223-womens-eau-de-parfum-50ml",
+  "/product/david-walker-b222-womens-eau-de-parfum-50ml",
+  "/product/david-walker-b225-womens-eau-de-parfum-50ml",
+];
+
+export const allPaths = [...staticPaths, ...productPaths];
