@@ -1,4 +1,4 @@
-import { extractCodeFromHandle, getProductMeta, type ProductMeta } from "@/lib/productMetadata";
+import { extractCodeFromHandle, getProductMeta, type ProductMeta, type ScentFamily } from "@/lib/productMetadata";
 export type { ScentFamily } from "@/lib/productMetadata";
 
 export type ProductLike = {
