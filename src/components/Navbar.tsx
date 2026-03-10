@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, User, Menu, X, ChevronDown } from "lucide-react";
+import { Search, User, Menu, X } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
@@ -14,10 +14,10 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const navLinks = [
-    { label: t("nav.perfumes"), to: getCollectionPath("all-perfumes"), hasDropdown: false },
-    { label: t("category.women"), to: getCollectionPath("women"), hasDropdown: false },
-    { label: t("category.men"), to: getCollectionPath("men"), hasDropdown: false },
-    { label: t("nav.about"), to: "/about", hasDropdown: false },
+    { label: t("nav.perfumes"), to: getCollectionPath("all-perfumes") },
+    { label: t("category.women"), to: getCollectionPath("women") },
+    { label: t("category.men"), to: getCollectionPath("men") },
+    { label: t("nav.about"), to: "/about" },
   ];
 
   useEffect(() => {
@@ -26,44 +26,43 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/95 backdrop-blur-sm shadow-soft" : "bg-background"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-background/95 backdrop-blur-md shadow-soft"
+          : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
-        {/* Left: Nav links (desktop) */}
-        <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              to={link.to}
-              className="flex items-center gap-1 rounded-full border border-border px-4 py-2 font-body text-sm font-medium text-foreground transition-all hover:bg-muted"
-            >
-              {link.label}
-              {link.hasDropdown && <ChevronDown size={14} />}
-            </Link>
-          ))}
-        </div>
-
-        {/* Mobile menu button */}
-        <button
-          aria-label="Menu"
-          className="text-foreground md:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-
-        {/* Center: Logo */}
-        <Link to="/" className="absolute left-1/2 -translate-x-1/2 text-center">
-          <span className="font-display text-lg font-semibold uppercase tracking-[0.32em] text-foreground md:text-xl">
+      <div className="container mx-auto flex items-center justify-between px-5 py-4 lg:px-8">
+        {/* Left: Logo */}
+        <Link to="/" className="relative z-10">
+          <span
+            className={`font-display text-lg font-semibold uppercase tracking-[0.32em] transition-colors duration-500 md:text-xl ${
+              scrolled ? "text-foreground" : "text-white"
+            }`}
+          >
             Real Scents
           </span>
           <span className="sr-only">{SITE_NAME}</span>
         </Link>
+
+        {/* Center: Nav links (desktop) */}
+        <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 md:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              to={link.to}
+              className={`rounded-full px-4 py-2 font-body text-sm font-medium transition-all duration-500 ${
+                scrolled
+                  ? "text-foreground hover:bg-muted"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3">
@@ -74,13 +73,13 @@ const Navbar = () => {
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 200, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
-                className="flex items-center gap-2 rounded-full border border-border px-3 py-1.5"
+                className="flex items-center gap-2 rounded-full border border-white/20 bg-black/20 backdrop-blur-sm px-3 py-1.5"
               >
-                <Search size={16} className="text-muted-foreground" />
+                <Search size={16} className="text-white/70" />
                 <input
                   type="text"
                   placeholder={t("nav.searchPlaceholder")}
-                  className="w-full bg-transparent font-body text-sm outline-none placeholder:text-muted-foreground"
+                  className="w-full bg-transparent font-body text-sm text-white outline-none placeholder:text-white/50"
                   autoFocus
                   onBlur={() => setSearchOpen(false)}
                 />
@@ -88,28 +87,46 @@ const Navbar = () => {
             ) : (
               <button
                 onClick={() => setSearchOpen(true)}
-                className="flex items-center gap-2 rounded-full border border-border px-3 py-1.5 font-body text-sm text-muted-foreground transition-all hover:border-foreground hover:text-foreground"
+                className={`transition-colors duration-500 ${
+                  scrolled ? "text-foreground hover:text-accent" : "text-white/90 hover:text-white"
+                }`}
               >
-                <Search size={16} />
-                <span>{t("nav.search")}</span>
+                <Search size={20} />
               </button>
             )}
           </div>
 
-
           <button
             aria-label={t("nav.search")}
-            className="text-foreground md:hidden"
+            className={`md:hidden transition-colors duration-500 ${
+              scrolled ? "text-foreground" : "text-white"
+            }`}
             onClick={() => setSearchOpen(!searchOpen)}
           >
             <Search size={20} />
           </button>
 
-          <button aria-label={t("nav.account")} className="hidden text-foreground transition-colors hover:text-accent md:block">
+          <button
+            aria-label={t("nav.account")}
+            className={`hidden md:block transition-colors duration-500 ${
+              scrolled ? "text-foreground hover:text-accent" : "text-white/90 hover:text-white"
+            }`}
+          >
             <User size={20} />
           </button>
 
           <CartDrawer />
+
+          {/* Mobile menu button */}
+          <button
+            aria-label="Menu"
+            className={`md:hidden transition-colors duration-500 ${
+              scrolled ? "text-foreground" : "text-white"
+            }`}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
 
@@ -120,14 +137,14 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t border-border px-4 py-3 md:hidden"
+            className="border-t border-white/10 px-4 py-3 md:hidden bg-black/40 backdrop-blur-md"
           >
-            <div className="flex items-center gap-2 rounded-full border border-border px-3 py-2">
-              <Search size={16} className="text-muted-foreground" />
+            <div className="flex items-center gap-2 rounded-full border border-white/20 px-3 py-2">
+              <Search size={16} className="text-white/60" />
               <input
                 type="text"
                 placeholder={t("nav.searchPlaceholder")}
-                className="w-full bg-transparent font-body text-sm outline-none"
+                className="w-full bg-transparent font-body text-sm text-white outline-none placeholder:text-white/50"
                 autoFocus
               />
             </div>

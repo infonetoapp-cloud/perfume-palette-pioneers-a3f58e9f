@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type WheelEvent } from "react";
+import type { MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -11,8 +11,7 @@ const FeaturedProducts = () => {
   const { t } = useI18n();
   const addItem = useCartStore((s) => s.addItem);
   const isCartLoading = useCartStore((s) => s.isLoading);
-  const products = getCatalogProductsForCollection("best-sellers").slice(0, 12);
-  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const products = getCatalogProductsForCollection("best-sellers").slice(0, 8);
 
   const handleAddToCart = async (e: MouseEvent, product: CatalogProduct) => {
     e.preventDefault();
@@ -31,14 +30,6 @@ const FeaturedProducts = () => {
     toast.success(t("cart.added"), { description: getProductDisplayCopy(product).shortTitle });
   };
 
-  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
-    if (!scrollerRef.current) return;
-    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-
-    event.preventDefault();
-    scrollerRef.current.scrollLeft += event.deltaY;
-  };
-
   if (products.length === 0) {
     return (
       <section id="products" className="bg-background py-16 lg:py-24">
@@ -55,35 +46,31 @@ const FeaturedProducts = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">{t("products.title")}</h2>
-            <p className="mt-1 font-body text-sm text-muted-foreground">{t("products.subtitle")}</p>
+            <p className="font-body text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+              {t("products.subtitle")}
+            </p>
+            <h2 className="mt-2 font-display text-2xl font-bold text-foreground md:text-3xl">
+              {t("products.title")}
+            </h2>
           </div>
-          <div className="flex items-center gap-2">
-            <Link to={getCollectionPath("all-perfumes")} className="hidden font-body text-sm font-medium text-foreground underline underline-offset-4 hover:text-accent md:block">
-              {t("products.viewAll")}
-            </Link>
-          </div>
+          <Link
+            to={getCollectionPath("all-perfumes")}
+            className="font-body text-sm font-medium text-foreground underline underline-offset-4 hover:text-accent"
+          >
+            {t("products.viewAll")}
+          </Link>
         </div>
 
-        <div
-          ref={scrollerRef}
-          className="featured-scroll flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pr-4 [scrollbar-width:none] [-ms-overflow-style:none]"
-          onWheel={handleWheel}
-        >
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           {products.map((product, i) => (
-            <div
+            <ProductCard
               key={product.id}
-              className="w-[280px] flex-shrink-0 snap-start md:w-[300px]"
-            >
-              <ProductCard
-                product={product}
-                index={i}
-                isCartLoading={isCartLoading}
-                onAddToCart={handleAddToCart}
-              />
-            </div>
+              product={product}
+              index={i}
+              isCartLoading={isCartLoading}
+              onAddToCart={handleAddToCart}
+            />
           ))}
-          <div className="w-px flex-shrink-0" aria-hidden="true" />
         </div>
       </div>
     </section>
