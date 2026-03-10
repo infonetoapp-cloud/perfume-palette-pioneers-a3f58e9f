@@ -397,9 +397,8 @@ const ProductDetail = () => {
         image={product.images[0]?.url}
         jsonLd={[productJsonLd, breadcrumbJsonLd]}
       />
-      <AnnouncementBar />
       <Navbar />
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background pt-28">
         <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-10">
           <Link to={getCollectionPath("all-perfumes")} className="mb-6 inline-flex items-center gap-2 font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />

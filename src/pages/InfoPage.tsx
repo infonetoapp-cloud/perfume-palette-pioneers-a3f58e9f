@@ -229,9 +229,8 @@ const InfoPage = () => {
         path={`/${slug}`}
         jsonLd={breadcrumbJsonLd}
       />
-      <AnnouncementBar />
       <Navbar />
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background pt-28">
         <section className="border-b border-border bg-secondary/30">
           <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
             <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-1.5 font-body text-xs text-muted-foreground">
