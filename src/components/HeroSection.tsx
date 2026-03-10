@@ -35,7 +35,6 @@ const SprayEffect = ({ side, isActive }: { side: "left" | "right"; isActive: boo
     <AnimatePresence>
       {isActive && (
         <>
-          {/* Mist cloud */}
           <motion.div
             initial={{ opacity: 0, scale: 0.3 }}
             animate={{ opacity: 0.4, scale: 1.2 }}
@@ -51,16 +50,10 @@ const SprayEffect = ({ side, isActive }: { side: "left" | "right"; isActive: boo
               transform: `translateX(${side === "left" ? "60px" : "-60px"})`,
             }}
           />
-          {/* Particles */}
           {particles.map((p) => (
             <motion.div
               key={p.id}
-              initial={{
-                opacity: 0,
-                x: 0,
-                y: 0,
-                scale: 0.2,
-              }}
+              initial={{ opacity: 0, x: 0, y: 0, scale: 0.2 }}
               animate={{
                 opacity: [0, p.opacity, p.opacity * 0.5, 0],
                 x: p.x,
@@ -102,8 +95,8 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] overflow-hidden bg-[#c8b8a8]">
-      {/* Studio background with bottle */}
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* Background images */}
       <img
         src={heroMobile}
         alt="David Walker Perfume - Mobile Studio"
@@ -117,8 +110,8 @@ const HeroSection = () => {
         loading="eager"
       />
 
-      {/* Subtle gradient for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-transparent md:from-black/20" />
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
       {/* Spray clickable area & effect */}
       <div className="absolute inset-0 z-10">
@@ -131,30 +124,36 @@ const HeroSection = () => {
         <SprayEffect side="right" isActive={sprayRight} />
       </div>
 
-      {/* Brand text - left aligned */}
-      <div className="relative z-20 flex min-h-[85vh] flex-col items-start justify-center text-left px-8 md:px-16 lg:px-24">
+      {/* Content at bottom-left — Dossier style */}
+      <div className="relative z-20 flex h-full flex-col justify-end px-6 pb-16 md:px-12 lg:px-20 lg:pb-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex max-w-[78%] flex-col items-start sm:max-w-[68%] md:max-w-[45%]"
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="max-w-xl"
         >
-          <h1 className="font-display text-4xl font-bold text-charcoal md:text-6xl lg:text-7xl xl:text-8xl tracking-wide">
+          <span className="inline-block rounded bg-accent px-3 py-1 font-body text-xs font-bold uppercase tracking-wider text-accent-foreground">
+            {t("hero.subtitle")}
+          </span>
+
+          <h1 className="mt-4 font-display text-4xl font-bold leading-[1.05] text-white md:text-6xl lg:text-7xl">
             DAVID WALKER
           </h1>
-          <p className="mt-3 font-body text-sm font-light uppercase tracking-[0.3em] text-charcoal/70 md:text-base lg:text-lg">
-            {t("hero.subtitle")}
+
+          <p className="mt-3 font-body text-base text-white/80 md:text-lg max-w-md">
+            Premium fragrances crafted for women and men.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               to={getCollectionPath("all-perfumes")}
-              className="rounded-full bg-charcoal px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all hover:bg-charcoal/80"
+              className="rounded-full bg-white px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-foreground transition-all hover:bg-white/90"
             >
               {t("hero.cta1")}
             </Link>
             <Link
               to={getCollectionPath("best-sellers")}
-              className="rounded-full border-2 border-charcoal/30 bg-transparent px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-charcoal transition-all hover:border-charcoal hover:bg-charcoal/5"
+              className="rounded-full border-2 border-white/40 bg-transparent px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all hover:border-white hover:bg-white/10"
             >
               {t("hero.cta2")}
             </Link>
