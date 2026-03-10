@@ -1,7 +1,7 @@
 import { type MouseEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import AnnouncementBar from "@/components/AnnouncementBar";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
@@ -75,9 +75,8 @@ const CollectionPage = () => {
           },
         ]}
       />
-      <AnnouncementBar />
       <Navbar />
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background pt-28">
         <section className="border-b border-border bg-secondary/30">
           <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
             <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-1.5 font-body text-xs text-muted-foreground">

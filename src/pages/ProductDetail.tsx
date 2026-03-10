@@ -20,7 +20,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
-import AnnouncementBar from "@/components/AnnouncementBar";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
@@ -330,9 +330,8 @@ const ProductDetail = () => {
     return (
       <>
         <Seo title={`Product Not Found | ${SITE_NAME}`} description="This product could not be found." noindex />
-        <AnnouncementBar />
         <Navbar />
-        <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <div className="flex min-h-screen flex-col items-center justify-center gap-4 pt-28">
           <h1 className="font-display text-3xl font-bold text-foreground">{t("product.notFound")}</h1>
           <Link to="/" className="font-body text-sm text-accent hover:underline">{t("product.goHome")}</Link>
         </div>
@@ -398,9 +397,8 @@ const ProductDetail = () => {
         image={product.images[0]?.url}
         jsonLd={[productJsonLd, breadcrumbJsonLd]}
       />
-      <AnnouncementBar />
       <Navbar />
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background pt-28">
         <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-10">
           <Link to={getCollectionPath("all-perfumes")} className="mb-6 inline-flex items-center gap-2 font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />

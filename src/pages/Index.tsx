@@ -1,4 +1,3 @@
-import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import CategoryCards from "@/components/CategoryCards";
@@ -41,7 +40,6 @@ const Index = () => {
           },
         ]}
       />
-      <AnnouncementBar />
       <Navbar />
       <main>
         <HeroSection />
