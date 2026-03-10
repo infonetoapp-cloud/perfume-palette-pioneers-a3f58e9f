@@ -330,9 +330,8 @@ const ProductDetail = () => {
     return (
       <>
         <Seo title={`Product Not Found | ${SITE_NAME}`} description="This product could not be found." noindex />
-        <AnnouncementBar />
         <Navbar />
-        <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <div className="flex min-h-screen flex-col items-center justify-center gap-4 pt-28">
           <h1 className="font-display text-3xl font-bold text-foreground">{t("product.notFound")}</h1>
           <Link to="/" className="font-body text-sm text-accent hover:underline">{t("product.goHome")}</Link>
         </div>
