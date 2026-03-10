@@ -2,6 +2,10 @@ const SHOPIFY_API_VERSION = process.env.SHOPIFY_API_VERSION || "2025-07";
 const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
 const SHOPIFY_STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_TOKEN;
 
+const shopifyTokenHeader = SHOPIFY_STOREFRONT_TOKEN?.startsWith("shpat_")
+  ? "Shopify-Storefront-Private-Token"
+  : "X-Shopify-Storefront-Access-Token";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -20,7 +24,7 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN,
+        [shopifyTokenHeader]: SHOPIFY_STOREFRONT_TOKEN,
       },
       body: JSON.stringify(req.body),
     });

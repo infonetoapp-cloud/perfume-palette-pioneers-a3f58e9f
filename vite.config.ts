@@ -6,6 +6,9 @@ import { componentTagger } from "lovable-tagger";
 const shopifyApiVersion = process.env.SHOPIFY_API_VERSION || "2025-07";
 const shopifyStoreDomain = process.env.SHOPIFY_STORE_DOMAIN;
 const shopifyStorefrontToken = process.env.SHOPIFY_STOREFRONT_TOKEN;
+const shopifyTokenHeader = shopifyStorefrontToken?.startsWith("shpat_")
+  ? "Shopify-Storefront-Private-Token"
+  : "X-Shopify-Storefront-Access-Token";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -23,7 +26,7 @@ export default defineConfig(({ mode }) => ({
               changeOrigin: true,
               rewrite: () => `/api/${shopifyApiVersion}/graphql.json`,
               headers: {
-                "X-Shopify-Storefront-Access-Token": shopifyStorefrontToken,
+                [shopifyTokenHeader]: shopifyStorefrontToken,
               },
             },
           },
