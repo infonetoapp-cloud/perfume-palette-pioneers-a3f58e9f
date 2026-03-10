@@ -41,7 +41,6 @@ const Index = () => {
           },
         ]}
       />
-      <AnnouncementBar />
       <Navbar />
       <main>
         <HeroSection />
