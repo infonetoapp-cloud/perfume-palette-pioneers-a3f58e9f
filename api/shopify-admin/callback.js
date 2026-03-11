@@ -20,6 +20,10 @@ function renderResultList(results) {
 }
 
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+
   const { clientId, clientSecret } = getShopifyAdminConfig();
   const shop = String(req.query.shop || "").trim();
   const code = String(req.query.code || "").trim();
@@ -85,7 +89,20 @@ export default async function handler(req, res) {
     const tokenPayload = await tokenResponse.json();
 
     if (!tokenResponse.ok || !tokenPayload.access_token) {
-      throw new Error(`Token exchange failed: ${JSON.stringify(tokenPayload)}`);
+      const tokenError = `Token exchange failed: ${JSON.stringify(tokenPayload)}`;
+
+      if (String(tokenPayload?.error_description || "").includes("authorization code was not found or was already used")) {
+        res.status(400).setHeader("Content-Type", "text/html").send(
+          renderHtml("Shopify sync needs a fresh OAuth start", `
+            <h1 class="err">This Shopify sync link expired</h1>
+            <p>The Shopify authorization code was already used. This happens if the callback page is refreshed or reopened from history.</p>
+            <p><a href="/api/shopify-admin/install.js">Start a fresh Shopify sync</a></p>
+          `),
+        );
+        return;
+      }
+
+      throw new Error(tokenError);
     }
 
     const productSync = await syncCatalogToShopify({

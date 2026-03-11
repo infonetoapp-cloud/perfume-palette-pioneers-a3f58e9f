@@ -10,6 +10,10 @@ import {
 const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
 
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+
   const { clientId, scopes } = getShopifyAdminConfig();
   const shop = String(req.query.shop || SHOPIFY_STORE_DOMAIN || "").trim();
 
