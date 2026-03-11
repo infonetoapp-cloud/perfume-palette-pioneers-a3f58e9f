@@ -624,10 +624,9 @@ async function ensureAutomaticBxgyDiscount(shop, accessToken, discountNodes, { b
         title: DISCOUNT_TITLES.gift,
         startsAt: getIsoNow(),
         combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
-        usesPerOrderLimit: 1,
-        customerSelection: { all: true },
+        usesPerOrderLimit: "1",
         customerBuys: {
-          value: { quantity: 1 },
+          value: { quantity: "1" },
           items: {
             collections: {
               add: [buysCollectionId],
@@ -635,7 +634,14 @@ async function ensureAutomaticBxgyDiscount(shop, accessToken, discountNodes, { b
           },
         },
         customerGets: {
-          value: { percentage: 1 },
+          value: {
+            discountOnQuantity: {
+              quantity: "1",
+              effect: {
+                percentage: 1,
+              },
+            },
+          },
           items: {
             collections: {
               add: [getsCollectionId],
@@ -689,11 +695,10 @@ async function ensureAutomaticBasicPairDiscount(shop, accessToken, discountNodes
         title: DISCOUNT_TITLES.pair,
         startsAt: getIsoNow(),
         combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
-        customerSelection: { all: true },
         customerGets: {
           value: {
             discountAmount: {
-              amount: 39.9,
+              amount: "39.90",
               appliesOnEachItem: false,
             },
           },
@@ -811,9 +816,12 @@ async function ensureAutomaticFreeShippingDiscount(shop, accessToken, discountNo
       discount: {
         title: DISCOUNT_TITLES.shipping,
         startsAt: getIsoNow(),
-        combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: true, shippingDiscounts: false }),
-        customerSelection: { all: true },
-        destinationSelection: { all: true },
+        combinesWith: {
+          orderDiscounts: true,
+          productDiscounts: true,
+        },
+        appliesOnOneTimePurchase: true,
+        destination: { all: true },
       },
     },
   });
