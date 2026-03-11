@@ -1,16 +1,23 @@
 import { SHOPIFY_SYNC_PRODUCTS } from "./_catalog.js";
 import { SHOPIFY_SYNC_COLLECTION_IMAGES } from "./_collections.js";
 
-const SHOPIFY_ADMIN_API_VERSION = process.env.SHOPIFY_ADMIN_API_VERSION || "2025-07";
+const SHOPIFY_ADMIN_API_VERSION = process.env.SHOPIFY_ADMIN_API_VERSION || process.env.SHOPIFY_API_VERSION || "2025-07";
 const MAX_RETRY_ATTEMPTS = 6;
 const ADMIN_REQUEST_INTERVAL_MS = 550;
 
-let lastAdminRequestAt = 0;
+const PERFUME_COLLECTION_HANDLE = "all-perfumes";
+const CAR_SCENTS_COLLECTION_HANDLE = "car-scents";
+const DISCOUNT_TITLES = {
+  gift: "Real Scents | Free car scent with perfume order",
+  pair: "Real Scents | 2 perfumes for $119.90",
+  shipping: "Real Scents | Free shipping on every order",
+  scent10: "Real Scents | SCENT10",
+};
 
 const SHOPIFY_SYNC_COLLECTIONS = [
   {
     title: "All Perfumes",
-    handle: "all-perfumes",
+    handle: PERFUME_COLLECTION_HANDLE,
     bodyHtml: "<p>Explore the full David Walker catalog for women and men at Real Scents.</p>",
     rules: [{ column: "tag", relation: "equals", condition: "all-perfumes" }],
   },
@@ -31,6 +38,12 @@ const SHOPIFY_SYNC_COLLECTIONS = [
     handle: "best-sellers",
     bodyHtml: "<p>Shop the most giftable and versatile David Walker fragrances curated by Real Scents.</p>",
     rules: [{ column: "tag", relation: "equals", condition: "best-seller" }],
+  },
+  {
+    title: "Car Scents",
+    handle: CAR_SCENTS_COLLECTION_HANDLE,
+    bodyHtml: "<p>Shop David Walker car scents in Iris Flower, Melon, and Oud. Sold individually or included once per perfume order.</p>",
+    rules: [{ column: "tag", relation: "equals", condition: "car-scent" }],
   },
   {
     title: "Fresh Perfumes",
@@ -75,6 +88,8 @@ const SHOPIFY_SYNC_COLLECTIONS = [
     rules: [{ column: "tag", relation: "equals", condition: "aromatic" }],
   },
 ];
+
+let lastAdminRequestAt = 0;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -197,8 +212,66 @@ function getManagedImageAlt(productCode, filename) {
   return `real-scents-sync:${productCode}:${filename}`;
 }
 
+function getNormalizedProductOptions(product) {
+  if (Array.isArray(product.options) && product.options.length > 0) {
+    return product.options.map((option) => ({
+      name: option.name,
+      values: [...option.values],
+    }));
+  }
+
+  return [
+    {
+      name: "Size",
+      values: ["50ml / 1.7oz"],
+    },
+  ];
+}
+
+function getNormalizedProductVariants(product) {
+  if (Array.isArray(product.variants) && product.variants.length > 0) {
+    return product.variants.map((variant) => ({
+      sku: variant.sku,
+      price: variant.price,
+      optionValues: variant.optionValues ?? ["50ml / 1.7oz"],
+      taxable: variant.taxable ?? true,
+      requiresShipping: variant.requiresShipping ?? true,
+      inventoryPolicy: variant.inventoryPolicy ?? "continue",
+      inventoryManagement: variant.inventoryManagement ?? null,
+    }));
+  }
+
+  return [
+    {
+      sku: product.code,
+      price: product.price,
+      optionValues: ["50ml / 1.7oz"],
+      taxable: true,
+      requiresShipping: true,
+      inventoryPolicy: "continue",
+      inventoryManagement: null,
+    },
+  ];
+}
+
+function getVariantMatchKey(variant) {
+  const optionValues = [variant.option1, variant.option2, variant.option3].filter(Boolean);
+  return optionValues.join("||").toLowerCase();
+}
+
+function findExistingVariant(existingProduct, desiredVariant) {
+  const existingVariants = existingProduct?.variants ?? [];
+
+  return (
+    existingVariants.find((variant) => variant.sku && desiredVariant.sku && variant.sku === desiredVariant.sku)
+    || existingVariants.find((variant) => getVariantMatchKey(variant) === desiredVariant.optionValues.join("||").toLowerCase())
+    || null
+  );
+}
+
 function buildRestProductPayload(product, existingProduct = null) {
-  const variant = existingProduct?.variants?.[0] ?? null;
+  const optionDefinitions = getNormalizedProductOptions(product);
+  const variantDefinitions = getNormalizedProductVariants(product);
 
   return {
     product: {
@@ -210,24 +283,27 @@ function buildRestProductPayload(product, existingProduct = null) {
       handle: product.handle,
       status: "active",
       tags: product.tags.join(", "),
-      options: [
-        {
-          name: "Size",
-          values: ["50ml / 1.7oz"],
-        },
-      ],
-      variants: [
-        {
-          ...(variant?.id ? { id: variant.id } : {}),
-          option1: "50ml / 1.7oz",
-          price: product.price,
-          sku: product.code,
-          taxable: true,
-          requires_shipping: true,
-          inventory_policy: "continue",
-          inventory_management: null,
-        },
-      ],
+      options: optionDefinitions.map((option) => ({
+        name: option.name,
+        values: option.values,
+      })),
+      variants: variantDefinitions.map((variantDefinition) => {
+        const existingVariant = findExistingVariant(existingProduct, variantDefinition);
+        const [option1, option2, option3] = variantDefinition.optionValues;
+
+        return {
+          ...(existingVariant?.id ? { id: existingVariant.id } : {}),
+          ...(option1 ? { option1 } : {}),
+          ...(option2 ? { option2 } : {}),
+          ...(option3 ? { option3 } : {}),
+          price: variantDefinition.price,
+          sku: variantDefinition.sku,
+          taxable: variantDefinition.taxable,
+          requires_shipping: variantDefinition.requiresShipping,
+          inventory_policy: variantDefinition.inventoryPolicy,
+          inventory_management: variantDefinition.inventoryManagement,
+        };
+      }),
       published: true,
     },
   };
@@ -284,9 +360,7 @@ async function createProductImage(shop, accessToken, productId, image) {
     accessToken,
     path: `/products/${productId}/images.json`,
     method: "POST",
-    body: {
-      image,
-    },
+    body: { image },
   });
 }
 
@@ -397,53 +471,10 @@ async function publishResource(shop, accessToken, resourceGid, publicationIds) {
   }
 }
 
-export async function syncCatalogToShopify({ shop, accessToken }) {
-  const results = [];
-  const publications = await getTargetPublications(shop, accessToken);
-  const publicationIds = publications.map((publication) => publication.id);
-
-  for (const product of SHOPIFY_SYNC_PRODUCTS) {
-    const { action, product: syncedProduct } = await createOrUpdateProduct(shop, accessToken, product);
-
-    try {
-      await syncProductImages(shop, accessToken, syncedProduct.id, product);
-    } catch (error) {
-      results.push({
-        code: product.code,
-        handle: product.handle,
-        action,
-        status: "warning",
-        message: `Product ${action}, but image sync failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-      });
-      continue;
-    }
-
-    try {
-      await publishResource(shop, accessToken, syncedProduct.admin_graphql_api_id, publicationIds);
-    } catch (error) {
-      results.push({
-        code: product.code,
-        handle: product.handle,
-        action,
-        status: "warning",
-        message: `Product ${action}, but publication failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-      });
-      continue;
-    }
-
-    results.push({
-      code: product.code,
-      handle: product.handle,
-      action,
-      status: "success",
-      message: `Product ${action}, images synced, and published successfully.`,
-    });
-  }
-
-  return {
-    results,
-    publications: publications.map((publication) => publication.name),
-  };
+function getCollectionGid(collection) {
+  if (collection?.admin_graphql_api_id) return collection.admin_graphql_api_id;
+  if (collection?.id) return `gid://shopify/Collection/${collection.id}`;
+  return null;
 }
 
 async function fetchSmartCollections(shop, accessToken) {
@@ -505,6 +536,349 @@ async function createOrUpdateSmartCollection(shop, accessToken, collection, exis
   };
 }
 
+function getIsoNow() {
+  return new Date().toISOString();
+}
+
+function getCombinesWith({ productDiscounts = true, orderDiscounts = false, shippingDiscounts = true } = {}) {
+  return {
+    productDiscounts,
+    orderDiscounts,
+    shippingDiscounts,
+  };
+}
+
+async function fetchDiscountNodes(shop, accessToken) {
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      query GetDiscountNodes {
+        discountNodes(first: 100) {
+          nodes {
+            id
+            discount {
+              __typename
+              ... on DiscountAutomaticBxgy {
+                title
+                status
+              }
+              ... on DiscountAutomaticBasic {
+                title
+                status
+              }
+              ... on DiscountAutomaticFreeShipping {
+                title
+                status
+              }
+              ... on DiscountCodeBasic {
+                title
+                status
+              }
+            }
+          }
+        }
+      }
+    `,
+  });
+
+  return data?.discountNodes?.nodes ?? [];
+}
+
+function findDiscountNodeByTitle(discountNodes, title) {
+  return discountNodes.find((node) => node?.discount?.title === title) ?? null;
+}
+
+function extractUserErrors(payload, fieldName) {
+  return payload?.[fieldName]?.userErrors ?? [];
+}
+
+async function ensureAutomaticBxgyDiscount(shop, accessToken, discountNodes, { buysCollectionId, getsCollectionId }) {
+  const existingNode = findDiscountNodeByTitle(discountNodes, DISCOUNT_TITLES.gift);
+  if (existingNode) {
+    return {
+      status: "existing",
+      title: DISCOUNT_TITLES.gift,
+      message: "Gift discount already exists in Shopify.",
+    };
+  }
+
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      mutation CreateGiftDiscount($discount: DiscountAutomaticBxgyInput!) {
+        discountAutomaticBxgyCreate(automaticBxgyDiscount: $discount) {
+          automaticDiscountNode {
+            id
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `,
+    variables: {
+      discount: {
+        title: DISCOUNT_TITLES.gift,
+        startsAt: getIsoNow(),
+        combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
+        usesPerOrderLimit: 1,
+        customerSelection: { all: true },
+        customerBuys: {
+          value: { quantity: 1 },
+          items: {
+            collections: {
+              add: [buysCollectionId],
+            },
+          },
+        },
+        customerGets: {
+          value: { percentage: 1 },
+          items: {
+            collections: {
+              add: [getsCollectionId],
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const userErrors = extractUserErrors(data, "discountAutomaticBxgyCreate");
+  if (userErrors.length > 0) {
+    throw new Error(userErrors.map((error) => error.message).join(", "));
+  }
+
+  return {
+    status: "success",
+    title: DISCOUNT_TITLES.gift,
+    message: "Gift discount created successfully.",
+  };
+}
+
+async function ensureAutomaticBasicPairDiscount(shop, accessToken, discountNodes, { perfumeCollectionId }) {
+  const existingNode = findDiscountNodeByTitle(discountNodes, DISCOUNT_TITLES.pair);
+  if (existingNode) {
+    return {
+      status: "existing",
+      title: DISCOUNT_TITLES.pair,
+      message: "Pair-price discount already exists in Shopify.",
+    };
+  }
+
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      mutation CreatePairDiscount($discount: DiscountAutomaticBasicInput!) {
+        discountAutomaticBasicCreate(automaticBasicDiscount: $discount) {
+          automaticDiscountNode {
+            id
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `,
+    variables: {
+      discount: {
+        title: DISCOUNT_TITLES.pair,
+        startsAt: getIsoNow(),
+        combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
+        customerSelection: { all: true },
+        customerGets: {
+          value: {
+            discountAmount: {
+              amount: 39.9,
+              appliesOnEachItem: false,
+            },
+          },
+          items: {
+            collections: {
+              add: [perfumeCollectionId],
+            },
+          },
+        },
+        minimumRequirement: {
+          quantity: {
+            greaterThanOrEqualToQuantity: "2",
+          },
+        },
+      },
+    },
+  });
+
+  const userErrors = extractUserErrors(data, "discountAutomaticBasicCreate");
+  if (userErrors.length > 0) {
+    throw new Error(userErrors.map((error) => error.message).join(", "));
+  }
+
+  return {
+    status: "success",
+    title: DISCOUNT_TITLES.pair,
+    message: "Pair-price discount created successfully.",
+  };
+}
+
+async function ensureCodeBasicDiscount(shop, accessToken, discountNodes, { perfumeCollectionId }) {
+  const existingNode = findDiscountNodeByTitle(discountNodes, DISCOUNT_TITLES.scent10);
+  if (existingNode) {
+    return {
+      status: "existing",
+      title: DISCOUNT_TITLES.scent10,
+      message: "SCENT10 code discount already exists in Shopify.",
+    };
+  }
+
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      mutation CreateScent10Discount($discount: DiscountCodeBasicInput!) {
+        discountCodeBasicCreate(basicCodeDiscount: $discount) {
+          codeDiscountNode {
+            id
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `,
+    variables: {
+      discount: {
+        title: DISCOUNT_TITLES.scent10,
+        code: "SCENT10",
+        startsAt: getIsoNow(),
+        combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
+        customerSelection: { all: true },
+        customerGets: {
+          value: { percentage: 0.1 },
+          items: {
+            collections: {
+              add: [perfumeCollectionId],
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const userErrors = extractUserErrors(data, "discountCodeBasicCreate");
+  if (userErrors.length > 0) {
+    throw new Error(userErrors.map((error) => error.message).join(", "));
+  }
+
+  return {
+    status: "success",
+    title: DISCOUNT_TITLES.scent10,
+    message: "SCENT10 code discount created successfully.",
+  };
+}
+
+async function ensureAutomaticFreeShippingDiscount(shop, accessToken, discountNodes) {
+  const existingNode = findDiscountNodeByTitle(discountNodes, DISCOUNT_TITLES.shipping);
+  if (existingNode) {
+    return {
+      status: "existing",
+      title: DISCOUNT_TITLES.shipping,
+      message: "Free shipping discount already exists in Shopify.",
+    };
+  }
+
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      mutation CreateFreeShippingDiscount($discount: DiscountAutomaticFreeShippingInput!) {
+        discountAutomaticFreeShippingCreate(freeShippingAutomaticDiscount: $discount) {
+          automaticDiscountNode {
+            id
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `,
+    variables: {
+      discount: {
+        title: DISCOUNT_TITLES.shipping,
+        startsAt: getIsoNow(),
+        combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: true, shippingDiscounts: false }),
+        customerSelection: { all: true },
+        destinationSelection: { all: true },
+      },
+    },
+  });
+
+  const userErrors = extractUserErrors(data, "discountAutomaticFreeShippingCreate");
+  if (userErrors.length > 0) {
+    throw new Error(userErrors.map((error) => error.message).join(", "));
+  }
+
+  return {
+    status: "success",
+    title: DISCOUNT_TITLES.shipping,
+    message: "Free shipping discount created successfully.",
+  };
+}
+
+export async function syncCatalogToShopify({ shop, accessToken }) {
+  const results = [];
+  const publications = await getTargetPublications(shop, accessToken);
+  const publicationIds = publications.map((publication) => publication.id);
+
+  for (const product of SHOPIFY_SYNC_PRODUCTS) {
+    const { action, product: syncedProduct } = await createOrUpdateProduct(shop, accessToken, product);
+
+    try {
+      await syncProductImages(shop, accessToken, syncedProduct.id, product);
+    } catch (error) {
+      results.push({
+        code: product.code,
+        handle: product.handle,
+        action,
+        status: "warning",
+        message: `Product ${action}, but image sync failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      });
+      continue;
+    }
+
+    try {
+      await publishResource(shop, accessToken, syncedProduct.admin_graphql_api_id, publicationIds);
+    } catch (error) {
+      results.push({
+        code: product.code,
+        handle: product.handle,
+        action,
+        status: "warning",
+        message: `Product ${action}, but publication failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      });
+      continue;
+    }
+
+    results.push({
+      code: product.code,
+      handle: product.handle,
+      action,
+      status: "success",
+      message: `Product ${action}, images synced, and published successfully.`,
+    });
+  }
+
+  return {
+    results,
+    publications: publications.map((publication) => publication.name),
+  };
+}
+
 export async function syncCollectionsToShopify({ shop, accessToken }) {
   const results = [];
   const existingCollections = await fetchSmartCollections(shop, accessToken);
@@ -521,6 +895,7 @@ export async function syncCollectionsToShopify({ shop, accessToken }) {
         handle: collection.handle,
         title: collection.title,
         action,
+        status: "warning",
         message: `Collection ${action}, but publication failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       });
       continue;
@@ -530,7 +905,77 @@ export async function syncCollectionsToShopify({ shop, accessToken }) {
       handle: collection.handle,
       title: collection.title,
       action,
+      status: "success",
       message: `Collection ${action} and published successfully.`,
+    });
+  }
+
+  return results;
+}
+
+export async function syncDiscountsToShopify({ shop, accessToken }) {
+  const results = [];
+
+  try {
+    const collections = await fetchSmartCollections(shop, accessToken);
+    const perfumeCollection = collections.find((collection) => collection.handle === PERFUME_COLLECTION_HANDLE);
+    const carScentsCollection = collections.find((collection) => collection.handle === CAR_SCENTS_COLLECTION_HANDLE);
+
+    if (!perfumeCollection || !carScentsCollection) {
+      return [
+        {
+          status: "error",
+          title: "Discount sync prerequisites",
+          message: "Required Shopify collections are missing. Sync collections before syncing discounts.",
+        },
+      ];
+    }
+
+    const perfumeCollectionId = getCollectionGid(perfumeCollection);
+    const carScentsCollectionId = getCollectionGid(carScentsCollection);
+
+    if (!perfumeCollectionId || !carScentsCollectionId) {
+      return [
+        {
+          status: "error",
+          title: "Discount sync prerequisites",
+          message: "Collection GraphQL IDs could not be resolved for Shopify discounts.",
+        },
+      ];
+    }
+
+    const discountNodes = await fetchDiscountNodes(shop, accessToken);
+
+    const syncTasks = [
+      () => ensureAutomaticBxgyDiscount(shop, accessToken, discountNodes, {
+        buysCollectionId: perfumeCollectionId,
+        getsCollectionId: carScentsCollectionId,
+      }),
+      () => ensureAutomaticBasicPairDiscount(shop, accessToken, discountNodes, {
+        perfumeCollectionId,
+      }),
+      () => ensureCodeBasicDiscount(shop, accessToken, discountNodes, {
+        perfumeCollectionId,
+      }),
+      () => ensureAutomaticFreeShippingDiscount(shop, accessToken, discountNodes),
+    ];
+
+    for (const runTask of syncTasks) {
+      try {
+        results.push(await runTask());
+      } catch (error) {
+        results.push({
+          status: "error",
+          title: "Discount sync error",
+          message: error instanceof Error ? error.message : "Unknown discount sync error",
+        });
+      }
+    }
+  } catch (error) {
+    results.push({
+      status: "error",
+      title: "Discount sync failed",
+      message: error instanceof Error ? error.message : "Unknown discount sync failure",
     });
   }
 

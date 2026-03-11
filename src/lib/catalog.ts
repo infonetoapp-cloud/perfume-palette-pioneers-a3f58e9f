@@ -7,7 +7,7 @@ export type ProductLike = {
   description: string;
 };
 
-export type CoreCollectionSlug = "all-perfumes" | "women" | "men" | "best-sellers";
+export type CoreCollectionSlug = "all-perfumes" | "women" | "men" | "best-sellers" | "auto-scents";
 export type CollectionSlug = CoreCollectionSlug | ScentFamily;
 
 export interface CollectionDefinition {
@@ -77,7 +77,7 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     title: "All Perfumes",
     eyebrow: "Full Collection",
     description:
-      "Explore the full David Walker catalog for women and men at Real Scents, organized for fragrance shopping in the U.S. market.",
+      "Explore the full David Walker catalog for women and men at Real Scents, organized for easy fragrance shopping.",
   },
   women: {
     slug: "women",
@@ -105,6 +105,15 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     eyebrow: "Customer Favorites",
     description:
       "Shop the most giftable and versatile David Walker fragrances curated by Real Scents across men's and women's collections.",
+  },
+  "auto-scents": {
+    slug: "auto-scents",
+    kind: "core",
+    label: "Car Scents",
+    title: "Car Scents",
+    eyebrow: "Car Scents",
+    description:
+      "Shop David Walker car scents in Iris Flower, Melon, and Oud. Premium hanging scents for a cleaner, more polished cabin.",
   },
 };
 
@@ -263,10 +272,10 @@ function buildMetaDescription(title: string, meta: ProductMeta | null, noteHighl
   const notes = noteHighlights.join(", ");
   const familySummary = formatFamilySummary(meta.scentFamilies);
   if (familySummary && notes) {
-    return `${title} in 50ml Eau de Parfum. ${meta.feeling} A ${familySummary} ${categoryLabel.toLowerCase()} with notes like ${notes}. Free U.S. shipping available.`;
+    return `${title} in 50ml Eau de Parfum. ${meta.feeling} A ${familySummary} ${categoryLabel.toLowerCase()} with notes like ${notes}. Free U.S. shipping on every order.`;
   }
 
-  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop David Walker fragrances online at Real Scents with free U.S. shipping.`;
+  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop David Walker fragrances online at Real Scents with free U.S. shipping on every order.`;
 }
 
 function getDisplayDescription(productDescription: string, meta: ProductMeta | null): string {
@@ -334,6 +343,7 @@ export function getProductDisplayCopy(product: ProductLike): ProductDisplayCopy 
 export function matchesCollection(handle: string, collection: CollectionSlug): boolean {
   if (!isStockedHandle(handle)) return false;
   if (collection === "all-perfumes") return true;
+  if (collection === "auto-scents") return false;
 
   const meta = getProductMeta(handle);
   const code = normalizeCode(extractCodeFromHandle(handle));

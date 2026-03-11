@@ -295,7 +295,7 @@ export function useStorefrontCatalog() {
 
   const search = useMemo(() => (query: string, limit = 6) => searchProducts(products, query, limit), [products]);
   const getRelated = useMemo(
-    () => (handle: string | undefined, limit = 4) => getRelatedProducts(products, handle, limit),
+    () => (handle: string | undefined, limit = 8) => getRelatedProducts(products, handle, limit),
     [products],
   );
 

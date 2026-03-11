@@ -5,7 +5,7 @@ import {
   renderHtml,
   verifyHmac,
 } from "./_oauth.js";
-import { syncCatalogToShopify, syncCollectionsToShopify } from "./_sync.js";
+import { syncCatalogToShopify, syncCollectionsToShopify, syncDiscountsToShopify } from "./_sync.js";
 
 function renderResultList(results) {
   return `
@@ -113,24 +113,33 @@ export default async function handler(req, res) {
       shop,
       accessToken: tokenPayload.access_token,
     });
+    const discountSync = await syncDiscountsToShopify({
+      shop,
+      accessToken: tokenPayload.access_token,
+    });
 
     const successCount = productSync.results.filter((result) => result.status === "success").length;
     const warningCount = productSync.results.filter((result) => result.status === "warning").length;
+    const discountSuccessCount = discountSync.filter((result) => result.status === "success" || result.status === "existing").length;
 
     res.status(200).setHeader("Content-Type", "text/html").send(
       renderHtml("Shopify sync complete", `
         <h1 class="ok">Shopify sync complete</h1>
         <p><strong>${successCount}</strong> products synced successfully.</p>
         <p><strong>${collectionSync.length}</strong> collections synced successfully.</p>
+        <p><strong>${discountSuccessCount}</strong> discount rules are present in Shopify.</p>
         <p>${warningCount > 0 ? `<strong>${warningCount}</strong> products synced with publication warnings.` : "No publication warnings were reported."}</p>
         <p class="muted">Target publications: <code>${productSync.publications.join(", ") || "none detected"}</code></p>
         <p><a href="https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/products" target="_blank" rel="noreferrer">Open Shopify products</a></p>
         <p><a href="https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/collections" target="_blank" rel="noreferrer">Open Shopify collections</a></p>
+        <p><a href="https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/discounts" target="_blank" rel="noreferrer">Open Shopify discounts</a></p>
         <p><a href="https://shoprealscents.com" target="_blank" rel="noreferrer">Open storefront</a></p>
         <h2 style="margin-top:28px">Product results</h2>
         ${renderResultList(productSync.results)}
         <h2 style="margin-top:28px">Collection results</h2>
         ${renderResultList(collectionSync)}
+        <h2 style="margin-top:28px">Discount results</h2>
+        ${renderResultList(discountSync)}
       `),
     );
   } catch (error) {

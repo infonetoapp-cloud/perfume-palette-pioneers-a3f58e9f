@@ -52,6 +52,7 @@ const Navbar = () => {
 
   const navLinks = [
     { label: t("nav.perfumes"), to: getCollectionPath("all-perfumes") },
+    { label: "Car Scents", to: "/auto-scents" },
     { label: t("category.women"), to: getCollectionPath("women") },
     { label: t("category.men"), to: getCollectionPath("men") },
     { label: t("nav.about"), to: "/about" },
@@ -134,10 +135,10 @@ const Navbar = () => {
               <Link
                 key={link.label}
                 to={link.to}
-                className={`rounded-full px-4 py-2 font-body text-sm font-medium transition-all duration-500 ${
+                className={`px-3 py-2 font-body text-sm font-medium transition-colors duration-500 ${
                   useTransparentNav
-                    ? "text-white/90 hover:bg-white/10 hover:text-white"
-                    : "text-foreground hover:bg-muted"
+                    ? "text-white/90 hover:text-white"
+                    : "text-foreground/80 hover:text-foreground"
                 }`}
               >
                 {link.label}

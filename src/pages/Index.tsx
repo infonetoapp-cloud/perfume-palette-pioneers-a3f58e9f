@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import CategoryCards from "@/components/CategoryCards";
 import ScentFamilySection from "@/components/ScentFamilySection";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import AutoScentsSection from "@/components/AutoScentsSection";
 import BrandStory from "@/components/BrandStory";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
@@ -68,6 +69,7 @@ const Index = () => {
         <CategoryCards />
         <ScentFamilySection />
         <FeaturedProducts />
+        <AutoScentsSection />
         <BrandStory />
         <Newsletter />
       </main>

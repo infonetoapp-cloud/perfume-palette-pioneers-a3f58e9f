@@ -3,6 +3,7 @@ export const SHOPIFY_SYNC_COLLECTION_IMAGES = {
   "women": "https://shoprealscents.com/shopify-sync/collections/women-category-women.jpg",
   "men": "https://shoprealscents.com/shopify-sync/collections/men-category-men.jpg",
   "best-sellers": "https://shoprealscents.com/shopify-sync/collections/best-sellers-hero-studio.jpg",
+  "car-scents": "https://shoprealscents.com/collection-banners/car-scents.jpg",
   "fresh": "https://shoprealscents.com/shopify-sync/collections/fresh-fresh.jpg",
   "woody": "https://shoprealscents.com/shopify-sync/collections/woody-woody.jpg",
   "vanilla": "https://shoprealscents.com/shopify-sync/collections/vanilla-vanilla.jpg",

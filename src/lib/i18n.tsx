@@ -4,7 +4,7 @@ export type Locale = "en" | "es";
 
 const translations = {
   en: {
-    "announcement.freeShipping": "Free shipping across the United States",
+    "announcement.freeShipping": "Free shipping on every U.S. order",
     "announcement.discount": "50ml Eau de Parfum",
     "announcement.newCollection": "Curated scent notes",
 
@@ -21,7 +21,7 @@ const translations = {
 
     "hero.badge": "NEW",
     "hero.title": "Curated scents:",
-    "hero.subtitle": "Curated David Walker fragrances for the U.S. market.",
+    "hero.subtitle": "Curated David Walker fragrances for everyday wear.",
     "hero.cta1": "SHOP ALL PERFUMES",
     "hero.cta2": "SHOP BEST SELLERS",
 
@@ -59,7 +59,7 @@ const translations = {
       "The opt-in flow is not live yet. Final contact details and subscription setup will be added before launch.",
     "newsletter.browse": "Browse all perfumes",
 
-    "footer.tagline": "Shop David Walker fragrances at Real Scents with clear scent notes and free U.S. shipping.",
+    "footer.tagline": "Shop David Walker fragrances at Real Scents with clear scent notes and free U.S. shipping on every order.",
     "footer.shop": "Shop",
     "footer.shopAll": "All Perfumes",
     "footer.shopWomen": "Women",
@@ -82,7 +82,7 @@ const translations = {
     "cart.total": "Total",
     "cart.checkout": "CHECKOUT",
     "cart.previewCheckout": "CHECKOUT",
-    "cart.previewNote": "Bundle pricing and promo code rules are shown before checkout. Complimentary gift is added per order.",
+    "cart.previewNote": "Bundle pricing and promo code rules are shown before checkout. Perfume orders include 1 free car scent per order. Car scent-only orders do not include an extra free car scent.",
     "cart.added": "Added to cart",
 
     "product.back": "Back",
@@ -93,7 +93,7 @@ const translations = {
     "lang.es": "Espanol",
   },
   es: {
-    "announcement.freeShipping": "Envio gratuito en todo Estados Unidos",
+    "announcement.freeShipping": "Envio gratuito en todos los pedidos de Estados Unidos",
     "announcement.discount": "Eau de Parfum de 50 ml",
     "announcement.newCollection": "Notas olfativas claras",
 
@@ -110,7 +110,7 @@ const translations = {
 
     "hero.badge": "NUEVO",
     "hero.title": "Aromas selectos:",
-    "hero.subtitle": "Fragancias David Walker seleccionadas para el mercado de Estados Unidos.",
+    "hero.subtitle": "Fragancias David Walker seleccionadas para el dia a dia.",
     "hero.cta1": "VER TODOS LOS PERFUMES",
     "hero.cta2": "VER LOS MAS VENDIDOS",
 
@@ -148,7 +148,7 @@ const translations = {
       "El flujo de suscripcion aun no esta activo. Los datos finales de contacto y el formulario se agregaran antes del lanzamiento.",
     "newsletter.browse": "Ver todos los perfumes",
 
-    "footer.tagline": "Compra fragancias David Walker en Real Scents con notas olfativas claras y envio gratuito en Estados Unidos.",
+    "footer.tagline": "Compra fragancias David Walker en Real Scents con notas olfativas claras y envio gratuito en todos los pedidos de Estados Unidos.",
     "footer.shop": "Tienda",
     "footer.shopAll": "Todos los Perfumes",
     "footer.shopWomen": "Mujer",
@@ -171,7 +171,7 @@ const translations = {
     "cart.total": "Total",
     "cart.checkout": "PAGAR",
     "cart.previewCheckout": "PAGAR",
-    "cart.previewNote": "Las reglas del bundle y del codigo promocional se muestran antes del pago. El regalo se agrega por pedido.",
+    "cart.previewNote": "Las reglas del bundle y del codigo promocional se muestran antes del pago. Los pedidos de perfume incluyen 1 ambientador para auto por pedido. Los pedidos solo de ambientador no incluyen otro gratis.",
     "cart.added": "Anadido al carrito",
 
     "product.back": "Volver",

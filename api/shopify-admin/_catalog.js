@@ -1,4 +1,6 @@
-export const SHOPIFY_SYNC_PRODUCTS = [
+import { SHOPIFY_AUTO_SCENT_PRODUCT } from "./_auto-scent.js";
+
+const PERFUME_SYNC_PRODUCTS = [
   {
     "code": "E155",
     "handle": "david-walker-e155-mens-eau-de-parfum-50ml",
@@ -548,3 +550,5 @@ export const SHOPIFY_SYNC_PRODUCTS = [
     ]
   }
 ];
+
+export const SHOPIFY_SYNC_PRODUCTS = [...PERFUME_SYNC_PRODUCTS, SHOPIFY_AUTO_SCENT_PRODUCT];

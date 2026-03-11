@@ -1,5 +1,9 @@
 export const staticPaths = [
   "/",
+  "/auto-scents",
+  "/auto-scents/iris-flower",
+  "/auto-scents/melon",
+  "/auto-scents/oud",
   "/about",
   "/shipping",
   "/privacy",

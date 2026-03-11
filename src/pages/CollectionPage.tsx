@@ -1,38 +1,52 @@
-import { type MouseEvent } from "react";
+import { useEffect, useRef, type MouseEvent } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { toast } from "sonner";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import AutoScentCard from "@/components/AutoScentCard";
 import ProductCard from "@/components/ProductCard";
 import Seo from "@/components/Seo";
-import { getCollectionDefinition, getCollectionPath, getProductDisplayCopy, SCENT_FAMILY_SLUGS } from "@/lib/catalog";
+import { getAutoScentVariants } from "@/lib/autoScents";
+import { getCollectionDefinition, getCollectionPath, getProductDisplayCopy } from "@/lib/catalog";
 import type { CatalogProduct } from "@/lib/catalogData";
-import { getProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_NAME } from "@/lib/site";
 import { useCartStore } from "@/stores/cartStore";
 import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
-import { toast } from "sonner";
+
+const COLLECTION_TILES = [
+  { label: "All Perfumes", slug: "all-perfumes", to: getCollectionPath("all-perfumes") },
+  { label: "Best Sellers", slug: "best-sellers", to: getCollectionPath("best-sellers") },
+  { label: "Women", slug: "women", to: getCollectionPath("women") },
+  { label: "Men", slug: "men", to: getCollectionPath("men") },
+  { label: "Vanilla", slug: "vanilla", to: getCollectionPath("vanilla") },
+  { label: "Fresh", slug: "fresh", to: getCollectionPath("fresh") },
+  { label: "Woody", slug: "woody", to: getCollectionPath("woody") },
+  { label: "Floral", slug: "floral", to: getCollectionPath("floral") },
+  { label: "Citrus", slug: "citrus", to: getCollectionPath("citrus") },
+  { label: "Amber", slug: "amber", to: getCollectionPath("amber") },
+  { label: "Aromatic", slug: "aromatic", to: getCollectionPath("aromatic") },
+  { label: "Car Scents", slug: "auto-scents", to: getCollectionPath("auto-scents") },
+] as const;
 
 const CollectionPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const collection = getCollectionDefinition(slug);
+  const activeTileRef = useRef<HTMLAnchorElement | null>(null);
   const addItem = useCartStore((state) => state.addItem);
   const isCartLoading = useCartStore((state) => state.isLoading);
   const { getProductsForCollection } = useStorefrontCatalog();
-  const filteredProducts = getProductsForCollection(collection.slug);
-  const familyCounts = SCENT_FAMILY_SLUGS
-    .map((family) => ({
-      family,
-      count: filteredProducts.filter((product) => getProductMeta(product.handle)?.scentFamilies.includes(family)).length,
-    }))
-    .filter((entry) => entry.count > 0)
-    .sort((left, right) => {
-      if (left.family === collection.slug) return -1;
-      if (right.family === collection.slug) return 1;
-      if (right.count !== left.count) return right.count - left.count;
-      return left.family.localeCompare(right.family);
+  const autoScentVariants = getAutoScentVariants();
+  const isAutoScentsCollection = collection.slug === "auto-scents";
+  const visibleProducts = getProductsForCollection(collection.slug);
+
+  useEffect(() => {
+    activeTileRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
     });
+  }, [collection.slug]);
 
   const handleAddToCart = async (event: MouseEvent, product: CatalogProduct) => {
     event.preventDefault();
@@ -53,12 +67,19 @@ const CollectionPage = () => {
   };
 
   const canonicalPath = getCollectionPath(collection.slug);
-  const itemList = filteredProducts.map((product, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    url: getAbsoluteUrl(`/product/${product.handle}`),
-    name: getProductDisplayCopy(product).title,
-  }));
+  const itemList = isAutoScentsCollection
+    ? autoScentVariants.map((variant, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: getAbsoluteUrl(`/auto-scents/${variant.slug}`),
+        name: variant.title,
+      }))
+    : visibleProducts.map((product, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: getAbsoluteUrl(`/product/${product.handle}`),
+        name: getProductDisplayCopy(product).title,
+      }));
 
   return (
     <>
@@ -92,79 +113,67 @@ const CollectionPage = () => {
       />
       <Navbar />
       <main className="min-h-screen bg-background pt-28">
-        <section className="bg-background">
-          <div className="container mx-auto px-4 py-10 lg:px-8 lg:py-14">
-            <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-1.5 font-body text-xs text-muted-foreground">
-              <Link to="/" className="transition-colors hover:text-foreground">Home</Link>
-              <ChevronRight className="h-3 w-3" />
-              <span className="font-semibold text-foreground">{collection.title}</span>
-            </nav>
-            <p className="font-body text-xs font-semibold uppercase tracking-[0.24em] text-accent">{collection.eyebrow}</p>
-            <h1 className="mt-3 font-display text-4xl font-bold text-foreground md:text-5xl">{collection.title}</h1>
-            <p className="mt-4 max-w-2xl font-body text-base leading-relaxed text-muted-foreground">{collection.description}</p>
-            <p className="mt-4 font-body text-sm font-medium text-foreground">{filteredProducts.length} fragrances in this collection</p>
+        <section className="border-b border-black/8 bg-[linear-gradient(180deg,#ffffff_0%,#fbf8f4_100%)]">
+          <div className="container mx-auto px-4 py-4 lg:px-8 lg:py-5">
+            <div className="relative overflow-hidden rounded-[1.35rem] border border-black/8 bg-white/90 shadow-[0_14px_34px_rgba(15,23,42,0.04)]">
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white via-white/90 to-white/0 md:hidden" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white via-white/90 to-white/0 md:hidden" />
+              <div className="scrollbar-none -mx-4 flex snap-x snap-mandatory items-center gap-5 overflow-x-auto overscroll-x-contain px-4 py-3 md:mx-0 md:flex-nowrap md:justify-between md:gap-1 md:overflow-visible md:px-3 lg:gap-2 lg:px-4">
+                {COLLECTION_TILES.map((entry) => {
+                  const isActive = entry.slug === collection.slug;
 
-            {collection.kind === "family" && (
-              <div className="mt-8 max-w-4xl space-y-5">
-                <article>
-                  <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-accent">What It Smells Like</p>
-                  <p className="mt-3 max-w-3xl font-body text-[15px] leading-8 text-foreground/80">{collection.story}</p>
-                </article>
-                <article>
-                  <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-accent">Common Notes</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(collection.commonNotes ?? []).map((note) => (
-                      <span key={note} className="rounded-full border border-border bg-secondary/30 px-3 py-1.5 font-body text-xs font-medium text-foreground">
-                        {note}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-                <article className="border-t border-border/70 pt-4">
-                  <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-accent">Best For</p>
-                  <p className="mt-3 max-w-3xl font-body text-sm leading-7 text-muted-foreground">{collection.wearMoments}</p>
-                </article>
-              </div>
-            )}
-
-            {familyCounts.length > 0 && (
-              <div className="scrollbar-none mt-8 flex gap-2 overflow-x-auto pb-1 md:flex-wrap">
-                {familyCounts.map(({ family, count }) => {
-                  const familyDefinition = getCollectionDefinition(family);
-                  const isActive = collection.slug === family;
                   return (
                     <Link
-                      key={family}
-                      to={getCollectionPath(family)}
-                      className={`shrink-0 rounded-full border px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
+                      key={entry.label}
+                      to={entry.to}
+                      ref={isActive ? activeTileRef : undefined}
+                      className={`group relative flex h-11 shrink-0 snap-start items-center justify-center whitespace-nowrap rounded-full px-4 py-2 leading-none transition-all md:flex-none md:px-2.5 lg:px-3 ${
                         isActive
-                          ? "border-foreground bg-foreground text-background"
-                          : "border-border bg-transparent text-foreground hover:border-foreground hover:text-foreground"
+                          ? "bg-[#fff4ef] text-black shadow-[0_0_0_1px_rgba(239,115,92,0.18)]"
+                          : "text-black/72 hover:bg-black/[0.025] hover:text-black"
                       }`}
                     >
-                      {familyDefinition.label} ({count})
+                      <span
+                        className={`absolute left-1/2 top-0 h-[4px] -translate-x-1/2 rounded-full bg-[#ef735c] transition-all ${
+                          isActive ? "w-10 opacity-100" : "w-0 opacity-0 group-hover:w-8 group-hover:opacity-45"
+                        }`}
+                      />
+                      <p className="text-center font-display text-[0.76rem] font-semibold uppercase tracking-[0.14em] md:text-[0.58rem] lg:text-[0.64rem] xl:text-[0.7rem]">
+                        {entry.label}
+                      </p>
                     </Link>
                   );
                 })}
               </div>
-            )}
+            </div>
           </div>
         </section>
 
-        <section className="py-12 lg:py-16">
+        <section className="py-10 lg:py-14">
           <div className="container mx-auto px-4 lg:px-8">
-            {filteredProducts.length === 0 ? (
+            {isAutoScentsCollection ? (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-3 xl:gap-6">
+                {autoScentVariants.map((variant, index) => (
+                  <AutoScentCard
+                    key={variant.slug}
+                    variant={variant}
+                    index={index}
+                    layout="compact"
+                  />
+                ))}
+              </div>
+            ) : visibleProducts.length === 0 ? (
               <div className="rounded-3xl border border-border bg-secondary/20 px-6 py-16 text-center">
-                <h2 className="font-display text-2xl font-semibold text-foreground">No products in this collection yet</h2>
-                <p className="mt-3 font-body text-sm text-muted-foreground">This collection is still being curated for launch.</p>
+                <h2 className="font-display text-2xl font-semibold text-foreground">No products in this collection</h2>
               </div>
             ) : (
-              <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
-                {filteredProducts.map((product, index) => (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
+                {visibleProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                     index={index}
+                    layout="compact"
                     isCartLoading={isCartLoading}
                     onAddToCart={handleAddToCart}
                   />
@@ -180,3 +189,4 @@ const CollectionPage = () => {
 };
 
 export default CollectionPage;
+

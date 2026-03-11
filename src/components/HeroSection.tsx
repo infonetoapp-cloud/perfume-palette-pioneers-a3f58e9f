@@ -6,7 +6,7 @@ import heroStudio from "@/assets/hero/hero-studio.jpg";
 import { getCollectionPath } from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
-import { BUNDLE_PRICE_USD, GIFT_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
+import { BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
 
 const HeroSection = () => {
   const { t } = useI18n();
@@ -54,7 +54,7 @@ const HeroSection = () => {
               {PROMO_CODE} for 10% off
             </span>
             <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-body text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
-              {GIFT_LABEL}
+              {GIFT_ORDER_LABEL}
             </span>
           </div>
           <p className="mt-3 max-w-lg font-body text-sm text-white/75">

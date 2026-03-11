@@ -21,7 +21,9 @@ import {
 import { toast } from "sonner";
 
 import Footer from "@/components/Footer";
+import AutoScentRecommendations from "@/components/AutoScentRecommendations";
 import Navbar from "@/components/Navbar";
+import { NoteArtworkStack, NoteSwatch } from "@/components/NoteArtwork";
 import ProductCard from "@/components/ProductCard";
 import Seo from "@/components/Seo";
 import TrustBadge from "@/components/TrustBadge";
@@ -32,7 +34,7 @@ import { getProductMeta, type ProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_BRAND, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
 import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
-import { BUNDLE_PRICE_USD, PROMO_CODE, formatUsd } from "@/lib/promotions";
+import { BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
 import { useCartStore } from "@/stores/cartStore";
 import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
@@ -60,8 +62,8 @@ const ProductBenefitsGrid = () => {
       icon: <Droplets className="h-7 w-7 text-accent" />,
     },
     {
-      title: "Surprise Gift\nevery order",
-      detail: "One complimentary gift per order.",
+      title: "Free Car Scent\nPerfume Orders",
+      detail: "Perfume orders include 1 free car scent per order.",
       icon: <Heart className="h-7 w-7 text-accent" />,
     },
     {
@@ -108,7 +110,7 @@ const ProductPromoStrip = () => (
         {PROMO_CODE} for 10% off
       </span>
       <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
-        Surprise gift every order
+        {GIFT_ORDER_LABEL}
       </span>
     </div>
     <p className="mt-2 font-body text-[11px] leading-relaxed text-muted-foreground">
@@ -148,32 +150,37 @@ const MobileStickyAddToCart = ({
 );
 
 const ScentNotes = ({ meta }: { meta: ProductMeta }) => (
-  <div className="space-y-4">
-    <div className="flex justify-center gap-6 py-4">
-      {meta.mainNotes.map((note) => (
-        <div key={note.name} className="flex flex-col items-center gap-1.5">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary/60">
-            {noteIconMap[note.icon] || <Droplets className="h-7 w-7 text-accent" />}
-          </div>
-          <span className="font-body text-xs text-muted-foreground">{note.name}</span>
-        </div>
-      ))}
+  <div className="space-y-5">
+    <div className="rounded-[1.75rem] border border-border bg-[linear-gradient(180deg,rgba(247,240,232,0.95)_0%,rgba(255,255,255,0.92)_100%)] p-5 md:p-6">
+      <div className="flex flex-wrap justify-center gap-4 md:gap-5">
+        {meta.mainNotes.map((note) => (
+          <NoteSwatch
+            key={note.name}
+            label={note.name}
+            fallbackIcon={noteIconMap[note.icon] || <Droplets className="h-7 w-7 text-accent" />}
+            labelClassName="max-w-[5.5rem]"
+          />
+        ))}
+      </div>
     </div>
     <div className="space-y-3 text-sm">
       {[
-        { tier: "Top", desc: "The first impression", notes: meta.scentNotes.top.join(", ") },
-        { tier: "Middle", desc: "The heart of the fragrance", notes: meta.scentNotes.middle.join(", ") },
-        { tier: "Base", desc: "The lasting dry-down", notes: meta.scentNotes.base.join(", ") },
+        { tier: "Top", desc: "The first impression", notes: meta.scentNotes.top, icon: <Sparkles className="h-4 w-4 text-accent" /> },
+        {
+          tier: "Middle",
+          desc: "The heart of the fragrance",
+          notes: meta.scentNotes.middle,
+          icon: <Flower2 className="h-4 w-4 text-accent" />,
+        },
+        { tier: "Base", desc: "The lasting dry-down", notes: meta.scentNotes.base, icon: <Flame className="h-4 w-4 text-accent" /> },
       ].map((row) => (
-        <div key={row.tier} className="flex items-start gap-3 rounded-lg bg-secondary/30 p-3">
-          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-accent/10">
-            <Droplets className="h-4 w-4 text-accent" />
-          </div>
+        <div key={row.tier} className="flex items-start gap-4 rounded-[1.35rem] border border-border bg-secondary/20 p-4">
+          <NoteArtworkStack notes={row.notes} fallbackIcon={row.icon} className="shrink-0 pt-1" />
           <div>
             <p className="font-body font-semibold text-foreground">
               {row.tier}: <span className="font-normal text-muted-foreground">{row.desc}</span>
             </p>
-            <p className="font-body text-muted-foreground">{row.notes}</p>
+            <p className="mt-1.5 font-body leading-6 text-muted-foreground">{row.notes.join(", ")}</p>
           </div>
         </div>
       ))}
@@ -234,11 +241,13 @@ const MainNoteHighlights = ({ meta }: { meta: ProductMeta | null }) => {
     <div className="mt-6 grid gap-3 sm:grid-cols-3">
       {noteGroups.map((group) => (
         <article key={group.label} className="rounded-2xl border border-border bg-secondary/30 p-4">
-          <div className="flex items-center gap-2">
-            {group.icon}
-            <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{group.label}</p>
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{group.label}</p>
+              <p className="mt-3 font-body text-sm font-medium text-foreground">{group.notes.join(" / ")}</p>
+            </div>
+            <NoteArtworkStack notes={group.notes} fallbackIcon={group.icon} />
           </div>
-          <p className="mt-3 font-body text-sm font-medium text-foreground">{group.notes.join(" / ")}</p>
         </article>
       ))}
     </div>
@@ -319,7 +328,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
       </AccordionTrigger>
       <AccordionContent>
         <div id="shipping" className="space-y-2 font-body text-sm text-muted-foreground">
-          <p>Standard shipping is free for delivery addresses within the United States.</p>
+          <p>Standard shipping is free on every order delivered within the United States.</p>
           <p>Most in-stock orders are expected to process within 1 to 3 business days.</p>
           <p>Tracking information should be sent once the order ships.</p>
           <p>
@@ -378,15 +387,15 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
           </div>
           <div>
             <p className="font-semibold text-foreground">Is shipping free in the United States?</p>
-            <p>Yes. Standard shipping is free for U.S. delivery addresses under the current storefront policy.</p>
+            <p>Yes. Standard shipping is free on every U.S. order under the current storefront policy.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">How does the 2 for $119.90 offer work?</p>
             <p>Any qualifying pair of fragrances added to the cart is priced at $119.90 before tax.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">Do I receive the complimentary car fragrance automatically?</p>
-            <p>Yes. One complimentary car fragrance is included per order as a promotional gift and is not part of the item price.</p>
+            <p className="font-semibold text-foreground">Do I get a free car scent with every perfume order?</p>
+            <p>Yes. Each perfume order includes 1 free car scent, added as a gift and limited to one per order.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">How do I contact support?</p>
@@ -406,7 +415,7 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 
 const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
   const { getRelatedProducts } = useStorefrontCatalog();
-  const products = getRelatedProducts(currentHandle, 4);
+  const products = getRelatedProducts(currentHandle, 8);
   const addItem = useCartStore((state) => state.addItem);
   const isCartLoading = useCartStore((state) => state.isLoading);
 
@@ -436,6 +445,7 @@ const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
             key={product.id}
             product={product}
             index={index}
+            layout="compact"
             isCartLoading={isCartLoading}
             onAddToCart={(event) => {
               event.preventDefault();
@@ -703,6 +713,10 @@ const ProductDetail = () => {
                 <span className="font-display text-2xl font-bold text-foreground">{formatUsd(parseFloat(product.price.amount))}</span>
               </div>
 
+              <p className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
+                {GIFT_ORDER_LABEL}
+              </p>
+
               <div className="mt-5">
                 <p className="font-body text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">Scent Profile</p>
                 {meta?.feeling ? (
@@ -766,6 +780,7 @@ const ProductDetail = () => {
           </div>
 
           <RelatedProducts currentHandle={product.handle} />
+          <AutoScentRecommendations />
           <TrustBadge />
         </div>
       </main>

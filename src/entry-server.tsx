@@ -3,6 +3,7 @@ import { StaticRouter } from "react-router-dom/server";
 
 import { AppProviders, AppRoutes } from "@/appShell";
 import Index from "@/pages/Index";
+import AutoScentsPage from "@/pages/AutoScentsPage";
 import CollectionPage from "@/pages/CollectionPage";
 import InfoPage from "@/pages/InfoPage";
 import ProductDetail from "@/pages/ProductDetail";
@@ -25,6 +26,7 @@ export function render(url: string) {
         <StaticRouter location={url}>
           <AppRoutes
             IndexPage={Index}
+            AutoScentsPage={AutoScentsPage}
             CollectionPage={CollectionPage}
             InfoPage={InfoPage}
             ProductDetailPage={ProductDetail}

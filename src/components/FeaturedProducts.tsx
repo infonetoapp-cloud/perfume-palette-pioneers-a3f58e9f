@@ -69,6 +69,7 @@ const FeaturedProducts = () => {
               key={product.id}
               product={product}
               index={i}
+              layout="compact"
               isCartLoading={isCartLoading}
               onAddToCart={handleAddToCart}
             />

@@ -12,6 +12,7 @@ type PageComponent = ComponentType;
 
 interface AppRoutesProps {
   IndexPage: PageComponent;
+  AutoScentsPage: PageComponent;
   CollectionPage: PageComponent;
   InfoPage: PageComponent;
   ProductDetailPage: PageComponent;
@@ -28,6 +29,7 @@ export const RouteFallback = () => (
 
 export const AppRoutes = ({
   IndexPage,
+  AutoScentsPage,
   CollectionPage,
   InfoPage,
   ProductDetailPage,
@@ -39,6 +41,8 @@ export const AppRoutes = ({
     <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<IndexPage />} />
+        <Route path="/auto-scents" element={<AutoScentsPage />} />
+        <Route path="/auto-scents/:slug" element={<AutoScentsPage />} />
         <Route path="/about" element={<InfoPage />} />
         <Route path="/shipping" element={<InfoPage />} />
         <Route path="/privacy" element={<InfoPage />} />

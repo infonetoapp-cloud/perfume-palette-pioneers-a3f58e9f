@@ -27,7 +27,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "About Real Scents",
     eyebrow: "Brand Overview",
     description:
-      "Learn how Real Scents presents David Walker fragrances online for the United States, with clear scent notes, free U.S. shipping, and direct customer support.",
+      "Learn how Real Scents presents David Walker fragrances online for the United States, with clear scent notes, free U.S. shipping on every order, and direct customer support.",
     lastUpdated: "March 10, 2026",
     sections: [
       {
@@ -52,12 +52,12 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Shipping Policy",
     eyebrow: "Order Policies",
     description:
-      "Review free U.S. shipping, processing timing, customer support details, and final sale terms for fragrance orders placed through Real Scents.",
+      "Review free U.S. shipping on every order, processing timing, customer support details, and final sale terms for fragrance orders placed through Real Scents.",
     lastUpdated: "March 10, 2026",
     sections: [
       {
         heading: "Free U.S. shipping",
-        body: "Standard shipping is free for delivery addresses within the United States. If faster shipping options are offered later, they will be shown before payment is completed.",
+        body: "Standard shipping is free on every order delivered within the United States. If faster shipping options are offered later, they will be shown before payment is completed.",
       },
       {
         heading: "Processing and delivery timing",
@@ -142,7 +142,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Frequently Asked Questions",
     eyebrow: "Customer Help",
     description:
-      "Common questions about fragrance shopping, free U.S. shipping, final sale terms, order support, and product use on the Real Scents storefront.",
+      "Common questions about fragrance shopping, free U.S. shipping on every order, final sale terms, order support, and product use on the Real Scents storefront.",
     lastUpdated: "March 10, 2026",
     sections: [
       {
@@ -151,7 +151,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Is shipping free in the United States?",
-        body: "Yes. Standard shipping is free for U.S. delivery addresses based on the current storefront policy.",
+        body: "Yes. Standard shipping is free on every U.S. order under the current storefront policy.",
       },
       {
         heading: "How long will my order take?",
@@ -166,8 +166,8 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         body: "No. SCENT10 cannot be combined with the 2-for-$119.90 promotion. Customers can use the bundle rate or the code-based discount, but not both on the same order.",
       },
       {
-        heading: "Do I get a free car fragrance with every order?",
-        body: "Yes. Each qualifying order includes one complimentary car fragrance. It is a promotional gift, not part of the item price, and it is limited to one per order.",
+        heading: "Do I get a free car fragrance with every perfume order?",
+        body: "Yes. Each perfume order includes one free car scent. It is added as a gift, not part of the item price, and it is limited to one per order. Car scent-only orders do not include an extra free car scent.",
       },
       {
         heading: "Can I return a fragrance order?",
@@ -216,7 +216,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Promotional offers",
-        body: "Bundle pricing, complimentary gifts, and discount codes may be changed or suspended at any time. Promotional gifts are not part of the item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic bundle offers.",
+        body: "Bundle pricing, the 1-free-car-scent-per-perfume-order offer, and discount codes may be changed or suspended at any time. Gift items are not part of the item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic bundle offers.",
       },
       {
         heading: "Intellectual property",
