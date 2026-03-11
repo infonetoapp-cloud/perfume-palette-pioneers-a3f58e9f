@@ -2,6 +2,10 @@ import { SHOPIFY_SYNC_PRODUCTS } from "./_catalog.js";
 import { SHOPIFY_SYNC_COLLECTION_IMAGES } from "./_collections.js";
 
 const SHOPIFY_ADMIN_API_VERSION = process.env.SHOPIFY_ADMIN_API_VERSION || "2025-07";
+const MAX_RETRY_ATTEMPTS = 6;
+const ADMIN_REQUEST_INTERVAL_MS = 550;
+
+let lastAdminRequestAt = 0;
 
 const SHOPIFY_SYNC_COLLECTIONS = [
   {
@@ -72,53 +76,103 @@ const SHOPIFY_SYNC_COLLECTIONS = [
   },
 ];
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForAdminRequestSlot() {
+  const waitMs = lastAdminRequestAt + ADMIN_REQUEST_INTERVAL_MS - Date.now();
+
+  if (waitMs > 0) {
+    await sleep(waitMs);
+  }
+
+  lastAdminRequestAt = Date.now();
+}
+
+function getRetryDelayMs(response, attempt) {
+  const retryAfterSeconds = Number(response.headers.get("retry-after"));
+
+  if (Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0) {
+    return retryAfterSeconds * 1000;
+  }
+
+  return Math.min(5000, 800 * 2 ** attempt);
+}
+
 async function adminRestRequest({ shop, accessToken, path, method = "GET", body }) {
-  const response = await fetch(`https://${shop}/admin/api/${SHOPIFY_ADMIN_API_VERSION}${path}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  const serializedBody = body ? JSON.stringify(body) : undefined;
 
-  const payload = await response.text();
-  let json = null;
+  for (let attempt = 0; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
+    await waitForAdminRequestSlot();
 
-  try {
-    json = payload ? JSON.parse(payload) : null;
-  } catch {
-    json = null;
+    const response = await fetch(`https://${shop}/admin/api/${SHOPIFY_ADMIN_API_VERSION}${path}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: serializedBody,
+    });
+
+    const payload = await response.text();
+    let json = null;
+
+    try {
+      json = payload ? JSON.parse(payload) : null;
+    } catch {
+      json = null;
+    }
+
+    if (response.status === 429 && attempt < MAX_RETRY_ATTEMPTS) {
+      await sleep(getRetryDelayMs(response, attempt));
+      continue;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Shopify REST ${method} ${path} failed (${response.status}): ${payload}`);
+    }
+
+    return json;
   }
 
-  if (!response.ok) {
-    throw new Error(`Shopify REST ${method} ${path} failed (${response.status}): ${payload}`);
-  }
-
-  return json;
+  throw new Error(`Shopify REST ${method} ${path} failed after retry exhaustion.`);
 }
 
 async function adminGraphqlRequest({ shop, accessToken, query, variables = {} }) {
-  const response = await fetch(`https://${shop}/admin/api/${SHOPIFY_ADMIN_API_VERSION}/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: JSON.stringify({ query, variables }),
-  });
+  const serializedBody = JSON.stringify({ query, variables });
 
-  const payload = await response.json();
+  for (let attempt = 0; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
+    await waitForAdminRequestSlot();
 
-  if (!response.ok) {
-    throw new Error(`Shopify GraphQL failed (${response.status}): ${JSON.stringify(payload)}`);
+    const response = await fetch(`https://${shop}/admin/api/${SHOPIFY_ADMIN_API_VERSION}/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: serializedBody,
+    });
+
+    const payload = await response.json();
+
+    if (response.status === 429 && attempt < MAX_RETRY_ATTEMPTS) {
+      await sleep(getRetryDelayMs(response, attempt));
+      continue;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Shopify GraphQL failed (${response.status}): ${JSON.stringify(payload)}`);
+    }
+
+    if (payload.errors?.length) {
+      throw new Error(`Shopify GraphQL errors: ${payload.errors.map((error) => error.message).join(", ")}`);
+    }
+
+    return payload.data;
   }
 
-  if (payload.errors?.length) {
-    throw new Error(`Shopify GraphQL errors: ${payload.errors.map((error) => error.message).join(", ")}`);
-  }
-
-  return payload.data;
+  throw new Error("Shopify GraphQL failed after retry exhaustion.");
 }
 
 async function fetchExistingProductByHandle(shop, accessToken, handle) {
