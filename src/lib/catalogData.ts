@@ -36,6 +36,7 @@ export interface CatalogProduct {
   title: string;
   description: string;
   gender: Exclude<ProductMeta["gender"], "unisex">;
+  tags: string[];
   price: CatalogMoney;
   images: CatalogImage[];
   variant: CatalogVariant;
@@ -185,6 +186,24 @@ function buildImages(code: string, title: string): CatalogImage[] {
     }));
 }
 
+function buildProductTags(code: string, meta: ProductMeta): string[] {
+  const tags = new Set<string>([
+    "all-perfumes",
+    meta.gender === "women" ? "women" : "men",
+    ...meta.scentFamilies,
+    ...meta.badges,
+    meta.intensity,
+    "Real Scents",
+    "David Walker",
+  ]);
+
+  if (["e49", "e145", "e155", "b197", "b206", "b225"].includes(code)) {
+    tags.add("best-seller");
+  }
+
+  return Array.from(tags);
+}
+
 function buildCatalogProduct(code: (typeof STOCKED_PRODUCT_CODES)[number]): CatalogProduct {
   const meta = getProductMeta(code);
   if (!meta || meta.gender === "unisex") {
@@ -209,6 +228,7 @@ function buildCatalogProduct(code: (typeof STOCKED_PRODUCT_CODES)[number]): Cata
     title,
     description: meta.description,
     gender: meta.gender,
+    tags: buildProductTags(code, meta),
     price,
     images: buildImages(code, title),
     variant,

@@ -4,9 +4,9 @@ import { ShoppingBag, Minus, Plus, Trash2, Loader2, Gift, TicketPercent } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { getCatalogProductByHandle } from "@/lib/catalogData";
 import { useCartStore } from "@/stores/cartStore";
 import { useI18n } from "@/lib/i18n";
+import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 import {
   BUNDLE_PRICE_USD,
   BUNDLE_SIZE,
@@ -78,10 +78,11 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     setPromoCode,
     clearPromoCode,
   } = useCartStore();
+  const { getProductByHandle } = useStorefrontCatalog();
 
   const liveItems = useMemo(
-    () => items.map((item) => ({ ...item, product: getCatalogProductByHandle(item.product.handle) ?? item.product })),
-    [items],
+    () => items.map((item) => ({ ...item, product: getProductByHandle(item.product.handle) ?? item.product })),
+    [getProductByHandle, items],
   );
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const checkoutUrl = getCheckoutUrl();
@@ -253,7 +254,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
                     <span className="font-display text-base font-semibold">{t("cart.total")}</span>
                     <span className="font-display text-lg font-bold">{formatUsd(summary.finalSubtotal)}</span>
                   </div>
-                  <p className="font-body text-[11px] text-muted-foreground">Free U.S. shipping. Sales tax calculated at checkout.</p>
+                  <p className="font-body text-[11px] text-muted-foreground">Free U.S. shipping.</p>
 
                   {nextBundleHint && (
                     <p className="rounded-2xl border border-accent/20 bg-accent/5 px-3 py-2 font-body text-xs leading-relaxed text-accent">
@@ -263,13 +264,26 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
                 </div>
 
                 <p className="font-body text-xs leading-relaxed text-muted-foreground">{t("cart.previewNote")}</p>
-                <Button
-                  className="w-full rounded-full bg-primary font-body text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-foreground/80"
-                  size="lg"
-                  disabled={items.length === 0 || isLoading || isSyncing || !checkoutUrl}
-                >
-                  {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : t("cart.previewCheckout")}
-                </Button>
+                {checkoutUrl ? (
+                  <Button
+                    asChild
+                    className="w-full rounded-full bg-primary font-body text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-foreground/80"
+                    size="lg"
+                    disabled={items.length === 0 || isLoading || isSyncing}
+                  >
+                    <a href={checkoutUrl} target="_blank" rel="noreferrer">
+                      {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : "Checkout"}
+                    </a>
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full rounded-full bg-primary font-body text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-foreground/80"
+                    size="lg"
+                    disabled
+                  >
+                    {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : "Checkout"}
+                  </Button>
+                )}
               </div>
             </>
           )}

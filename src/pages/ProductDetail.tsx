@@ -27,13 +27,14 @@ import Seo from "@/components/Seo";
 import TrustBadge from "@/components/TrustBadge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { getCollectionDefinition, getCollectionPath, getProductDisplayCopy } from "@/lib/catalog";
-import { getCatalogProductByHandle, getRelatedCatalogProducts, type CatalogProduct } from "@/lib/catalogData";
+import type { CatalogProduct } from "@/lib/catalogData";
 import { getProductMeta, type ProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_BRAND, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
 import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
 import { BUNDLE_PRICE_USD, PROMO_CODE, formatUsd } from "@/lib/promotions";
 import { useCartStore } from "@/stores/cartStore";
+import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
 const noteIconMap: Record<string, ReactNode> = {
   floral: <Flower2 className="h-7 w-7 text-accent" />,
@@ -404,7 +405,8 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
 );
 
 const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
-  const products = getRelatedCatalogProducts(currentHandle, 4);
+  const { getRelatedProducts } = useStorefrontCatalog();
+  const products = getRelatedProducts(currentHandle, 4);
   const addItem = useCartStore((state) => state.addItem);
   const isCartLoading = useCartStore((state) => state.isLoading);
 
@@ -454,8 +456,9 @@ const ProductDetail = () => {
   const mobileGalleryRef = useRef<HTMLDivElement | null>(null);
   const addItem = useCartStore((state) => state.addItem);
   const isCartLoading = useCartStore((state) => state.isLoading);
+  const { getProductByHandle } = useStorefrontCatalog();
 
-  const product = getCatalogProductByHandle(handle);
+  const product = getProductByHandle(handle);
 
   useEffect(() => {
     setSelectedImage(0);

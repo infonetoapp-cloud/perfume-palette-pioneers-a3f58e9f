@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Citrus, Flame, Flower2, Leaf, Sparkles, TreePine, Wind } from "lucide-react";
 import { getCollectionDefinition, getCollectionPath, SCENT_FAMILY_SLUGS, type ScentFamily } from "@/lib/catalog";
-import { getCatalogProductsForCollection } from "@/lib/catalogData";
 import { getMotionInitial } from "@/lib/motion";
+import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
 const FAMILY_IMAGE_MODULES = import.meta.glob("../assets/scent-families/*.{png,jpg,jpeg,webp}", {
   eager: true,
@@ -29,9 +29,10 @@ const familyIconMap: Record<ScentFamily, typeof Wind> = {
 };
 
 const ScentFamilySection = () => {
+  const { getProductsForCollection } = useStorefrontCatalog();
   const families = SCENT_FAMILY_SLUGS.map((slug) => {
     const definition = getCollectionDefinition(slug);
-    const count = getCatalogProductsForCollection(slug).length;
+    const count = getProductsForCollection(slug).length;
     const Icon = familyIconMap[slug];
     const image = familyImageMap[slug];
 

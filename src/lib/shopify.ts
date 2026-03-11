@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 
-const SHOPIFY_PROXY_URL = "/api/shopify";
+const SHOPIFY_PROXY_URL = "/api/shopify.js";
+const SHOPIFY_CHECKOUT_HOST = "checkout.shoprealscents.com";
 
 export interface ShopifyProduct {
   node: {
@@ -8,6 +9,7 @@ export interface ShopifyProduct {
     title: string;
     description: string;
     handle: string;
+    tags: string[];
     priceRange: {
       minVariantPrice: {
         amount: string;
@@ -83,6 +85,7 @@ export const PRODUCTS_QUERY = `
           title
           description
           handle
+          tags
           priceRange {
             minVariantPrice {
               amount
@@ -131,6 +134,7 @@ export const PRODUCT_BY_HANDLE_QUERY = `
       title
       description
       handle
+      tags
       priceRange {
         minVariantPrice {
           amount
@@ -222,6 +226,9 @@ const CART_LINES_REMOVE_MUTATION = `
 function formatCheckoutUrl(checkoutUrl: string): string {
   try {
     const url = new URL(checkoutUrl);
+    if (SHOPIFY_CHECKOUT_HOST) {
+      url.hostname = SHOPIFY_CHECKOUT_HOST;
+    }
     url.searchParams.set("channel", "online_store");
     return url.toString();
   } catch {

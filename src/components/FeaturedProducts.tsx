@@ -5,13 +5,15 @@ import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import ProductCard from "@/components/ProductCard";
 import { getCollectionPath, getProductDisplayCopy } from "@/lib/catalog";
-import { getCatalogProductsForCollection, type CatalogProduct } from "@/lib/catalogData";
+import type { CatalogProduct } from "@/lib/catalogData";
+import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
 const FeaturedProducts = () => {
   const { t } = useI18n();
   const addItem = useCartStore((s) => s.addItem);
   const isCartLoading = useCartStore((s) => s.isLoading);
-  const products = getCatalogProductsForCollection("best-sellers").slice(0, 8);
+  const { getProductsForCollection } = useStorefrontCatalog();
+  const products = getProductsForCollection("best-sellers").slice(0, 8);
 
   const handleAddToCart = async (e: MouseEvent, product: CatalogProduct) => {
     e.preventDefault();

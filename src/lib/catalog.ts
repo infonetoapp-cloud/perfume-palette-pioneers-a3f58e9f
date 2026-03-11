@@ -236,12 +236,17 @@ function getCategoryLabel(gender: ProductMeta["gender"] | null): string {
   return "Unisex fragrance";
 }
 
-function getFallbackTitle(title: string, code: string | null, genderLabel: string): string {
+function getDisplayTitle(title: string, code: string | null, genderLabel: string): string {
+  const normalizedTitle = title.replace(/\s+/g, " ").trim();
+  if (normalizedTitle) {
+    return normalizedTitle;
+  }
+
   if (code) {
     return `David Walker ${code.toUpperCase()} ${genderLabel} Eau de Parfum`;
   }
 
-  return title.replace(/\s+/g, " ").trim();
+  return title;
 }
 
 function formatFamilySummary(families: ScentFamily[]): string {
@@ -264,6 +269,24 @@ function buildMetaDescription(title: string, meta: ProductMeta | null, noteHighl
   return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop David Walker fragrances online at Real Scents with free U.S. shipping.`;
 }
 
+function getDisplayDescription(productDescription: string, meta: ProductMeta | null): string {
+  const normalized = productDescription.replace(/\s+/g, " ").trim();
+
+  if (!normalized) {
+    return meta ? `${meta.feeling} ${meta.description}` : productDescription;
+  }
+
+  const looksLikeLongBodyCopy =
+    normalized.length > 280
+    || /top notes:|heart notes:|base notes:|best for:|concentration:/i.test(normalized);
+
+  if (looksLikeLongBodyCopy && meta) {
+    return `${meta.feeling} ${meta.description}`;
+  }
+
+  return normalized;
+}
+
 export function getCollectionDefinition(slug: string | undefined): CollectionDefinition {
   if (!slug || !(slug in COLLECTION_DEFINITIONS)) {
     return COLLECTION_DEFINITIONS["all-perfumes"];
@@ -283,13 +306,13 @@ export function getProductDisplayCopy(product: ProductLike): ProductDisplayCopy 
   const categoryLabel = getCategoryLabel(meta?.gender ?? null);
   const noteHighlights = meta?.mainNotes.map((item) => item.name) ?? [];
   const familyLabels = meta?.scentFamilies.map((family) => COLLECTION_DEFINITIONS[family].label) ?? [];
-  const title = getFallbackTitle(product.title, code, genderLabel);
+  const title = getDisplayTitle(product.title, code, genderLabel);
   const shortTitle = code ? `David Walker ${code.toUpperCase()}` : title;
   const subtitleHighlights = familyLabels.length > 0 ? familyLabels : noteHighlights;
   const subtitle = meta
     ? `${categoryLabel} - ${subtitleHighlights.slice(0, 3).join(" - ")}`
     : `${categoryLabel} - Eau de Parfum`;
-  const description = meta ? `${meta.feeling} ${meta.description}` : product.description;
+  const description = getDisplayDescription(product.description, meta);
   const eyebrow = code ? `${code.toUpperCase()} - ${genderLabel}` : genderLabel;
 
   return {

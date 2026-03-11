@@ -81,8 +81,8 @@ const translations = {
     "cart.item": "item",
     "cart.total": "Total",
     "cart.checkout": "CHECKOUT",
-    "cart.previewCheckout": "CHECKOUT OPENS AT LAUNCH",
-    "cart.previewNote": "The store is running in preview mode. Campaign pricing is shown here now, and Shopify checkout will be connected when launch setup is complete.",
+    "cart.previewCheckout": "CHECKOUT",
+    "cart.previewNote": "Bundle pricing and promo code rules are shown before checkout. Complimentary gift is added per order.",
     "cart.added": "Added to cart",
 
     "product.back": "Back",
@@ -170,8 +170,8 @@ const translations = {
     "cart.item": "articulo",
     "cart.total": "Total",
     "cart.checkout": "PAGAR",
-    "cart.previewCheckout": "PAGO DISPONIBLE EN EL LANZAMIENTO",
-    "cart.previewNote": "La tienda esta en modo previo. La campana promocional ya se muestra aqui y el pago de Shopify se conectara cuando termine la configuracion del lanzamiento.",
+    "cart.previewCheckout": "PAGAR",
+    "cart.previewNote": "Las reglas del bundle y del codigo promocional se muestran antes del pago. El regalo se agrega por pedido.",
     "cart.added": "Anadido al carrito",
 
     "product.back": "Volver",

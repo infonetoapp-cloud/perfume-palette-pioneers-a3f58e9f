@@ -2,5 +2,19 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "git": {
     "deploymentEnabled": true
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/shopify",
+      "destination": "/api/shopify.js"
+    },
+    {
+      "source": "/api/shopify-admin/install",
+      "destination": "/api/shopify-admin/install.js"
+    },
+    {
+      "source": "/api/shopify-admin/callback",
+      "destination": "/api/shopify-admin/callback.js"
+    }
+  ]
 }

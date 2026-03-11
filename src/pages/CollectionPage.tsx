@@ -7,10 +7,11 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import Seo from "@/components/Seo";
 import { getCollectionDefinition, getCollectionPath, getProductDisplayCopy, SCENT_FAMILY_SLUGS } from "@/lib/catalog";
-import { getCatalogProductsForCollection, type CatalogProduct } from "@/lib/catalogData";
+import type { CatalogProduct } from "@/lib/catalogData";
 import { getProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_NAME } from "@/lib/site";
 import { useCartStore } from "@/stores/cartStore";
+import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 import { toast } from "sonner";
 
 const CollectionPage = () => {
@@ -18,7 +19,8 @@ const CollectionPage = () => {
   const collection = getCollectionDefinition(slug);
   const addItem = useCartStore((state) => state.addItem);
   const isCartLoading = useCartStore((state) => state.isLoading);
-  const filteredProducts = getCatalogProductsForCollection(collection.slug);
+  const { getProductsForCollection } = useStorefrontCatalog();
+  const filteredProducts = getProductsForCollection(collection.slug);
   const familyCounts = SCENT_FAMILY_SLUGS
     .map((family) => ({
       family,

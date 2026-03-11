@@ -5,10 +5,11 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { getCollectionPath, getProductDisplayCopy } from "@/lib/catalog";
-import { searchCatalogProducts, type CatalogProduct } from "@/lib/catalogData";
+import type { CatalogProduct } from "@/lib/catalogData";
 import { formatUsd } from "@/lib/promotions";
 import { SITE_NAME } from "@/lib/site";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
 const SearchResultLink = ({ product, onSelect }: { product: CatalogProduct; onSelect: () => void }) => {
   const copy = getProductDisplayCopy(product);
@@ -45,6 +46,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { searchProducts } = useStorefrontCatalog();
   const isHome = location.pathname === "/";
   const useTransparentNav = isHome && !scrolled && !searchOpen && !menuOpen;
 
@@ -55,7 +57,7 @@ const Navbar = () => {
     { label: t("nav.about"), to: "/about" },
   ];
   const trimmedQuery = searchQuery.trim();
-  const searchResults = trimmedQuery.length >= 2 ? searchCatalogProducts(trimmedQuery, 6) : [];
+  const searchResults = trimmedQuery.length >= 2 ? searchProducts(trimmedQuery, 6) : [];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
