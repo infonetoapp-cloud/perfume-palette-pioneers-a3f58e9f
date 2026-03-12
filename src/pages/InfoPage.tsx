@@ -158,12 +158,12 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery timing depends on the destination, carrier, and seasonal volume.",
       },
       {
-        heading: "How does the 2 for $119.90 offer work?",
-        body: "Qualifying fragrance orders receive automatic bundle pricing for every pair of perfumes in the cart. A cart with 2 fragrances prices the pair at $119.90 before tax. A cart with 3 fragrances prices two bottles at the bundle rate and the third at the standard single-bottle price.",
+        heading: "How does multi-bottle pricing work?",
+        body: "The first perfume is priced at $79.90. A cart with 2 perfumes totals $119.90, and every additional perfume after that adds $40.",
       },
       {
-        heading: "Can I use SCENT10 with the 2 for $119.90 offer?",
-        body: "No. SCENT10 cannot be combined with the 2-for-$119.90 promotion. Customers can use the bundle rate or the code-based discount, but not both on the same order.",
+        heading: "Can I use SCENT10 with multi-bottle pricing?",
+        body: "No. SCENT10 cannot be combined with the automatic multi-bottle pricing. Customers can use the single-bottle code discount or the automatic multi-bottle pricing, but not both on the same order.",
       },
       {
         heading: "Do I get a free car fragrance with every perfume order?",
@@ -216,7 +216,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Promotional offers",
-        body: "Bundle pricing, the 1-free-car-scent-per-perfume-order offer, and discount codes may be changed or suspended at any time. Gift items are not part of the item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic bundle offers.",
+        body: "Multi-bottle pricing, the 1-free-car-scent-per-perfume-order offer, and discount codes may be changed or suspended at any time. Gift items are not part of the item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic multi-bottle offers.",
       },
       {
         heading: "Intellectual property",

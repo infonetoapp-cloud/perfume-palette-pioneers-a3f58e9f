@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { Gift, Loader2, Minus, Plus, ShoppingBag, Sparkles, TicketPercent, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { getAutoScentVariant, getAutoScentVariants, type AutoScentVariant } from "@/lib/autoScents";
 import type { CatalogProduct } from "@/lib/catalogData";
 import {
+  ADDITIONAL_PERFUME_PRICE_LABEL,
   BASE_AUTO_SCENT_PRICE_USD,
   BUNDLE_PRICE_USD,
-  BUNDLE_SIZE,
   PROMO_CODE,
   formatUsd,
   getCartPromotionSummary,
@@ -20,7 +20,6 @@ import { cn } from "@/lib/utils";
 import { useCartStore, type CartItem } from "@/stores/cartStore";
 import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -68,7 +67,7 @@ function toPromotionItems(items: CartItem[], managedGiftVariantId: string | null
 
 function getPromoHelperText(status: ReturnType<typeof getCartPromotionSummary>["promoCodeStatus"]) {
   if (status === "applied") return `${PROMO_CODE} applied to your single perfume.`;
-  if (status === "blocked") return `${PROMO_CODE} cannot be combined with the 2-for-${formatUsd(BUNDLE_PRICE_USD)} perfume offer.`;
+  if (status === "blocked") return `${PROMO_CODE} cannot be combined with multi-bottle perfume pricing.`;
   if (status === "invalid") return "That code is not valid.";
   return `Use ${PROMO_CODE} for 10% off one eligible perfume.`;
 }
@@ -77,41 +76,6 @@ function getPromoHelperClass(status: ReturnType<typeof getCartPromotionSummary>[
   if (status === "applied") return "text-emerald-700";
   if (status === "blocked" || status === "invalid") return "text-destructive";
   return "text-muted-foreground";
-}
-
-function getNextBundleHint(perfumeCount: number) {
-  if (perfumeCount <= 0) return null;
-  if (perfumeCount < BUNDLE_SIZE) return `Add 1 more perfume to unlock 2 for ${formatUsd(BUNDLE_PRICE_USD)}.`;
-  if (perfumeCount % BUNDLE_SIZE === 1) return `Add 1 more perfume to unlock your next pair at ${formatUsd(BUNDLE_PRICE_USD)}.`;
-  return null;
-}
-
-function getOfferCopy(perfumeCount: number, autoScentCount: number, pairCount: number) {
-  if (pairCount > 0) {
-    return {
-      title: "Pair pricing unlocked",
-      detail: `Your order already qualifies for ${pairCount} perfume pair${pairCount > 1 ? "s" : ""} at ${formatUsd(BUNDLE_PRICE_USD)} and still includes 1 free car scent.`,
-    };
-  }
-
-  if (perfumeCount === 1) {
-    return {
-      title: "One more perfume unlocks your pair price",
-      detail: `Your order already includes 1 free car scent. Add a second perfume and the pair drops to ${formatUsd(BUNDLE_PRICE_USD)}.`,
-    };
-  }
-
-  if (autoScentCount > 0) {
-    return {
-      title: "Add any perfume to unlock your free car scent",
-      detail: "Car scent-only orders stay paid. As soon as a perfume joins the order, 1 car scent becomes complimentary.",
-    };
-  }
-
-  return {
-    title: "Build your best-value order first",
-    detail: `Perfume orders include 1 free car scent per order. 2 perfumes unlock ${formatUsd(BUNDLE_PRICE_USD)}.`,
-  };
 }
 
 function findAutoScentVariantFromItem(item: CartItem | undefined): AutoScentVariant | null {
@@ -201,6 +165,99 @@ function Row({
   );
 }
 
+function OfferProgressCard({
+  perfumeCount,
+  higherTierUnlocked,
+}: {
+  perfumeCount: number;
+  higherTierUnlocked: boolean;
+}) {
+  const steps = [
+    {
+      label: "Perfume order",
+      mobileLabel: "Gift",
+      detail: "1 free car scent",
+      mobileDetail: "1 free scent",
+      active: perfumeCount >= 1,
+    },
+    {
+      label: "2 perfumes",
+      mobileLabel: "Pair",
+      detail: formatUsd(BUNDLE_PRICE_USD),
+      mobileDetail: formatUsd(BUNDLE_PRICE_USD),
+      active: perfumeCount >= 2,
+    },
+    {
+      label: "Each next perfume",
+      mobileLabel: "Next",
+      detail: `+${ADDITIONAL_PERFUME_PRICE_LABEL}`,
+      mobileDetail: `+${ADDITIONAL_PERFUME_PRICE_LABEL}`,
+      active: higherTierUnlocked,
+    },
+  ];
+
+  return (
+    <section className="rounded-[1.6rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#f5ede3_0%,#fbf7f1_100%)] p-3.5 shadow-soft sm:rounded-[1.85rem] sm:p-4">
+      <div>
+        <div className="relative px-1.5 sm:px-3">
+          <div className="absolute left-5 right-5 top-2.5 h-px bg-[#d8c7b4] sm:left-6 sm:right-6 sm:top-3" />
+          <div className="relative z-10 grid grid-cols-3 gap-1.5 sm:gap-2">
+            {steps.map((step) => (
+              <div key={step.label} className="flex flex-col items-center text-center">
+                <span
+                  className={cn(
+                    "flex h-5 w-5 items-center justify-center rounded-full border bg-white sm:h-6 sm:w-6",
+                    step.active ? "border-accent bg-accent text-accent-foreground" : "border-[#d8c7b4]",
+                  )}
+                >
+                  <span className={cn("h-2 w-2 rounded-full sm:h-2.5 sm:w-2.5", step.active ? "bg-accent-foreground" : "bg-[#d8c7b4]")} />
+                </span>
+                <div className="mt-2.5 w-full rounded-[0.95rem] border border-[#eadfd1] bg-white/90 px-2 py-2 sm:mt-3 sm:rounded-[1.05rem] sm:px-3 sm:py-2.5">
+                  <p className="font-body text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:text-[10px] sm:tracking-[0.16em]">
+                    <span className="sm:hidden">{step.mobileLabel}</span>
+                    <span className="hidden sm:inline">{step.label}</span>
+                  </p>
+                  <p className="mt-1.5 font-body text-xs font-semibold text-foreground sm:mt-2 sm:text-sm">
+                    <span className="sm:hidden">{step.mobileDetail}</span>
+                    <span className="hidden sm:inline">{step.detail}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DrawerSection({
+  step,
+  title,
+  description,
+  children,
+}: {
+  step: number;
+  title: string;
+  description?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="overflow-hidden rounded-[1.8rem] border border-[#eadfd1] bg-card shadow-soft">
+      <div className="flex items-center gap-3 bg-[#efe6d8] px-4 py-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white font-display text-lg font-semibold text-accent">
+          {step}
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-display text-xl font-semibold text-foreground">{title}</h3>
+          {description ? <p className="mt-0.5 font-body text-xs leading-5 text-foreground/70">{description}</p> : null}
+        </div>
+      </div>
+      <div className="p-4">{children}</div>
+    </section>
+  );
+}
+
 function Upsell({
   product,
   isLoading,
@@ -211,120 +268,74 @@ function Upsell({
   onAdd: () => void;
 }) {
   return (
-    <article className="min-w-[220px] rounded-[1.5rem] border border-border bg-card p-3 shadow-soft">
+    <article className="min-w-[196px] rounded-[1.5rem] border border-[#eadfd1] bg-[#fffaf5] p-3 shadow-soft sm:min-w-[228px]">
       <div className="h-40 overflow-hidden rounded-[1rem] bg-secondary">
         {product.images[0] ? <img src={product.images[0].url} alt={product.images[0].altText} className="h-full w-full object-cover" /> : null}
       </div>
-      <p className="mt-3 font-display text-[15px] font-semibold text-foreground">{product.title.replace(" Eau de Parfum 50ml", "")}</p>
+      <p className="mt-3 font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Best next bottle</p>
+      <p className="mt-2 font-display text-[15px] font-semibold leading-tight text-foreground">{product.title.replace(" Eau de Parfum 50ml", "")}</p>
       <p className="mt-1 font-body text-xs text-muted-foreground">{formatUsd(parseFloat(product.price.amount))}</p>
       <Button
         type="button"
         variant="outline"
-        className="mt-3 w-full rounded-full border-accent/30 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent hover:bg-accent hover:text-accent-foreground"
+        className="mt-3 w-full rounded-full border-accent/30 bg-white text-[11px] font-semibold uppercase tracking-[0.16em] text-accent hover:bg-accent hover:text-accent-foreground"
         onClick={onAdd}
         disabled={isLoading || !product.availableForSale}
       >
-        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add to cart"}
+        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add perfume"}
       </Button>
     </article>
   );
 }
 
-function GiftSelectionTeaser({
+function GiftSelectionPanel({
   variant,
-  onOpen,
-}: {
-  variant: AutoScentVariant;
-  onOpen: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="flex w-full items-center gap-3 rounded-[1.6rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#fbf5ec_0%,#fffaf5_100%)] p-4 text-left transition-all hover:border-accent/30 hover:shadow-soft"
-    >
-      <div className="h-20 w-16 shrink-0 overflow-hidden rounded-[1rem] bg-white">
-        <img src={variant.images.hero} alt={variant.title} className="h-full w-full object-cover" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">Complimentary gift</p>
-        <p className="mt-2 font-display text-lg font-semibold leading-tight text-foreground">Choose your free car scent</p>
-        <p className="mt-1 font-body text-sm leading-6 text-muted-foreground">
-          {variant.name} is selected right now. Tap to switch between Iris Flower, Melon, and Oud.
-        </p>
-        <span className="mt-3 inline-flex font-body text-[11px] font-semibold uppercase tracking-[0.16em] text-accent underline underline-offset-4">
-          Select your scent
-        </span>
-      </div>
-    </button>
-  );
-}
-
-function GiftSelectionDialog({
-  isOpen,
-  onOpenChange,
-  selectedVariant,
   onSelect,
 }: {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  selectedVariant: AutoScentVariant;
+  variant: AutoScentVariant;
   onSelect: (slug: string) => void;
 }) {
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[980px] rounded-[2rem] border-[#eadfd1] bg-[linear-gradient(180deg,#fffdf8_0%,#fdf7ef_100%)] p-6 sm:p-8">
-        <DialogHeader className="pr-8">
-          <div className="inline-flex w-fit rounded-full bg-accent px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-foreground">
-            Complimentary gift
-          </div>
-          <DialogTitle className="mt-3 font-display text-3xl font-semibold leading-tight text-foreground">
-            Pick your free car scent
-          </DialogTitle>
-          <DialogDescription className="max-w-2xl font-body text-sm leading-7 text-muted-foreground">
-            Perfume orders include 1 free car scent per order. Choose the cabin mood you want to include with this order.
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {getAutoScentVariants().map((variant) => {
-            const selected = variant.slug === selectedVariant.slug;
-
-            return (
-              <article
-                key={variant.slug}
-                className={cn(
-                  "rounded-[1.6rem] border bg-white/90 p-4 shadow-soft transition-all",
-                  selected ? "border-accent bg-accent/5" : "border-border",
-                )}
-              >
-                <div className="aspect-[4/5] overflow-hidden rounded-[1.2rem] bg-secondary">
-                  <img src={variant.images.hero} alt={variant.title} className="h-full w-full object-cover" />
-                </div>
-                <div className="mt-4">
-                  <p className="font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Car scent</p>
-                  <p className="mt-2 font-display text-xl font-semibold text-foreground">{variant.name}</p>
-                  <p className="mt-2 font-body text-sm leading-6 text-muted-foreground">{variant.scentProfile.slice(0, 2).join(" / ")}</p>
-                </div>
-                <Button
-                  type="button"
-                  className={cn(
-                    "mt-4 h-11 w-full rounded-full font-body text-[11px] font-semibold uppercase tracking-[0.16em]",
-                    selected ? "bg-foreground text-background hover:bg-foreground/90" : "bg-accent text-accent-foreground hover:bg-accent/90",
-                  )}
-                  onClick={() => {
-                    onSelect(variant.slug);
-                    onOpenChange(false);
-                  }}
-                >
-                  {selected ? "Selected" : "Choose this scent"}
-                </Button>
-              </article>
-            );
-          })}
+    <article className="rounded-[1.35rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#fbf5ec_0%,#fffaf5_100%)] p-3">
+      <div className="flex items-start gap-3">
+        <div className="h-16 w-14 shrink-0 overflow-hidden rounded-[0.9rem] bg-white">
+          <img src={variant.images.hero} alt={variant.title} className="h-full w-full object-cover" />
         </div>
-      </DialogContent>
-    </Dialog>
+        <div className="min-w-0 flex-1">
+          <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">Complimentary gift</p>
+          <p className="mt-1.5 font-display text-[1.05rem] font-semibold leading-tight text-foreground">Choose your free car scent</p>
+          <p className="mt-1 font-body text-[13px] leading-5 text-muted-foreground">
+            Included with your perfume order.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {getAutoScentVariants().map((preview) => {
+          const selected = preview.slug === variant.slug;
+
+          return (
+            <button
+              type="button"
+              key={preview.slug}
+              onClick={() => onSelect(preview.slug)}
+              className={cn(
+                "overflow-hidden rounded-[0.95rem] border bg-white text-left transition-all hover:border-accent/60",
+                selected ? "border-accent shadow-soft ring-1 ring-accent/20" : "border-[#eadfd1]",
+              )}
+            >
+              <div className="aspect-[4/5] bg-secondary">
+                <img src={preview.images.hero} alt={preview.title} className="h-full w-full object-cover" />
+              </div>
+              <div className="px-2 py-2">
+                <p className="truncate font-body text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{preview.name}</p>
+                {selected ? <p className="mt-1 font-body text-[10px] font-semibold uppercase tracking-[0.12em] text-accent">Selected</p> : null}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </article>
   );
 }
 
@@ -332,7 +343,6 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
   const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [promoInput, setPromoInput] = useState("");
-  const [isGiftDialogOpen, setIsGiftDialogOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const sheetTitleRef = useRef<HTMLHeadingElement | null>(null);
   const {
@@ -368,7 +378,6 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
   );
   const perfumeItems = useMemo(() => liveItems.filter((item) => getCartItemKind(item) === "perfume"), [liveItems]);
   const autoScentItems = useMemo(() => liveItems.filter((item) => getCartItemKind(item) === "auto-scent"), [liveItems]);
-  const nextBundleHint = getNextBundleHint(summary.perfumeCount);
 
   const displayRows = useMemo(() => {
     const rows: CartDisplayRow[] = [];
@@ -410,7 +419,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
           quantity: item.quantity,
           totalPrice: linePrice,
           compareAtPrice: null,
-          helper: kind === "perfume" ? "Eligible for pair pricing" : null,
+          helper: null,
           editable: true,
           sourceItem: item,
         });
@@ -442,7 +451,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     if (summary.perfumeCount === 1 && perfumeItems[0]) {
       return {
         title: "Complete your pair",
-        detail: `Add one more perfume to drop the pair to ${formatUsd(BUNDLE_PRICE_USD)}.`,
+        detail: `Add one more perfume. Your 2-bottle total becomes ${formatUsd(BUNDLE_PRICE_USD)}.`,
         products: getRelatedProducts(perfumeItems[0].product.handle, 8).filter((product) => !cartHandles.has(product.handle)).slice(0, 4),
       };
     }
@@ -463,7 +472,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     if (summary.perfumeCount > 1 && perfumeItems[0]) {
       return {
         title: "Add another favorite",
-        detail: "Keep building with matching David Walker perfumes.",
+        detail: `Every perfume after the first adds ${ADDITIONAL_PERFUME_PRICE_LABEL}.`,
         products: getRelatedProducts(perfumeItems[0].product.handle, 8).filter((product) => !cartHandles.has(product.handle)).slice(0, 4),
       };
     }
@@ -481,8 +490,6 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
         scrollAreaRef.current?.scrollTo({ top: 0, behavior: "auto" });
       });
       void syncCart();
-    } else {
-      setIsGiftDialogOpen(false);
     }
   }, [isOpen, syncCart]);
 
@@ -493,6 +500,11 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
       return;
     }
     setPromoCode(normalized);
+  };
+
+  const handleApplyPresetPromo = () => {
+    setPromoInput(PROMO_CODE);
+    setPromoCode(PROMO_CODE);
   };
 
   const handleOpenChange = (open: boolean) => {
@@ -520,7 +532,13 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     toast.success(t("cart.added"), { description: product.title });
   };
 
-  const offer = getOfferCopy(summary.perfumeCount, summary.autoScentCount, summary.bundle.pairCount);
+  const showGiftTeaser = summary.complimentaryGiftEligible && !!selectedGiftVariant;
+  const showUpsellSection = !!upsellConfig && upsellConfig.products.length > 0;
+  let nextSectionStep = 1;
+  const cartStep = nextSectionStep++;
+  const giftStep = showGiftTeaser ? nextSectionStep++ : null;
+  const upsellStep = showUpsellSection ? nextSectionStep++ : null;
+  const summaryStep = nextSectionStep++;
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
@@ -551,102 +569,80 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
           {items.length === 0 ? (
             <div className="flex flex-1 items-center">
               <div className="w-full rounded-[1.8rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#f5ede3_0%,#fbf7f1_100%)] p-5">
-                <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">Offer progress</p>
-                <h3 className="mt-3 font-display text-2xl font-semibold text-foreground">{offer.title}</h3>
-                <p className="mt-2 font-body text-sm leading-6 text-foreground/75">{offer.detail}</p>
+                <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">Cart</p>
+                <h3 className="mt-3 font-display text-2xl font-semibold text-foreground">Start with one perfume at {formatUsd(79.9)}</h3>
+                <p className="mt-2 font-body text-sm leading-6 text-foreground/75">
+                  Perfume orders include 1 free car scent. The second perfume brings the total to {formatUsd(BUNDLE_PRICE_USD)}, and each additional perfume adds {ADDITIONAL_PERFUME_PRICE_LABEL}.
+                </p>
               </div>
             </div>
           ) : (
             <>
               <div ref={scrollAreaRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
                 <div className="space-y-4 pb-6">
-                  <section className="rounded-[1.8rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#f5ede3_0%,#fbf7f1_100%)] p-4">
-                    <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">Offer progress</p>
-                    <h3 className="mt-3 font-display text-xl font-semibold text-foreground">{offer.title}</h3>
-                    <p className="mt-2 font-body text-sm leading-6 text-foreground/75">{offer.detail}</p>
-                    <div className="mt-4 grid grid-cols-3 gap-2">
-                      {[
-                        { label: "Perfume order", detail: "1 free car scent", active: summary.perfumeCount >= 1 },
-                        { label: "2 perfumes", detail: `${formatUsd(BUNDLE_PRICE_USD)} pair`, active: summary.perfumeCount >= 2 },
-                        { label: "Every order", detail: "Free shipping", active: summary.itemCount > 0 },
-                      ].map((step) => (
-                        <div key={step.label} className={cn("rounded-[1.1rem] border px-3 py-3", step.active ? "border-accent/20 bg-accent/10" : "border-[#eadfd1] bg-white/75")}>
-                          <p className="font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{step.label}</p>
-                          <p className="mt-2 font-body text-sm font-semibold text-foreground">{step.detail}</p>
-                        </div>
+                  <OfferProgressCard
+                    perfumeCount={summary.perfumeCount}
+                    higherTierUnlocked={summary.perfumeCount >= 3}
+                  />
+
+                  <DrawerSection
+                    step={cartStep}
+                    title="Your cart"
+                    description={summary.itemCount === 1 ? "1 item in your bag" : `${summary.itemCount} items in your bag`}
+                  >
+                    <div className="space-y-3">
+                      {displayRows.map((row) => (
+                        <Row
+                          key={row.key}
+                          row={row}
+                          isLoading={isLoading}
+                          onDecrease={row.sourceItem ? () => void updateQuantity(row.sourceItem.variantId, row.sourceItem.quantity - 1) : undefined}
+                          onIncrease={row.sourceItem ? () => void updateQuantity(row.sourceItem.variantId, row.sourceItem.quantity + 1) : undefined}
+                          onRemove={row.sourceItem ? () => void removeItem(row.sourceItem.variantId) : undefined}
+                        />
                       ))}
                     </div>
-                  </section>
+                  </DrawerSection>
 
-                  <section className="space-y-3">
-                    {displayRows.map((row) => (
-                      <Row
-                        key={row.key}
-                        row={row}
-                        isLoading={isLoading}
-                        onDecrease={row.sourceItem ? () => void updateQuantity(row.sourceItem!.variantId, row.sourceItem!.quantity - 1) : undefined}
-                        onIncrease={row.sourceItem ? () => void updateQuantity(row.sourceItem!.variantId, row.sourceItem!.quantity + 1) : undefined}
-                        onRemove={row.sourceItem ? () => void removeItem(row.sourceItem!.variantId) : undefined}
+                  {showGiftTeaser && giftStep ? (
+                    <DrawerSection
+                      step={giftStep}
+                      title="Pick your free car scent"
+                      description="Perfume orders include 1 complimentary car scent per order."
+                    >
+                      <GiftSelectionPanel
+                        variant={selectedGiftVariant}
+                        onSelect={setGiftSelectionSlug}
                       />
-                    ))}
-                  </section>
-
-                  {summary.complimentaryGiftEligible && selectedGiftVariant ? (
-                    <GiftSelectionTeaser
-                      variant={selectedGiftVariant}
-                      onOpen={() => setIsGiftDialogOpen(true)}
-                    />
+                    </DrawerSection>
                   ) : null}
 
-                  {upsellConfig && upsellConfig.products.length > 0 ? (
-                    <section className="rounded-[1.7rem] border border-border bg-card p-4">
-                      <div className="flex items-start gap-3">
-                        <Sparkles className="mt-0.5 h-4 w-4 text-accent" />
-                        <div>
-                          <p className="font-display text-lg font-semibold text-foreground">{upsellConfig.title}</p>
-                          <p className="mt-1 font-body text-sm leading-6 text-muted-foreground">{upsellConfig.detail}</p>
-                        </div>
-                      </div>
-                      <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+                  {showUpsellSection && upsellConfig && upsellStep ? (
+                    <DrawerSection
+                      step={upsellStep}
+                      title={upsellConfig.title}
+                      description={upsellConfig.detail}
+                    >
+                      <div className="flex gap-3 overflow-x-auto pb-1">
                         {upsellConfig.products.map((product) => (
                           <Upsell key={product.handle} product={product} isLoading={isLoading} onAdd={() => void handleUpsellAdd(product)} />
                         ))}
                       </div>
-                    </section>
+                    </DrawerSection>
                   ) : null}
 
-                  <section className="rounded-[1.7rem] border border-border bg-card p-4">
-                    <div className="flex items-start gap-3">
-                      <TicketPercent className="mt-0.5 h-4 w-4 text-accent" />
-                      <div className="w-full">
-                        <p className="font-display text-lg font-semibold text-foreground">Promo code</p>
-                        <div className="mt-3 flex gap-2">
-                          <Input value={promoInput} onChange={(event) => setPromoInput(event.target.value)} placeholder={PROMO_CODE} className="h-10 rounded-full" />
-                          <Button type="button" variant="outline" className="rounded-full px-4" onClick={handleApplyPromo}>Apply</Button>
-                        </div>
-                        <p className={`mt-2 font-body text-xs leading-relaxed ${getPromoHelperClass(summary.promoCodeStatus)}`}>{getPromoHelperText(summary.promoCodeStatus)}</p>
-                      </div>
-                    </div>
-                  </section>
-
-                  <section className="rounded-[1.7rem] border border-border bg-card p-4">
-                    <div className="flex items-start gap-3">
-                      <Gift className="mt-0.5 h-4 w-4 text-accent" />
-                      <div>
-                        <p className="font-display text-lg font-semibold text-foreground">Order summary</p>
-                        <p className="mt-1 font-body text-sm leading-6 text-muted-foreground">
-                          {summary.perfumeCount > 0 ? "Pair pricing and 1 complimentary car scent per perfume order are reflected below." : "Add a perfume to make 1 car scent complimentary."}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-4 space-y-3">
+                  <DrawerSection
+                    step={summaryStep}
+                    title="Order summary"
+                  >
+                    <div className="space-y-2.5">
                       <div className="flex items-center justify-between font-body text-sm text-muted-foreground">
                         <span>Merchandise subtotal</span>
                         <span>{formatUsd(summary.baseSubtotal)}</span>
                       </div>
                       {summary.bundle.isApplied ? (
                         <div className="flex items-center justify-between font-body text-sm text-emerald-700">
-                          <span>Perfume pair savings</span>
+                          <span>Perfume pricing savings</span>
                           <span>-{formatUsd(summary.bundle.savings)}</span>
                         </div>
                       ) : null}
@@ -668,44 +664,66 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
                           <span>-{formatUsd(summary.promoCodeDiscount)}</span>
                         </div>
                       ) : null}
-                      <div className="flex items-center justify-between border-t border-border pt-3">
+                      <div className="flex items-center justify-between border-t border-border pt-2.5">
                         <span className="font-display text-base font-semibold">{t("cart.total")}</span>
                         <span className="font-display text-xl font-bold">{formatUsd(summary.finalSubtotal)}</span>
                       </div>
                     </div>
-                    {nextBundleHint ? (
-                      <div className="mt-4 rounded-[1.1rem] border border-accent/20 bg-accent/5 px-3 py-3">
-                        <p className="font-body text-xs font-semibold uppercase tracking-[0.16em] text-accent">Next best move</p>
-                        <p className="mt-2 font-body text-sm leading-6 text-accent">{nextBundleHint}</p>
-                      </div>
-                    ) : null}
-                  </section>
 
-                  <p className="font-body text-xs leading-relaxed text-muted-foreground">{t("cart.previewNote")}</p>
+                    <div className="mt-3 rounded-[1.05rem] border border-[#eadfd1] bg-[#fffaf5] p-3">
+                      <div className="flex items-start gap-3">
+                        <TicketPercent className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                        <div className="w-full">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Promo code</p>
+                            {summary.promoCodeStatus === "applied" ? (
+                              <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
+                                Applied
+                              </span>
+                            ) : null}
+                          </div>
+                          <div className="mt-2 flex items-center gap-2">
+                            <div className="flex-1 rounded-full border border-border bg-white px-4 py-2.5 font-body text-sm text-muted-foreground">
+                              {PROMO_CODE}
+                            </div>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="rounded-full px-4"
+                              onClick={handleApplyPresetPromo}
+                              disabled={summary.promoCodeStatus === "applied"}
+                            >
+                              {summary.promoCodeStatus === "applied" ? "Added" : "Apply"}
+                            </Button>
+                          </div>
+                          <p className={`mt-2 font-body text-xs leading-relaxed ${getPromoHelperClass(summary.promoCodeStatus)}`}>
+                            {summary.promoCodeStatus === "applied" ? `${PROMO_CODE} applied to 1 perfume.` : `Tap apply to use ${PROMO_CODE} on 1 eligible perfume.`}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerSection>
+
+                  <p className="hidden font-body text-xs leading-relaxed text-muted-foreground sm:block">{t("cart.previewNote")}</p>
                 </div>
               </div>
 
-              <div className="shrink-0 border-t border-border bg-background/95 px-6 pb-6 pt-4 backdrop-blur">
-                <div className="rounded-[1.7rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#fffaf5_0%,#fff 100%)] p-4 shadow-soft">
-                  <div className="flex items-center justify-between gap-4">
+              <div className="shrink-0 border-t border-border bg-background/95 px-6 pb-5 pt-3 backdrop-blur">
+                <div className="rounded-[1.4rem] border border-[#e6d6c6] bg-[linear-gradient(180deg,#fffdf9_0%,#fff8ef_100%)] p-3 shadow-soft">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Ready to checkout</p>
-                      <p className="mt-2 font-display text-2xl font-semibold text-foreground">{formatUsd(summary.finalSubtotal)}</p>
+                      <p className="font-body text-[9px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Ready to checkout</p>
+                      <p className="mt-1 font-display text-[1.7rem] font-semibold leading-none text-foreground">{formatUsd(summary.finalSubtotal)}</p>
                     </div>
-                    <div className="text-right">
-                      {summary.bundle.savings > 0 ? (
-                        <p className="font-body text-xs font-semibold text-emerald-700">-{formatUsd(summary.bundle.savings)} pair savings</p>
-                      ) : null}
-                      {summary.complimentaryGift.savings > 0 ? (
-                        <p className="mt-1 font-body text-xs font-semibold text-emerald-700">-{formatUsd(summary.complimentaryGift.savings)} complimentary gift</p>
-                      ) : null}
-                    </div>
+                    <span className="rounded-full border border-[#dfd3c6] bg-white/90 px-2.5 py-1 font-body text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                      Free shipping
+                    </span>
                   </div>
 
                   {checkoutUrl ? (
                     <Button
                       asChild
-                      className="mt-4 h-14 w-full rounded-full bg-primary font-body text-sm font-semibold uppercase tracking-[0.16em] text-primary-foreground hover:bg-foreground/80"
+                      className="mt-3 h-11 w-full rounded-full border border-transparent bg-[#8d8882] font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-white hover:bg-[#78736d]"
                       size="lg"
                       disabled={items.length === 0 || isLoading || isSyncing}
                     >
@@ -715,13 +733,17 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
                     </Button>
                   ) : (
                     <Button
-                      className="mt-4 h-14 w-full rounded-full bg-primary font-body text-sm font-semibold uppercase tracking-[0.16em] text-primary-foreground"
+                      className="mt-3 h-11 w-full rounded-full border border-transparent bg-[#8d8882] font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-white"
                       size="lg"
                       disabled
                     >
                       {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : `Checkout - ${formatUsd(summary.finalSubtotal)}`}
                     </Button>
                   )}
+
+                  <p className="mt-2 text-center font-body text-[11px] leading-5 text-muted-foreground">
+                    Taxes are calculated at checkout.
+                  </p>
                 </div>
               </div>
             </>
@@ -729,14 +751,6 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
         </div>
       </SheetContent>
 
-      {summary.complimentaryGiftEligible && selectedGiftVariant ? (
-        <GiftSelectionDialog
-          isOpen={isGiftDialogOpen}
-          onOpenChange={setIsGiftDialogOpen}
-          selectedVariant={selectedGiftVariant}
-          onSelect={setGiftSelectionSlug}
-        />
-      ) : null}
     </Sheet>
   );
 };

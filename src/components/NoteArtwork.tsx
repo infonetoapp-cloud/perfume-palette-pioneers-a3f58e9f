@@ -77,14 +77,14 @@ export function NoteArtworkStack({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center -space-x-3", className)}>
+    <div className={cn("flex shrink-0 items-center gap-1.5", className)}>
       {notes.slice(0, 3).map((note, index) => (
         <NoteArtwork
           key={`${note}-${index}`}
           label={note}
           fallbackIcon={fallbackIcon}
           size={size}
-          className="ring-2 ring-background/90"
+          className="ring-1 ring-background/90"
         />
       ))}
     </div>

@@ -1,7 +1,9 @@
 export const BASE_FRAGRANCE_PRICE_USD = 79.9;
 export const BASE_AUTO_SCENT_PRICE_USD = 25;
+export const ADDITIONAL_PERFUME_PRICE_USD = 40;
 export const BUNDLE_SIZE = 2;
 export const BUNDLE_PRICE_USD = 119.9;
+export const ADDITIONAL_PERFUME_PRICE_LABEL = "$40";
 export const PROMO_CODE = "SCENT10";
 export const PROMO_CODE_DISCOUNT_RATE = 0.1;
 export const GIFT_LABEL = "Free car scent";
@@ -22,7 +24,7 @@ export interface CartPromotionItem {
 }
 
 export interface BundlePricingSummary {
-  pairCount: number;
+  discountedBottleCount: number;
   discountedSubtotal: number;
   savings: number;
   isApplied: boolean;
@@ -78,24 +80,25 @@ export function normalizePromoCode(code: string): string {
 export function getBundlePricing(perfumeCount: number): BundlePricingSummary {
   if (perfumeCount < BUNDLE_SIZE) {
     return {
-      pairCount: 0,
+      discountedBottleCount: 0,
       discountedSubtotal: roundCurrency(perfumeCount * BASE_FRAGRANCE_PRICE_USD),
       savings: 0,
       isApplied: false,
     };
   }
 
-  const pairCount = Math.floor(perfumeCount / BUNDLE_SIZE);
-  const remainder = perfumeCount % BUNDLE_SIZE;
+  const discountedBottleCount = Math.max(0, perfumeCount - 1);
   const baseSubtotal = perfumeCount * BASE_FRAGRANCE_PRICE_USD;
-  const discountedSubtotal = roundCurrency((pairCount * BUNDLE_PRICE_USD) + (remainder * BASE_FRAGRANCE_PRICE_USD));
+  const discountedSubtotal = roundCurrency(
+    BASE_FRAGRANCE_PRICE_USD + (discountedBottleCount * ADDITIONAL_PERFUME_PRICE_USD),
+  );
   const savings = roundCurrency(baseSubtotal - discountedSubtotal);
 
   return {
-    pairCount,
+    discountedBottleCount,
     discountedSubtotal,
     savings,
-    isApplied: pairCount > 0,
+    isApplied: discountedBottleCount > 0,
   };
 }
 

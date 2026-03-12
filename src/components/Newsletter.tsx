@@ -33,7 +33,7 @@ const Newsletter = () => {
               {t("newsletter.comingSoon")}
             </p>
             <p className="mt-3 font-body text-sm leading-relaxed text-primary-foreground/75">
-              Questions before launch? Email{" "}
+              Questions about scents, gifts, or orders? Email{" "}
               <a href={`mailto:${SITE_SUPPORT_EMAIL}`} className="font-semibold text-primary-foreground underline underline-offset-4">
                 {SITE_SUPPORT_EMAIL}
               </a>

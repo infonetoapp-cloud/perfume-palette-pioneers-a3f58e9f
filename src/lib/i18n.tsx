@@ -49,14 +49,14 @@ const translations = {
     "brand.standardsTitle2": "ONLINE DISCOVERY",
     "brand.standardsDesc": "Every listing is organized around scent profile, notes, and wearing occasion so customers can shop by mood instead of guessing from a code alone.",
 
-    "newsletter.title": "Be the first to know",
-    "newsletter.desc": "New collections, exclusive offers, and scent inspiration.",
+    "newsletter.title": "Need help choosing a scent?",
+    "newsletter.desc": "Questions, gift help, and order support from the Real Scents team.",
     "newsletter.placeholder": "Your email address",
     "newsletter.subscribe": "Subscribe",
-    "newsletter.privacy": "We respect your privacy. Unsubscribe anytime.",
-    "newsletter.status": "Email signup opens at launch.",
+    "newsletter.privacy": "We only use your email to reply and help with your order.",
+    "newsletter.status": "Direct support",
     "newsletter.comingSoon":
-      "The opt-in flow is not live yet. Final contact details and subscription setup will be added before launch.",
+      "Email us for scent recommendations, current offers, or help with an order before you check out.",
     "newsletter.browse": "Browse all perfumes",
 
     "footer.tagline": "Shop David Walker fragrances at Real Scents with clear scent notes and free U.S. shipping on every order.",
@@ -82,7 +82,7 @@ const translations = {
     "cart.total": "Total",
     "cart.checkout": "CHECKOUT",
     "cart.previewCheckout": "CHECKOUT",
-    "cart.previewNote": "Bundle pricing and promo code rules are shown before checkout. Perfume orders include 1 free car scent per order. Car scent-only orders do not include an extra free car scent.",
+    "cart.previewNote": "Multi-bottle pricing and promo code rules are shown before checkout. Perfume orders include 1 free car scent per order. Car scent-only orders do not include an extra free car scent.",
     "cart.added": "Added to cart",
 
     "product.back": "Back",
@@ -138,14 +138,14 @@ const translations = {
     "brand.standardsTitle2": "DESCUBRIMIENTO ONLINE",
     "brand.standardsDesc": "Cada ficha esta organizada por perfil olfativo, notas y ocasion de uso para que la compra online sea mas clara y directa.",
 
-    "newsletter.title": "Se el primero en enterarte",
-    "newsletter.desc": "Nuevas colecciones, ofertas exclusivas e inspiracion aromatica.",
+    "newsletter.title": "Necesitas ayuda para elegir un aroma?",
+    "newsletter.desc": "Ayuda con aromas, regalos y pedidos del equipo de Real Scents.",
     "newsletter.placeholder": "Tu correo electronico",
     "newsletter.subscribe": "Suscribirse",
-    "newsletter.privacy": "Respetamos tu privacidad. Cancela cuando quieras.",
-    "newsletter.status": "El registro por email se abrira en el lanzamiento.",
+    "newsletter.privacy": "Solo usamos tu correo para responderte y ayudarte con tu pedido.",
+    "newsletter.status": "Soporte directo",
     "newsletter.comingSoon":
-      "El flujo de suscripcion aun no esta activo. Los datos finales de contacto y el formulario se agregaran antes del lanzamiento.",
+      "Escribenos para recomendaciones de aromas, ofertas actuales o ayuda con tu pedido antes de comprar.",
     "newsletter.browse": "Ver todos los perfumes",
 
     "footer.tagline": "Compra fragancias David Walker en Real Scents con notas olfativas claras y envio gratuito en todos los pedidos de Estados Unidos.",

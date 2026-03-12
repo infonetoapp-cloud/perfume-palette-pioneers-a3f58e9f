@@ -17,6 +17,7 @@ import {
 import { toast } from "sonner";
 
 import AutoScentCard from "@/components/AutoScentCard";
+import { BenefitArtwork } from "@/components/BenefitArtwork";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { NoteArtwork, NoteArtworkStack } from "@/components/NoteArtwork";
@@ -66,43 +67,43 @@ const AutoScentBenefitsGrid = ({ variant }: { variant: AutoScentVariant }) => {
     {
       title: "FREE U.S.\nSHIPPING",
       detail: "Every car scent order ships free within the United States, including single-scent purchases.",
-      icon: <Package className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="free-shipping" fallbackIcon={<Package className="h-7 w-7 text-accent" />} />,
     },
     {
       title: `${formatPrice(variant.priceUsd)}\nEACH`,
       detail: "Each scent is sold separately, so customers can buy only the one they want.",
-      icon: <Droplets className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="single-car-scent" fallbackIcon={<Droplets className="h-7 w-7 text-accent" />} />,
     },
     {
       title: "PERFUME\nORDER GIFT",
       detail: "Perfume orders include 1 complimentary car scent per order. Car scent-only purchases are sold separately.",
-      icon: <Heart className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="perfume-order-gift" fallbackIcon={<Heart className="h-7 w-7 text-accent" />} />,
     },
     {
       title: "AUTO SCENT\nDESIGN",
       detail: "Compact bottle, wood cap, and hanging cord designed to look clean inside the cabin.",
-      icon: <Sparkles className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="auto-scent-design" fallbackIcon={<Sparkles className="h-7 w-7 text-accent" />} />,
     },
   ];
 
   return (
-    <div className="mt-8 grid gap-3 sm:grid-cols-2">
+    <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-2">
       {benefits.map((benefit) => (
         <article
           key={benefit.title}
-          className="group relative overflow-hidden rounded-[1.5rem] border border-border bg-card/90 p-4 shadow-soft transition-transform duration-300 hover:-translate-y-0.5 md:p-5"
+          className="group relative overflow-hidden rounded-[1.4rem] border border-border bg-card/90 p-3 shadow-soft transition-transform duration-300 hover:-translate-y-0.5 sm:p-4 md:p-5"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(227,102,81,0.07),transparent_42%)]" />
           <div className="relative flex items-start justify-between gap-4">
-            <div className="max-w-[14rem]">
-              <h3 className="whitespace-pre-line font-display text-[1.45rem] font-semibold uppercase leading-[0.94] tracking-[-0.03em] text-foreground md:text-[1.6rem]">
+            <div className="min-w-0">
+              <h3 className="whitespace-pre-line font-display text-[1.05rem] font-semibold uppercase leading-[0.98] tracking-[-0.03em] text-foreground sm:text-[1.2rem] md:text-[1.6rem]">
                 {benefit.title}
               </h3>
-              <p className="mt-3 max-w-[15rem] font-body text-[13px] leading-relaxed text-muted-foreground md:text-sm">
+              <p className="mt-3 hidden max-w-[15rem] font-body text-[13px] leading-relaxed text-muted-foreground sm:block md:text-sm">
                 {benefit.detail}
               </p>
             </div>
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-accent/20 bg-accent/5 md:h-14 md:w-14">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-accent/20 bg-accent/5 sm:h-12 sm:w-12 md:h-14 md:w-14">
               {benefit.icon}
             </div>
           </div>
@@ -118,15 +119,18 @@ const AutoScentPromoStrip = ({ variant }: { variant: AutoScentVariant }) => (
       <span className="rounded-full bg-foreground px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-background">
         {formatPrice(variant.priceUsd)} each
       </span>
-      <span className="rounded-full border border-border bg-background/80 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground">
+      <span className="hidden rounded-full border border-border bg-background/80 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground sm:inline-flex">
         Free shipping on every order
       </span>
       <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
-        1 free car scent per perfume order
+        Free with perfume orders
       </span>
     </div>
-    <p className="mt-2 font-body text-[11px] leading-relaxed text-muted-foreground">
+    <p className="mt-2 hidden font-body text-[11px] leading-relaxed text-muted-foreground sm:block">
       Buy one for {formatPrice(variant.priceUsd)} with free shipping. Car scent-only orders stay paid, and perfume orders include 1 free car scent per order.
+    </p>
+    <p className="mt-2 font-body text-[11px] leading-relaxed text-muted-foreground sm:hidden">
+      Car scent-only orders stay paid. Add any perfume to make 1 car scent complimentary.
     </p>
   </div>
 );
@@ -139,15 +143,15 @@ const AutoScentNoteHighlights = ({ variant }: { variant: AutoScentVariant }) => 
   ];
 
   return (
-    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+    <div className="mt-6 hidden gap-3 sm:grid sm:grid-cols-3">
       {noteGroups.map((group) => (
         <article key={group.label} className="rounded-2xl border border-border bg-secondary/30 p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 sm:flex-1">
               <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{group.label}</p>
               <p className="mt-3 font-body text-sm font-medium text-foreground">{group.notes.join(" / ")}</p>
             </div>
-            <NoteArtworkStack notes={group.notes} fallbackIcon={group.icon} />
+            <NoteArtworkStack notes={group.notes} fallbackIcon={group.icon} className="self-start" />
           </div>
         </article>
       ))}
@@ -186,9 +190,12 @@ const AutoScentAccordions = ({ variant }: { variant: AutoScentVariant }) => (
               icon: <Flame className="h-4 w-4 text-accent" />,
             },
           ].map((row) => (
-            <div key={row.tier} className="flex items-start gap-4 rounded-[1.35rem] border border-border bg-secondary/20 p-4">
-              <NoteArtworkStack notes={row.notes} fallbackIcon={row.icon} className="shrink-0 pt-1" />
-              <div>
+            <div
+              key={row.tier}
+              className="flex flex-col gap-4 rounded-[1.35rem] border border-border bg-secondary/20 p-4 sm:flex-row sm:items-start"
+            >
+              <NoteArtworkStack notes={row.notes} fallbackIcon={row.icon} className="self-start sm:pt-1" />
+              <div className="min-w-0">
                 <p className="font-body font-semibold text-foreground">
                   {row.tier}: <span className="font-normal text-muted-foreground">{row.desc}</span>
                 </p>
@@ -315,7 +322,7 @@ const AutoScentPerfumeRecommendations = ({ variant }: { variant: AutoScentVarian
           <h2 className="mt-2 font-display text-2xl font-bold text-foreground md:text-3xl">
             Perfume picks that fit this cabin mood.
           </h2>
-          <p className="mt-3 max-w-2xl font-body text-sm leading-7 text-muted-foreground">
+          <p className="mt-3 hidden max-w-2xl font-body text-sm leading-7 text-muted-foreground md:block">
             Add a matching David Walker perfume alongside {variant.name.toLowerCase()} for a cleaner, more consistent scent story.
           </p>
         </div>
@@ -327,7 +334,7 @@ const AutoScentPerfumeRecommendations = ({ variant }: { variant: AutoScentVarian
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6 [&>*:nth-child(n+3)]:hidden md:[&>*:nth-child(n+3)]:block md:[&>*:nth-child(n+5)]:hidden xl:[&>*:nth-child(n+5)]:block">
         {perfumes.map((product, index) => (
           <ProductCard
             key={product.id}
@@ -615,11 +622,11 @@ const AutoScentDetailPage = ({ slug }: { slug: string }) => {
                 <span className="font-display text-2xl font-bold text-foreground">{formatPrice(variant.priceUsd)}</span>
               </div>
 
-              <p className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
+              <p className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-accent sm:hidden">
                 Free shipping on every order
               </p>
-              <p className="mt-2 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
-                1 free car scent per perfume order
+              <p className="mt-3 hidden font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-accent sm:block">
+                Free shipping on every order · 1 free car scent per perfume order
               </p>
 
               <div className="mt-5">
@@ -643,6 +650,9 @@ const AutoScentDetailPage = ({ slug }: { slug: string }) => {
               </button>
 
               <AutoScentPromoStrip variant={variant} />
+              <div className="lg:hidden">
+                <AutoScentBenefitsGrid variant={variant} />
+              </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 font-body text-xs text-accent">

@@ -22,6 +22,7 @@ import { toast } from "sonner";
 
 import Footer from "@/components/Footer";
 import AutoScentRecommendations from "@/components/AutoScentRecommendations";
+import { BenefitArtwork } from "@/components/BenefitArtwork";
 import Navbar from "@/components/Navbar";
 import { NoteArtworkStack, NoteSwatch } from "@/components/NoteArtwork";
 import ProductCard from "@/components/ProductCard";
@@ -34,7 +35,7 @@ import { getProductMeta, type ProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_BRAND, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
 import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
-import { BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
+import { ADDITIONAL_PERFUME_PRICE_LABEL, BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
 import { useCartStore } from "@/stores/cartStore";
 import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
@@ -54,43 +55,43 @@ const ProductBenefitsGrid = () => {
     {
       title: "Free U.S.\nShipping",
       detail: "Standard delivery across the United States.",
-      icon: <Package className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="free-shipping" fallbackIcon={<Package className="h-7 w-7 text-accent" />} />,
     },
     {
       title: "50ml Eau\nde Parfum",
       detail: "A concentrated daily-wear format in a polished bottle.",
-      icon: <Droplets className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="eau-de-parfum-50ml" fallbackIcon={<Droplets className="h-7 w-7 text-accent" />} />,
     },
     {
       title: "Free Car Scent\nPerfume Orders",
       detail: "Perfume orders include 1 free car scent per order.",
-      icon: <Heart className="h-7 w-7 text-accent" />,
+      icon: <BenefitArtwork kind="perfume-order-gift" fallbackIcon={<Heart className="h-7 w-7 text-accent" />} />,
     },
     {
-      title: `2 for ${formatUsd(BUNDLE_PRICE_USD)}\nor ${PROMO_CODE}`,
-      detail: `${PROMO_CODE} gives 10% off one bottle. Offers do not combine.`,
-      icon: <Sparkles className="h-7 w-7 text-accent" />,
+      title: `2 for ${formatUsd(BUNDLE_PRICE_USD)}\nthen +${ADDITIONAL_PERFUME_PRICE_LABEL}`,
+      detail: `${PROMO_CODE} gives 10% off one bottle. Multi-bottle pricing and codes do not combine.`,
+      icon: <BenefitArtwork kind="bundle-offer" fallbackIcon={<Sparkles className="h-7 w-7 text-accent" />} />,
     },
   ];
 
   return (
-    <div className="mt-8 grid gap-3 sm:grid-cols-2">
+    <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-2">
       {benefits.map((benefit) => (
         <article
           key={benefit.title}
-          className="group relative overflow-hidden rounded-[1.5rem] border border-border bg-card/90 p-4 shadow-soft transition-transform duration-300 hover:-translate-y-0.5 md:p-5"
+          className="group relative overflow-hidden rounded-[1.4rem] border border-border bg-card/90 p-3 shadow-soft transition-transform duration-300 hover:-translate-y-0.5 sm:p-4 md:p-5"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(227,102,81,0.07),transparent_42%)]" />
           <div className="relative flex items-start justify-between gap-4">
-            <div className="max-w-[14rem]">
-              <h3 className="whitespace-pre-line font-display text-[1.45rem] font-semibold uppercase leading-[0.94] tracking-[-0.03em] text-foreground md:text-[1.6rem]">
+            <div className="min-w-0">
+              <h3 className="whitespace-pre-line font-display text-[1.05rem] font-semibold uppercase leading-[0.98] tracking-[-0.03em] text-foreground sm:text-[1.2rem] md:text-[1.6rem]">
                 {benefit.title}
               </h3>
-              <p className="mt-3 max-w-[15rem] font-body text-[13px] leading-relaxed text-muted-foreground md:text-sm">
+              <p className="mt-3 hidden max-w-[15rem] font-body text-[13px] leading-relaxed text-muted-foreground sm:block md:text-sm">
                 {benefit.detail}
               </p>
             </div>
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-accent/20 bg-accent/5 md:h-14 md:w-14">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-accent/20 bg-accent/5 sm:h-12 sm:w-12 md:h-14 md:w-14">
               {benefit.icon}
             </div>
           </div>
@@ -107,14 +108,17 @@ const ProductPromoStrip = () => (
         2 for {formatUsd(BUNDLE_PRICE_USD)}
       </span>
       <span className="rounded-full border border-border bg-background/80 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground">
-        {PROMO_CODE} for 10% off
+        +{ADDITIONAL_PERFUME_PRICE_LABEL} each next bottle
       </span>
-      <span className="rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+      <span className="hidden rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-accent sm:inline-flex">
         {GIFT_ORDER_LABEL}
       </span>
     </div>
-    <p className="mt-2 font-body text-[11px] leading-relaxed text-muted-foreground">
-      Bundle pricing applies automatically in cart. {PROMO_CODE} works on eligible single-bottle orders. Offers do not combine.
+    <p className="mt-2 hidden font-body text-[11px] leading-relaxed text-muted-foreground sm:block">
+      Multi-bottle pricing applies automatically in cart. {PROMO_CODE} works on eligible single-bottle orders only.
+    </p>
+    <p className="mt-2 font-body text-[11px] leading-relaxed text-muted-foreground sm:hidden">
+      2 perfumes total {formatUsd(BUNDLE_PRICE_USD)}. Every extra perfume adds {ADDITIONAL_PERFUME_PRICE_LABEL}.
     </p>
   </div>
 );
@@ -135,7 +139,7 @@ const MobileStickyAddToCart = ({
       <div className="min-w-0 flex-1">
         <p className="font-display text-lg font-bold text-foreground">{price}</p>
         <p className="font-body text-[11px] leading-relaxed text-muted-foreground">
-          2 for {formatUsd(BUNDLE_PRICE_USD)} or {PROMO_CODE} for 10% off
+          2 for {formatUsd(BUNDLE_PRICE_USD)}, then +{ADDITIONAL_PERFUME_PRICE_LABEL}
         </p>
       </div>
       <button
@@ -174,9 +178,12 @@ const ScentNotes = ({ meta }: { meta: ProductMeta }) => (
         },
         { tier: "Base", desc: "The lasting dry-down", notes: meta.scentNotes.base, icon: <Flame className="h-4 w-4 text-accent" /> },
       ].map((row) => (
-        <div key={row.tier} className="flex items-start gap-4 rounded-[1.35rem] border border-border bg-secondary/20 p-4">
-          <NoteArtworkStack notes={row.notes} fallbackIcon={row.icon} className="shrink-0 pt-1" />
-          <div>
+        <div
+          key={row.tier}
+          className="flex flex-col gap-4 rounded-[1.35rem] border border-border bg-secondary/20 p-4 sm:flex-row sm:items-start"
+        >
+          <NoteArtworkStack notes={row.notes} fallbackIcon={row.icon} className="self-start sm:pt-1" />
+          <div className="min-w-0">
             <p className="font-body font-semibold text-foreground">
               {row.tier}: <span className="font-normal text-muted-foreground">{row.desc}</span>
             </p>
@@ -238,15 +245,15 @@ const MainNoteHighlights = ({ meta }: { meta: ProductMeta | null }) => {
   if (noteGroups.length === 0) return null;
 
   return (
-    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+    <div className="mt-6 hidden gap-3 sm:grid sm:grid-cols-3">
       {noteGroups.map((group) => (
         <article key={group.label} className="rounded-2xl border border-border bg-secondary/30 p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 sm:flex-1">
               <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{group.label}</p>
               <p className="mt-3 font-body text-sm font-medium text-foreground">{group.notes.join(" / ")}</p>
             </div>
-            <NoteArtworkStack notes={group.notes} fallbackIcon={group.icon} />
+            <NoteArtworkStack notes={group.notes} fallbackIcon={group.icon} className="self-start" />
           </div>
         </article>
       ))}
@@ -390,8 +397,8 @@ const ProductAccordions = ({ meta }: { meta: ProductMeta | null }) => (
             <p>Yes. Standard shipping is free on every U.S. order under the current storefront policy.</p>
           </div>
           <div>
-            <p className="font-semibold text-foreground">How does the 2 for $119.90 offer work?</p>
-            <p>Any qualifying pair of fragrances added to the cart is priced at $119.90 before tax.</p>
+            <p className="font-semibold text-foreground">How does multi-bottle pricing work?</p>
+            <p>The first perfume is $79.90. Two perfumes total $119.90, and each additional perfume adds $40.</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Do I get a free car scent with every perfume order?</p>
@@ -439,7 +446,7 @@ const RelatedProducts = ({ currentHandle }: { currentHandle: string }) => {
   return (
     <section className="mt-16 border-t border-border pt-12">
       <h2 className="mb-8 text-center font-display text-2xl font-bold text-foreground">You May Also Like</h2>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 [&>*:nth-child(n+3)]:hidden md:[&>*:nth-child(n+3)]:block md:[&>*:nth-child(n+5)]:hidden xl:[&>*:nth-child(n+5)]:block">
         {products.map((product, index) => (
           <ProductCard
             key={product.id}
@@ -761,6 +768,9 @@ const ProductDetail = () => {
               </button>
 
               <ProductPromoStrip />
+              <div className="lg:hidden">
+                <ProductBenefitsGrid />
+              </div>
 
               {meta && (
                 <div className="mt-4 flex flex-wrap gap-2">

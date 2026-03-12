@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { getProductDisplayCopy, matchesCollection } from "@/lib/catalog";
 import type { CatalogProduct } from "@/lib/catalogData";
 import { getMotionInitial } from "@/lib/motion";
-import { BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
+import { ADDITIONAL_PERFUME_PRICE_LABEL, BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
 import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
@@ -129,9 +129,9 @@ const ProductCard = ({
             <div className="flex h-full items-center justify-center text-sm text-muted-foreground">No image</div>
           )}
           <div className="pointer-events-none absolute left-3 top-3 hidden items-start flex-col gap-2 md:flex">
-            <span className="rounded-full bg-foreground/85 px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-background shadow-soft backdrop-blur-sm">
-              2 for {formatUsd(BUNDLE_PRICE_USD)}
-            </span>
+          <span className="rounded-full bg-foreground/85 px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-background shadow-soft backdrop-blur-sm">
+            2 for {formatUsd(BUNDLE_PRICE_USD)}
+          </span>
             <span className="rounded-full bg-foreground/85 px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-background shadow-soft backdrop-blur-sm">
               {GIFT_ORDER_LABEL}
             </span>
@@ -173,7 +173,7 @@ const ProductCard = ({
             {formatUsd(parseFloat(product.price.amount))}
           </span>
           <p className="mt-1 font-body text-[11px] leading-relaxed text-muted-foreground">
-            {`Buy any 2 for ${formatUsd(BUNDLE_PRICE_USD)}. ${GIFT_ORDER_LABEL}.`}
+            {`Buy any 2 for ${formatUsd(BUNDLE_PRICE_USD)}, then ${ADDITIONAL_PERFUME_PRICE_LABEL} each extra bottle. ${GIFT_ORDER_LABEL}.`}
           </p>
         </div>
         <button

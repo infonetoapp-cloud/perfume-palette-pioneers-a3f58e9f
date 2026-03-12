@@ -9,9 +9,9 @@ const BrandStory = () => {
   const { t } = useI18n();
 
   return (
-    <section id="about" className="bg-background py-20 lg:py-28">
+    <section id="about" className="bg-background py-16 lg:py-28">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
           <motion.div
             initial={getMotionInitial({ opacity: 0, x: -30 })}
             whileInView={{ opacity: 1, x: 0 }}
@@ -28,7 +28,7 @@ const BrandStory = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <h2 className="font-display text-4xl font-bold leading-tight text-foreground md:text-5xl lg:text-6xl">
+            <h2 className="font-display text-3xl font-bold leading-tight text-foreground md:text-5xl lg:text-6xl">
               {t("brand.title1")}
               <br />
               {t("brand.title2")}
@@ -37,7 +37,7 @@ const BrandStory = () => {
               <br />
               <span className="text-accent">{t("brand.titleAccent")}</span>
             </h2>
-            <p className="mt-6 max-w-md font-body text-base leading-relaxed text-muted-foreground">
+            <p className="mt-5 max-w-md font-body text-sm leading-relaxed text-muted-foreground md:text-base">
               {t("brand.desc")}
             </p>
             <Link to="/about" className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
@@ -51,7 +51,7 @@ const BrandStory = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mt-20 rounded-2xl bg-secondary p-10 md:p-16"
+          className="mt-20 hidden rounded-2xl bg-secondary p-10 md:block md:p-16"
         >
           <div className="mx-auto max-w-2xl text-center">
             <h3 className="font-display text-3xl font-bold text-foreground md:text-4xl">

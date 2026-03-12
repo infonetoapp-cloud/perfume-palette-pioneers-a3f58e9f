@@ -6,7 +6,7 @@ import heroStudio from "@/assets/hero/hero-studio.jpg";
 import { getCollectionPath } from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
-import { BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
+import { ADDITIONAL_PERFUME_PRICE_LABEL, BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
 
 const HeroSection = () => {
   const { t } = useI18n();
@@ -43,12 +43,15 @@ const HeroSection = () => {
             DAVID WALKER
           </h1>
 
-          <p className="mt-3 max-w-md font-body text-base text-white/80 md:text-lg">
+          <p className="mt-3 max-w-md font-body text-sm text-white/80 md:text-lg">
             Premium fragrances crafted for women and men.
           </p>
-          <div className="mt-4 inline-flex flex-wrap gap-2">
+          <div className="mt-4 hidden flex-wrap gap-2 sm:inline-flex">
             <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-body text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
               2 for {formatUsd(BUNDLE_PRICE_USD)}
+            </span>
+            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-body text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
+              +{ADDITIONAL_PERFUME_PRICE_LABEL} each next bottle
             </span>
             <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-body text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
               {PROMO_CODE} for 10% off
@@ -57,20 +60,23 @@ const HeroSection = () => {
               {GIFT_ORDER_LABEL}
             </span>
           </div>
-          <p className="mt-3 max-w-lg font-body text-sm text-white/75">
-            {`Buy any two fragrances for ${formatUsd(BUNDLE_PRICE_USD)} or use code ${PROMO_CODE} for 10% off a single-bottle order. Offers cannot be combined.`}
+          <p className="mt-4 max-w-sm font-body text-sm leading-6 text-white/85 sm:hidden">
+            2 for {formatUsd(BUNDLE_PRICE_USD)}, then +{ADDITIONAL_PERFUME_PRICE_LABEL} each extra bottle. {PROMO_CODE} on single bottles.
+          </p>
+          <p className="mt-3 hidden max-w-lg font-body text-sm text-white/75 sm:block">
+            {`Buy any two fragrances for ${formatUsd(BUNDLE_PRICE_USD)}, then add each extra bottle for ${ADDITIONAL_PERFUME_PRICE_LABEL}. ${PROMO_CODE} works on single-bottle perfume orders only.`}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               to={getCollectionPath("all-perfumes")}
-              className="rounded-full bg-white px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-foreground transition-all hover:bg-white/90"
+              className="rounded-full bg-white px-8 py-3.5 text-center font-body text-sm font-semibold uppercase tracking-wider text-foreground transition-all hover:bg-white/90"
             >
               {t("hero.cta1")}
             </Link>
             <Link
               to={getCollectionPath("best-sellers")}
-              className="rounded-full border-2 border-white/40 bg-transparent px-8 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all hover:border-white hover:bg-white/10"
+              className="rounded-full border-2 border-white/40 bg-transparent px-8 py-3.5 text-center font-body text-sm font-semibold uppercase tracking-wider text-white transition-all hover:border-white hover:bg-white/10"
             >
               {t("hero.cta2")}
             </Link>

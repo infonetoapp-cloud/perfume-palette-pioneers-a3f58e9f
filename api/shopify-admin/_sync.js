@@ -7,11 +7,14 @@ const ADMIN_REQUEST_INTERVAL_MS = 550;
 
 const PERFUME_COLLECTION_HANDLE = "all-perfumes";
 const CAR_SCENTS_COLLECTION_HANDLE = "car-scents";
+const SHOPIFY_APP_DISCOUNT_FUNCTION_HANDLE = "real-scents-discount-engine";
+const SHOPIFY_APP_DISCOUNT_CLASSES = ["PRODUCT", "ORDER", "SHIPPING"];
 const DISCOUNT_TITLES = {
   gift: "Real Scents | Free car scent with perfume order",
   pair: "Real Scents | 2 perfumes for $119.90",
   shipping: "Real Scents | Free shipping on every order",
   scent10: "Real Scents | SCENT10",
+  engine: "Real Scents | Checkout pricing engine",
 };
 
 const SHOPIFY_SYNC_COLLECTIONS = [
@@ -571,6 +574,10 @@ async function fetchDiscountNodes(shop, accessToken) {
                 title
                 status
               }
+              ... on DiscountAutomaticApp {
+                title
+                status
+              }
               ... on DiscountCodeBasic {
                 title
                 status
@@ -587,6 +594,11 @@ async function fetchDiscountNodes(shop, accessToken) {
 
 function findDiscountNodeByTitle(discountNodes, title) {
   return discountNodes.find((node) => node?.discount?.title === title) ?? null;
+}
+
+function findDiscountNodesByTitles(discountNodes, titles) {
+  const titleSet = new Set(titles);
+  return discountNodes.filter((node) => titleSet.has(node?.discount?.title));
 }
 
 function extractUserErrors(payload, fieldName) {
@@ -761,7 +773,6 @@ async function ensureCodeBasicDiscount(shop, accessToken, discountNodes, { perfu
         code: "SCENT10",
         startsAt: getIsoNow(),
         combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
-        customerSelection: { all: true },
         customerGets: {
           value: { percentage: 0.1 },
           items: {
@@ -783,6 +794,134 @@ async function ensureCodeBasicDiscount(shop, accessToken, discountNodes, { perfu
     status: "success",
     title: DISCOUNT_TITLES.scent10,
     message: "SCENT10 code discount created successfully.",
+  };
+}
+
+async function deleteDiscountNode(shop, accessToken, discountNodeId) {
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      mutation DeleteAutomaticDiscount($id: ID!) {
+        discountAutomaticDelete(id: $id) {
+          deletedAutomaticDiscountId
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `,
+    variables: {
+      id: discountNodeId,
+    },
+  });
+
+  const userErrors = extractUserErrors(data, "discountAutomaticDelete");
+  if (userErrors.length > 0) {
+    throw new Error(userErrors.map((error) => error.message).join(", "));
+  }
+}
+
+async function removeLegacyAutomaticDiscounts(shop, accessToken, discountNodes) {
+  const legacyNodes = findDiscountNodesByTitles(discountNodes, [
+    DISCOUNT_TITLES.gift,
+    DISCOUNT_TITLES.pair,
+    DISCOUNT_TITLES.shipping,
+  ]);
+
+  const results = [];
+
+  for (const node of legacyNodes) {
+    if (!node?.id || node.discount?.__typename === "DiscountCodeBasic") {
+      continue;
+    }
+
+    await deleteDiscountNode(shop, accessToken, node.id);
+    results.push({
+      status: "removed",
+      title: node.discount?.title ?? "Legacy automatic discount",
+      message: "Legacy automatic discount removed.",
+    });
+  }
+
+  return results;
+}
+
+async function ensureAutomaticAppDiscount(shop, accessToken, discountNodes) {
+  const existingNode = findDiscountNodeByTitle(discountNodes, DISCOUNT_TITLES.engine);
+
+  const mutationName = existingNode ? "UpdateCheckoutEngineDiscount" : "CreateCheckoutEngineDiscount";
+  const mutation = existingNode
+    ? `
+      mutation ${mutationName}($id: ID!, $discount: DiscountAutomaticAppInput!) {
+        discountAutomaticAppUpdate(id: $id, automaticAppDiscount: $discount) {
+          automaticAppDiscount {
+            discountId
+            title
+            status
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `
+    : `
+      mutation ${mutationName}($discount: DiscountAutomaticAppInput!) {
+        discountAutomaticAppCreate(automaticAppDiscount: $discount) {
+          automaticAppDiscount {
+            discountId
+            title
+            status
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `;
+
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: mutation,
+    variables: existingNode
+      ? {
+          id: existingNode.id,
+          discount: {
+            title: DISCOUNT_TITLES.engine,
+            functionHandle: SHOPIFY_APP_DISCOUNT_FUNCTION_HANDLE,
+            startsAt: getIsoNow(),
+            combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
+            discountClasses: SHOPIFY_APP_DISCOUNT_CLASSES,
+          },
+        }
+      : {
+          discount: {
+            title: DISCOUNT_TITLES.engine,
+            functionHandle: SHOPIFY_APP_DISCOUNT_FUNCTION_HANDLE,
+            startsAt: getIsoNow(),
+            combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
+            discountClasses: SHOPIFY_APP_DISCOUNT_CLASSES,
+          },
+        },
+  });
+
+  const fieldName = existingNode ? "discountAutomaticAppUpdate" : "discountAutomaticAppCreate";
+  const userErrors = extractUserErrors(data, fieldName);
+  if (userErrors.length > 0) {
+    throw new Error(userErrors.map((error) => error.message).join(", "));
+  }
+
+  return {
+    status: existingNode ? "success" : "success",
+    title: DISCOUNT_TITLES.engine,
+    message: existingNode
+      ? "Checkout pricing app discount updated successfully."
+      : "Checkout pricing app discount created successfully.",
   };
 }
 
@@ -952,20 +1091,20 @@ export async function syncDiscountsToShopify({ shop, accessToken }) {
       ];
     }
 
-    const discountNodes = await fetchDiscountNodes(shop, accessToken);
+    const initialDiscountNodes = await fetchDiscountNodes(shop, accessToken);
+    results.push(...await removeLegacyAutomaticDiscounts(shop, accessToken, initialDiscountNodes));
 
     const syncTasks = [
-      () => ensureAutomaticBxgyDiscount(shop, accessToken, discountNodes, {
-        buysCollectionId: perfumeCollectionId,
-        getsCollectionId: carScentsCollectionId,
-      }),
-      () => ensureAutomaticBasicPairDiscount(shop, accessToken, discountNodes, {
+      async () => {
+        const latestDiscountNodes = await fetchDiscountNodes(shop, accessToken);
+        return ensureAutomaticAppDiscount(shop, accessToken, latestDiscountNodes);
+      },
+      async () => {
+        const latestDiscountNodes = await fetchDiscountNodes(shop, accessToken);
+        return ensureCodeBasicDiscount(shop, accessToken, latestDiscountNodes, {
         perfumeCollectionId,
-      }),
-      () => ensureCodeBasicDiscount(shop, accessToken, discountNodes, {
-        perfumeCollectionId,
-      }),
-      () => ensureAutomaticFreeShippingDiscount(shop, accessToken, discountNodes),
+        });
+      },
     ];
 
     for (const runTask of syncTasks) {
