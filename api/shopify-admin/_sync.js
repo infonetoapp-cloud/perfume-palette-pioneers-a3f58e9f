@@ -592,6 +592,36 @@ async function fetchDiscountNodes(shop, accessToken) {
   return data?.discountNodes?.nodes ?? [];
 }
 
+async function fetchDiscountFunctionId(shop, accessToken) {
+  const data = await adminGraphqlRequest({
+    shop,
+    accessToken,
+    query: `
+      query GetShopifyFunctions {
+        shopifyFunctions(first: 100) {
+          nodes {
+            id
+            title
+            apiType
+          }
+        }
+      }
+    `,
+  });
+
+  const functions = data?.shopifyFunctions?.nodes ?? [];
+  const discountFunction = functions.find((node) => String(node?.apiType || "").toUpperCase().includes("DISCOUNT"))
+    ?? null;
+
+  if (!discountFunction?.id) {
+    throw new Error(
+      `Discount function not found for this installed app. Available functions: ${functions.map((node) => `${node.title || "untitled"} [${node.apiType || "unknown"}]`).join(", ") || "none"}`,
+    );
+  }
+
+  return discountFunction.id;
+}
+
 function findDiscountNodeByTitle(discountNodes, title) {
   return discountNodes.find((node) => node?.discount?.title === title) ?? null;
 }
@@ -850,6 +880,7 @@ async function removeLegacyAutomaticDiscounts(shop, accessToken, discountNodes) 
 
 async function ensureAutomaticAppDiscount(shop, accessToken, discountNodes) {
   const existingNode = findDiscountNodeByTitle(discountNodes, DISCOUNT_TITLES.engine);
+  const functionId = await fetchDiscountFunctionId(shop, accessToken);
 
   const mutationName = existingNode ? "UpdateCheckoutEngineDiscount" : "CreateCheckoutEngineDiscount";
   const mutation = existingNode
@@ -893,7 +924,7 @@ async function ensureAutomaticAppDiscount(shop, accessToken, discountNodes) {
           id: existingNode.id,
           discount: {
             title: DISCOUNT_TITLES.engine,
-            functionHandle: SHOPIFY_APP_DISCOUNT_FUNCTION_HANDLE,
+            functionId,
             startsAt: getIsoNow(),
             combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
             discountClasses: SHOPIFY_APP_DISCOUNT_CLASSES,
@@ -902,7 +933,7 @@ async function ensureAutomaticAppDiscount(shop, accessToken, discountNodes) {
       : {
           discount: {
             title: DISCOUNT_TITLES.engine,
-            functionHandle: SHOPIFY_APP_DISCOUNT_FUNCTION_HANDLE,
+            functionId,
             startsAt: getIsoNow(),
             combinesWith: getCombinesWith({ productDiscounts: true, orderDiscounts: false, shippingDiscounts: true }),
             discountClasses: SHOPIFY_APP_DISCOUNT_CLASSES,
