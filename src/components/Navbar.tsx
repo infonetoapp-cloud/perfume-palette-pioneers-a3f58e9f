@@ -112,16 +112,16 @@ const Navbar = () => {
 
       {/* Main nav */}
       <nav
-        className={`transition-all duration-500 ${
-          useTransparentNav ? "bg-transparent" : "bg-background/95 backdrop-blur-md shadow-soft"
+        className={`relative transition-all duration-500 ${
+          useTransparentNav ? "bg-transparent" : "bg-background/92 backdrop-blur-md shadow-soft"
         }`}
       >
-        <div className="container mx-auto flex items-center justify-between px-5 py-4 lg:px-8">
+        <div className="container mx-auto flex min-h-[4.25rem] items-center justify-between px-4 py-3 lg:px-8">
           {/* Left: Logo */}
           <Link to="/" className="relative z-10">
             <span
-              className={`font-display text-lg font-semibold uppercase tracking-[0.32em] transition-colors duration-500 md:text-xl ${
-                useTransparentNav ? "text-white" : "text-foreground"
+              className={`font-display text-[15px] font-semibold uppercase tracking-[0.22em] transition-colors duration-500 md:text-xl md:tracking-[0.32em] ${
+                useTransparentNav ? "text-foreground" : "text-foreground"
               }`}
             >
               Real Scents
@@ -130,14 +130,14 @@ const Navbar = () => {
           </Link>
 
           {/* Center: Nav links (desktop) */}
-          <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 md:flex">
+          <div className="pointer-events-none absolute inset-0 hidden items-center justify-center gap-1 pt-1 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.to}
-                className={`px-3 py-2 font-body text-sm font-medium transition-colors duration-500 ${
+                className={`pointer-events-auto px-3 py-2 font-body text-sm font-medium transition-colors duration-500 ${
                   useTransparentNav
-                    ? "text-white/90 hover:text-white"
+                    ? "text-foreground/82 hover:text-foreground"
                     : "text-foreground/80 hover:text-foreground"
                 }`}
               >
@@ -147,13 +147,13 @@ const Navbar = () => {
           </div>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 md:gap-3">
             <div className="hidden md:flex items-center">
               <button
                 aria-label={t("nav.search")}
                 onClick={toggleSearch}
                 className={`transition-colors duration-500 ${
-                  useTransparentNav ? "text-white/90 hover:text-white" : "text-foreground hover:text-accent"
+                  useTransparentNav ? "text-foreground/88 hover:text-foreground" : "text-foreground hover:text-accent"
                 }`}
               >
                 <Search size={20} />
@@ -162,12 +162,12 @@ const Navbar = () => {
 
             <button
               aria-label={t("nav.search")}
-              className={`md:hidden transition-colors duration-500 ${
-                useTransparentNav ? "text-white" : "text-foreground"
+              className={`rounded-full p-1 transition-colors duration-500 md:hidden ${
+                useTransparentNav ? "text-foreground" : "text-foreground"
               }`}
               onClick={toggleSearch}
             >
-              <Search size={20} />
+              <Search size={18} />
             </button>
 
             <CartDrawer
@@ -181,12 +181,12 @@ const Navbar = () => {
 
             <button
               aria-label="Menu"
-              className={`md:hidden transition-colors duration-500 ${
-                useTransparentNav ? "text-white" : "text-foreground"
+              className={`rounded-full p-1 transition-colors duration-500 md:hidden ${
+                useTransparentNav ? "text-foreground" : "text-foreground"
               }`}
               onClick={handleMenuToggle}
             >
-              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>

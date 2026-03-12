@@ -27,24 +27,29 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "About Real Scents",
     eyebrow: "Brand Overview",
     description:
-      "Learn how Real Scents presents David Walker fragrances online for the United States, with clear scent notes, free U.S. shipping on every order, and direct customer support.",
-    lastUpdated: "March 10, 2026",
+      "Learn how Real Scents presents David Walker fragrances online for the United States with organized collections, secure Shopify checkout, clear scent-note guidance, and free U.S. shipping on every order.",
+    lastUpdated: "March 12, 2026",
     sections: [
       {
-        heading: "Storefront focus",
-        body: "Real Scents is designed to present David Walker fragrances clearly to shoppers in the United States, with direct product pages, organized collections, and consistent scent information.",
+        heading: "What Real Scents offers",
+        body: "Real Scents is a U.S.-focused online storefront for David Walker Eau de Parfum and car scents. The storefront is built to make fragrance shopping straightforward, with clear pricing, organized collections, and scent-note guidance that helps customers compare styles before checkout.",
       },
       {
-        heading: "Built for product discovery",
-        body: "Each fragrance page is structured around mood, main notes, and wearing occasions so customers can shop by scent profile instead of relying on code-only naming.",
+        heading: "How the catalog is organized",
+        body: "The catalog is structured around all perfumes, men's fragrances, women's fragrances, best sellers, and major scent families so customers can browse by mood, notes, and occasion instead of relying only on product codes.",
+        items: [
+          "Every product page includes note guidance, scent-family context, and wearing direction.",
+          "Car scents are kept in a separate collection so perfume browsing stays clean and focused.",
+          "Multi-bottle pricing is surfaced clearly before checkout so customers understand the offer before they pay.",
+        ],
       },
       {
-        heading: "Launch-ready catalog structure",
-        body: "Collections are separated into all perfumes, women's fragrances, men's fragrances, and best sellers so the catalog remains easy to browse and ready to scale.",
+        heading: "Checkout and order confidence",
+        body: "Orders are processed through secure Shopify checkout. Product prices are shown before checkout, free U.S. shipping is built into the storefront policy, and any applicable sales tax is displayed during checkout before payment is completed.",
       },
       {
         heading: "Support and contact",
-        body: `Customer support is available at ${SITE_SUPPORT_EMAIL}. Real Scents operates online at ${SITE_DOMAIN} and is structured to make ordering, shipping questions, and fragrance discovery straightforward for U.S. customers.`,
+        body: `Customer support is available at ${SITE_SUPPORT_EMAIL}. Real Scents operates online at ${SITE_DOMAIN} and keeps the key customer policies, including shipping, privacy, FAQs, and terms, available directly on the storefront for quick review before and after purchase.`,
       },
     ],
   },
@@ -52,29 +57,29 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Shipping Policy",
     eyebrow: "Order Policies",
     description:
-      "Review free U.S. shipping on every order, processing timing, customer support details, and final sale terms for fragrance orders placed through Real Scents.",
-    lastUpdated: "March 10, 2026",
+      "Review free U.S. shipping on every order, processing timing, final sale fragrance terms, tax-at-checkout details, and customer support guidance for Real Scents orders.",
+    lastUpdated: "March 12, 2026",
     sections: [
       {
         heading: "Free U.S. shipping",
-        body: "Standard shipping is free on every order delivered within the United States. If faster shipping options are offered later, they will be shown before payment is completed.",
+        body: "Standard shipping is free on every order delivered within the United States. If faster or premium delivery options are offered later, they will be shown during checkout before payment is completed.",
       },
       {
         heading: "Processing and delivery timing",
-        body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery times may vary by destination, carrier capacity, weather conditions, and holiday volume.",
+        body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery timing can vary based on destination, carrier conditions, weather, and seasonal order volume.",
         items: [
           "Orders are processed on business days only.",
           "A shipping confirmation and tracking update should be sent once the order leaves the warehouse.",
-          "If there is a material shipping delay after checkout, the customer should be notified using the contact details provided with the order.",
+          "If there is a material delay after checkout, customers should be contacted using the order details provided at purchase.",
         ],
       },
       {
-        heading: "Address and order review",
-        body: "Customers are responsible for entering a complete and accurate shipping address. Orders may be delayed, adjusted, or canceled if payment review, fraud checks, or address verification issues arise.",
+        heading: "Address accuracy and review checks",
+        body: "Customers are responsible for entering a complete and accurate delivery address. Orders may be delayed, adjusted, or canceled if payment review, fraud screening, or address verification problems arise before shipment.",
       },
       {
         heading: "Final sale policy",
-        body: "All fragrance purchases are final sale. Returns and exchanges are not accepted for change-of-mind purchases, scent preference, gift orders, duplicate orders, opened items, or standard order mistakes after checkout is completed.",
+        body: "All fragrance purchases are final sale. Returns and exchanges are not accepted for change-of-mind purchases, scent preference, gift orders, duplicate orders, opened items, or standard ordering mistakes after checkout is completed.",
         items: [
           "Customers should review product details carefully before completing checkout.",
           `If an order arrives damaged, defective, or incorrect, the issue should be reported promptly to ${SITE_SUPPORT_EMAIL} for review.`,
@@ -83,7 +88,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Taxes and order totals",
-        body: "Applicable sales tax may be calculated based on the shipping destination and the requirements of the relevant U.S. jurisdiction. Final taxes and charges should always be reviewed before checkout is completed.",
+        body: "Displayed product prices do not include applicable sales tax. Any required sales tax is calculated separately at checkout and shown before payment is completed, so customers can review the full order total before finalizing payment.",
       },
       {
         heading: "Customer support",
@@ -95,8 +100,8 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Privacy Policy",
     eyebrow: "Customer Privacy",
     description:
-      "Read how this storefront may collect, use, store, and protect customer information for orders, support, analytics, and lawful business operations.",
-    lastUpdated: "March 10, 2026",
+      "Read how Real Scents may collect, use, store, and protect customer information for order fulfillment, support, analytics, fraud prevention, and lawful business operations.",
+    lastUpdated: "March 12, 2026",
     sections: [
       {
         heading: "Information collected",
@@ -114,7 +119,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Sharing of information",
-        body: "Information may be shared only as needed with service providers that support payments, shipping, hosting, analytics, fraud prevention, and other operational services. Information may also be disclosed when required by law, legal process, or to protect the rights, safety, or property of the business and its customers.",
+        body: "Information may be shared only as needed with service providers that support checkout, payments, shipping, hosting, analytics, fraud prevention, and related operational services. Information may also be disclosed when required by law, legal process, or to protect the rights, safety, or property of the business and its customers.",
       },
       {
         heading: "Cookies and analytics",
@@ -130,7 +135,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Data retention and security",
-        body: "Information may be retained for as long as reasonably necessary to complete orders, maintain records, comply with law, resolve disputes, and protect the storefront. No system can be guaranteed fully secure, but reasonable administrative, technical, and organizational safeguards should be used to protect customer information.",
+        body: "Information may be retained for as long as reasonably necessary to complete orders, maintain business records, comply with law, resolve disputes, and protect the storefront. No system can be guaranteed fully secure, but reasonable administrative, technical, and organizational safeguards should be used to protect customer information.",
       },
       {
         heading: "Policy updates",
@@ -142,8 +147,8 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Frequently Asked Questions",
     eyebrow: "Customer Help",
     description:
-      "Common questions about fragrance shopping, free U.S. shipping on every order, final sale terms, order support, and product use on the Real Scents storefront.",
-    lastUpdated: "March 10, 2026",
+      "Common questions about fragrance shopping, multi-bottle pricing, free U.S. shipping, tax at checkout, final sale terms, and customer support on the Real Scents storefront.",
+    lastUpdated: "March 12, 2026",
     sections: [
       {
         heading: "How do I choose the right fragrance?",
@@ -159,7 +164,11 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "How does multi-bottle pricing work?",
-        body: "The first perfume is priced at $79.90. A cart with 2 perfumes totals $119.90, and every additional perfume after that adds $40.",
+        body: "The first perfume is priced at $79.90. A cart with 2 perfumes totals $119.90, and every additional perfume after that adds $40, so the pricing stays clear as the order grows.",
+      },
+      {
+        heading: "Are taxes included in listed prices?",
+        body: "No. Listed product prices do not include applicable sales tax. Any required sales tax is calculated at checkout and shown before payment is completed.",
       },
       {
         heading: "Can I use SCENT10 with multi-bottle pricing?",
@@ -167,7 +176,11 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Do I get a free car fragrance with every perfume order?",
-        body: "Yes. Each perfume order includes one free car scent. It is added as a gift, not part of the item price, and it is limited to one per order. Car scent-only orders do not include an extra free car scent.",
+        body: "Yes. Each order that includes at least one perfume qualifies for one free car scent. The gift is limited to one per order, appears separately from paid items, and car scent-only orders do not include an extra free car scent.",
+      },
+      {
+        heading: "Is checkout secure?",
+        body: "Yes. Orders are completed through secure Shopify checkout, and the final order total is shown before payment is submitted.",
       },
       {
         heading: "Can I return a fragrance order?",
@@ -195,8 +208,8 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Terms of Service",
     eyebrow: "Store Terms",
     description:
-      "Review the general terms that apply to browsing Real Scents, placing orders, using content, and interacting with the storefront online.",
-    lastUpdated: "March 10, 2026",
+      "Review the terms that apply to browsing Real Scents, placing orders, using site content, and interacting with the storefront online.",
+    lastUpdated: "March 12, 2026",
     sections: [
       {
         heading: "Use of the storefront",
@@ -216,7 +229,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Promotional offers",
-        body: "Multi-bottle pricing, the 1-free-car-scent-per-perfume-order offer, and discount codes may be changed or suspended at any time. Gift items are not part of the item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic multi-bottle offers.",
+        body: "Multi-bottle pricing, the one-free-car-scent-per-perfume-order offer, and discount codes may be changed, corrected, or suspended at any time. Gift items are not part of the paid item price and cannot be redeemed for cash. Unless explicitly stated otherwise, discount codes cannot be combined with automatic multi-bottle offers.",
       },
       {
         heading: "Intellectual property",
@@ -267,6 +280,25 @@ const InfoPage = () => {
       { "@type": "ListItem", position: 2, name: content.title, item: getAbsoluteUrl(`/${slug}`) },
     ],
   };
+  const organizationJsonLd =
+    slug === "about"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: SITE_NAME,
+          url: getAbsoluteUrl("/"),
+          email: SITE_SUPPORT_EMAIL,
+          contactPoint: [
+            {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              email: SITE_SUPPORT_EMAIL,
+              areaServed: "US",
+              availableLanguage: ["en"],
+            },
+          ],
+        }
+      : null;
   const pageJsonLd =
     slug === "faq"
       ? {
@@ -296,7 +328,7 @@ const InfoPage = () => {
         title={`${content.title} | ${SITE_NAME}`}
         description={content.description}
         path={`/${slug}`}
-        jsonLd={[breadcrumbJsonLd, pageJsonLd]}
+        jsonLd={organizationJsonLd ? [breadcrumbJsonLd, pageJsonLd, organizationJsonLd] : [breadcrumbJsonLd, pageJsonLd]}
       />
       <Navbar />
       <main className="min-h-screen bg-background pt-28">

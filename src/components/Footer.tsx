@@ -2,6 +2,7 @@ import { useI18n } from "@/lib/i18n";
 import { Link } from "react-router-dom";
 import { getCollectionPath } from "@/lib/catalog";
 import { SITE_DOMAIN, SITE_SUPPORT_EMAIL } from "@/lib/site";
+import ShopifyTrustMark from "@/components/ShopifyTrustMark";
 
 const Footer = () => {
   const { t } = useI18n();
@@ -36,7 +37,7 @@ const Footer = () => {
           <div>
             <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-widest text-foreground">Support</h4>
             <div className="space-y-2.5 font-body text-sm leading-relaxed text-muted-foreground">
-              <p>Questions about orders, shipping, or damaged deliveries can be sent to support.</p>
+              <p>Questions about orders, shipping, checkout totals, or damaged deliveries can be sent to support.</p>
               <a href={`mailto:${SITE_SUPPORT_EMAIL}`} className="block transition-colors hover:text-foreground">
                 {SITE_SUPPORT_EMAIL}
               </a>
@@ -44,10 +45,14 @@ const Footer = () => {
                 {SITE_DOMAIN}
               </a>
               <p>Fragrance purchases are final sale.</p>
+              <p>Applicable sales tax is shown at checkout before payment.</p>
             </div>
           </div>
         </div>
         <div className="mt-12 border-t border-border pt-6 text-center">
+          <div className="mx-auto mb-6 max-w-2xl">
+            <ShopifyTrustMark />
+          </div>
           <p className="font-body text-xs text-muted-foreground">{t("footer.copyright")}</p>
         </div>
       </div>

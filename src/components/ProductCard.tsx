@@ -175,6 +175,9 @@ const ProductCard = ({
           <p className="mt-1 font-body text-[11px] leading-relaxed text-muted-foreground">
             {`Buy any 2 for ${formatUsd(BUNDLE_PRICE_USD)}, then ${ADDITIONAL_PERFUME_PRICE_LABEL} each extra bottle. ${GIFT_ORDER_LABEL}.`}
           </p>
+          <p className="mt-1 font-body text-[11px] leading-relaxed text-muted-foreground">
+            Applicable sales tax is shown at checkout before payment.
+          </p>
         </div>
         <button
           onClick={(event) => onAddToCart?.(event, product)}

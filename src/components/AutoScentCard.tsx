@@ -169,6 +169,9 @@ const AutoScentCard = ({ variant, index = 0, className, layout = "default" }: Au
           <p className="mt-1 font-body text-[11px] leading-relaxed text-muted-foreground">
             {`Buy on its own for ${priceLabel}. Free shipping on every order.`}
           </p>
+          <p className="mt-1 font-body text-[11px] leading-relaxed text-muted-foreground">
+            Applicable sales tax is shown at checkout before payment.
+          </p>
         </div>
         <button
           type="button"

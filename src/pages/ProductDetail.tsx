@@ -718,6 +718,9 @@ const ProductDetail = () => {
 
               <div className="mt-4">
                 <span className="font-display text-2xl font-bold text-foreground">{formatUsd(parseFloat(product.price.amount))}</span>
+                <p className="mt-1 font-body text-xs leading-relaxed text-muted-foreground">
+                  Free shipping. Applicable sales tax is shown at checkout before payment.
+                </p>
               </div>
 
               <p className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">

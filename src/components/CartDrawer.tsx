@@ -1,9 +1,10 @@
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { Gift, Loader2, Minus, Plus, ShoppingBag, Sparkles, TicketPercent, Trash2 } from "lucide-react";
+import { Loader2, Minus, Plus, ShoppingBag, TicketPercent, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { getAutoScentVariant, getAutoScentVariants, type AutoScentVariant } from "@/lib/autoScents";
 import type { CatalogProduct } from "@/lib/catalogData";
+import { createDraftCheckout } from "@/lib/draftCheckout";
 import {
   ADDITIONAL_PERFUME_PRICE_LABEL,
   BASE_AUTO_SCENT_PRICE_USD,
@@ -11,7 +12,6 @@ import {
   PROMO_CODE,
   formatUsd,
   getCartPromotionSummary,
-  normalizePromoCode,
   type CartItemKind,
   type CartPromotionItem,
 } from "@/lib/promotions";
@@ -20,8 +20,8 @@ import { cn } from "@/lib/utils";
 import { useCartStore, type CartItem } from "@/stores/cartStore";
 import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import ShopifyTrustMark from "@/components/ShopifyTrustMark";
 
 interface CartDrawerProps {
   onOpenChange?: (open: boolean) => void;
@@ -197,34 +197,37 @@ function OfferProgressCard({
   ];
 
   return (
-    <section className="rounded-[1.6rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#f5ede3_0%,#fbf7f1_100%)] p-3.5 shadow-soft sm:rounded-[1.85rem] sm:p-4">
-      <div>
-        <div className="relative px-1.5 sm:px-3">
-          <div className="absolute left-5 right-5 top-2.5 h-px bg-[#d8c7b4] sm:left-6 sm:right-6 sm:top-3" />
-          <div className="relative z-10 grid grid-cols-3 gap-1.5 sm:gap-2">
-            {steps.map((step) => (
-              <div key={step.label} className="flex flex-col items-center text-center">
-                <span
+    <section className="rounded-[1.6rem] border border-[#eadfd1] bg-[linear-gradient(180deg,#f7efe5_0%,#fcf8f2_100%)] p-3 shadow-soft sm:rounded-[1.85rem] sm:p-4">
+      <div className="relative px-2 sm:px-4">
+        <div className="absolute left-6 right-6 top-2.5 h-px bg-[#d8c7b4] sm:top-3" />
+        <div className="relative z-10 grid grid-cols-3 gap-3">
+          {steps.map((step) => (
+            <div key={step.label} className="text-center">
+              <span
+                className={cn(
+                  "mx-auto flex h-5 w-5 items-center justify-center rounded-full border bg-white sm:h-6 sm:w-6",
+                  step.active ? "border-accent bg-accent text-accent-foreground shadow-sm" : "border-[#d8c7b4]",
+                )}
+              >
+                <span className={cn("h-2 w-2 rounded-full sm:h-2.5 sm:w-2.5", step.active ? "bg-accent-foreground" : "bg-[#d8c7b4]")} />
+              </span>
+              <div className="mt-2 sm:mt-2.5">
+                <p
                   className={cn(
-                    "flex h-5 w-5 items-center justify-center rounded-full border bg-white sm:h-6 sm:w-6",
-                    step.active ? "border-accent bg-accent text-accent-foreground" : "border-[#d8c7b4]",
+                    "font-body text-[9px] font-semibold uppercase tracking-[0.14em] sm:text-[10px]",
+                    step.active ? "text-foreground" : "text-muted-foreground",
                   )}
                 >
-                  <span className={cn("h-2 w-2 rounded-full sm:h-2.5 sm:w-2.5", step.active ? "bg-accent-foreground" : "bg-[#d8c7b4]")} />
-                </span>
-                <div className="mt-2.5 w-full rounded-[0.95rem] border border-[#eadfd1] bg-white/90 px-2 py-2 sm:mt-3 sm:rounded-[1.05rem] sm:px-3 sm:py-2.5">
-                  <p className="font-body text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:text-[10px] sm:tracking-[0.16em]">
-                    <span className="sm:hidden">{step.mobileLabel}</span>
-                    <span className="hidden sm:inline">{step.label}</span>
-                  </p>
-                  <p className="mt-1.5 font-body text-xs font-semibold text-foreground sm:mt-2 sm:text-sm">
-                    <span className="sm:hidden">{step.mobileDetail}</span>
-                    <span className="hidden sm:inline">{step.detail}</span>
-                  </p>
-                </div>
+                  <span className="sm:hidden">{step.mobileLabel}</span>
+                  <span className="hidden sm:inline">{step.label}</span>
+                </p>
+                <p className={cn("mt-1 font-display text-[1rem] font-semibold sm:text-[1.05rem]", step.active ? "text-foreground" : "text-foreground/75")}>
+                  <span className="sm:hidden">{step.mobileDetail}</span>
+                  <span className="hidden sm:inline">{step.detail}</span>
+                </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -342,7 +345,7 @@ function GiftSelectionPanel({
 export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
   const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
-  const [promoInput, setPromoInput] = useState("");
+  const [isCreatingCheckout, setIsCreatingCheckout] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const sheetTitleRef = useRef<HTMLHeadingElement | null>(null);
   const {
@@ -354,10 +357,8 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     isSyncing,
     updateQuantity,
     removeItem,
-    getCheckoutUrl,
     syncCart,
     setPromoCode,
-    clearPromoCode,
     setGiftSelectionSlug,
     addItem,
   } = useCartStore();
@@ -371,7 +372,6 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     () => getCartPromotionSummary(toPromotionItems(liveItems, managedGiftVariantId), promoCode),
     [liveItems, managedGiftVariantId, promoCode],
   );
-  const checkoutUrl = getCheckoutUrl();
   const selectedGiftVariant = useMemo(
     () => getAutoScentVariant(giftSelectionSlug) ?? getAutoScentVariants()[0],
     [giftSelectionSlug],
@@ -481,10 +481,6 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
   }, [autoScentItems, getProductByHandle, getRelatedProducts, liveItems, perfumeItems, summary.perfumeCount]);
 
   useEffect(() => {
-    setPromoInput(promoCode);
-  }, [promoCode]);
-
-  useEffect(() => {
     if (isOpen) {
       requestAnimationFrame(() => {
         scrollAreaRef.current?.scrollTo({ top: 0, behavior: "auto" });
@@ -493,18 +489,25 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
     }
   }, [isOpen, syncCart]);
 
-  const handleApplyPromo = () => {
-    const normalized = normalizePromoCode(promoInput);
-    if (!normalized) {
-      clearPromoCode();
-      return;
-    }
-    setPromoCode(normalized);
+  const handleApplyPresetPromo = () => {
+    setPromoCode(PROMO_CODE);
   };
 
-  const handleApplyPresetPromo = () => {
-    setPromoInput(PROMO_CODE);
-    setPromoCode(PROMO_CODE);
+  const handleCheckout = async () => {
+    if (items.length === 0 || isLoading || isSyncing || isCreatingCheckout) return;
+
+    setIsCreatingCheckout(true);
+
+    try {
+      const { checkoutUrl } = await createDraftCheckout(liveItems, promoCode, managedGiftVariantId);
+      window.location.assign(checkoutUrl);
+    } catch (error) {
+      toast.error("Checkout could not be prepared", {
+        description: error instanceof Error ? error.message : "Please try again.",
+      });
+    } finally {
+      setIsCreatingCheckout(false);
+    }
   };
 
   const handleOpenChange = (open: boolean) => {
@@ -720,30 +723,20 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
                     </span>
                   </div>
 
-                  {checkoutUrl ? (
-                    <Button
-                      asChild
-                      className="mt-3 h-11 w-full rounded-full border border-transparent bg-[#8d8882] font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-white hover:bg-[#78736d]"
-                      size="lg"
-                      disabled={items.length === 0 || isLoading || isSyncing}
-                    >
-                      <a href={checkoutUrl} target="_blank" rel="noreferrer">
-                        {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : `Checkout - ${formatUsd(summary.finalSubtotal)}`}
-                      </a>
-                    </Button>
-                  ) : (
-                    <Button
-                      className="mt-3 h-11 w-full rounded-full border border-transparent bg-[#8d8882] font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-white"
-                      size="lg"
-                      disabled
-                    >
-                      {isLoading || isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : `Checkout - ${formatUsd(summary.finalSubtotal)}`}
-                    </Button>
-                  )}
+                  <Button
+                    className="mt-3 h-11 w-full rounded-full border border-transparent bg-accent font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-accent-foreground hover:bg-accent/90 disabled:bg-[#b8aea3] disabled:text-white"
+                    size="lg"
+                    disabled={items.length === 0 || isLoading || isSyncing || isCreatingCheckout}
+                    onClick={() => void handleCheckout()}
+                  >
+                    {isLoading || isSyncing || isCreatingCheckout ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      `Checkout - ${formatUsd(summary.finalSubtotal)}`
+                    )}
+                  </Button>
 
-                  <p className="mt-2 text-center font-body text-[11px] leading-5 text-muted-foreground">
-                    Taxes are calculated at checkout.
-                  </p>
+                  <ShopifyTrustMark compact className="mt-3" />
                 </div>
               </div>
             </>
