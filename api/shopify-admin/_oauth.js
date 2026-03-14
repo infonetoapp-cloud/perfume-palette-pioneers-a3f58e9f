@@ -3,7 +3,7 @@ import crypto from "crypto";
 const SHOPIFY_ADMIN_CLIENT_ID = process.env.SHOPIFY_ADMIN_CLIENT_ID;
 const SHOPIFY_ADMIN_CLIENT_SECRET = process.env.SHOPIFY_ADMIN_CLIENT_SECRET;
 const SHOPIFY_ADMIN_SCOPES = process.env.SHOPIFY_ADMIN_SCOPES
-  || "read_products,write_products,read_inventory,write_inventory,read_files,write_files,read_publications,write_publications,read_discounts,write_discounts";
+  || "read_products,write_products,read_inventory,write_inventory,read_files,write_files,read_publications,write_publications,read_discounts,write_discounts,read_orders,write_orders,read_draft_orders,write_draft_orders,read_merchant_managed_fulfillment_orders,write_merchant_managed_fulfillment_orders,read_customers,write_customers";
 
 export function getShopifyAdminConfig() {
   return {

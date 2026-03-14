@@ -45,6 +45,7 @@ export const AppRoutes = ({
         <Route path="/auto-scents/:slug" element={<AutoScentsPage />} />
         <Route path="/about" element={<InfoPage />} />
         <Route path="/shipping" element={<InfoPage />} />
+        <Route path="/refund-policy" element={<InfoPage />} />
         <Route path="/privacy" element={<InfoPage />} />
         <Route path="/terms" element={<InfoPage />} />
         <Route path="/faq" element={<InfoPage />} />

@@ -1,0 +1,524 @@
+<div class="slip-wrapper">
+  <div class="topbar"></div>
+
+  <div class="slip-header">
+    <div class="brand-block">
+      <p class="eyebrow">Packing Slip</p>
+      <h1>{{ shop.name }}</h1>
+      <p class="muted">
+        Premium fragrance order fulfillment
+      </p>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-row">
+        <span class="meta-label">Order</span>
+        <span class="meta-value">{{ order.name }}</span>
+      </div>
+      {% if order.po_number != blank %}
+        <div class="meta-row">
+          <span class="meta-label">PO Number</span>
+          <span class="meta-value">{{ order.po_number }}</span>
+        </div>
+      {% endif %}
+      <div class="meta-row">
+        <span class="meta-label">Order Date</span>
+        <span class="meta-value">{{ order.created_at | date: format: "date" }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Shipment</span>
+        <span class="meta-value">
+          {% if delivery_method.instructions != blank %}
+            Delivery
+          {% else %}
+            Shipping
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="address-grid">
+    <div class="address-card">
+      <p class="card-label">
+        {% if delivery_method.instructions != blank %}
+          Delivery to
+        {% else %}
+          Ship to
+        {% endif %}
+      </p>
+
+      {% if shipping_address != blank %}
+        <p class="address-name">{{ shipping_address.name }}</p>
+        <p class="address-lines">
+          {% if shipping_address.company != blank %}
+            {{ shipping_address.company }}<br>
+          {% endif %}
+          {{ shipping_address.address1 }}
+          {% if shipping_address.address2 != blank %}
+            <br>{{ shipping_address.address2 }}
+          {% endif %}
+          {% if shipping_address.city_province_zip != blank %}
+            <br>{{ shipping_address.city_province_zip }}
+          {% endif %}
+          <br>{{ shipping_address.country }}
+          {% if shipping_address.phone != blank %}
+            <br>{{ shipping_address.phone }}
+          {% endif %}
+        </p>
+      {% else %}
+        <p class="address-lines">No shipping address provided.</p>
+      {% endif %}
+    </div>
+
+    <div class="address-card">
+      <p class="card-label">Bill to</p>
+
+      {% if billing_address != blank %}
+        <p class="address-name">{{ billing_address.name }}</p>
+        <p class="address-lines">
+          {% if billing_address.company != blank %}
+            {{ billing_address.company }}<br>
+          {% endif %}
+          {{ billing_address.address1 }}
+          {% if billing_address.address2 != blank %}
+            <br>{{ billing_address.address2 }}
+          {% endif %}
+          {% if billing_address.city_province_zip != blank %}
+            <br>{{ billing_address.city_province_zip }}
+          {% endif %}
+          <br>{{ billing_address.country }}
+        </p>
+      {% else %}
+        <p class="address-lines">No billing address provided.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="section-head">
+    <p>Items in this shipment</p>
+  </div>
+
+  {% assign desired_image_size = 62 %}
+  {% assign resolution_adjusted_size = desired_image_size | times: 300 | divided_by: 72 | ceil %}
+  {% capture effective_image_dimensions %}
+    {{ resolution_adjusted_size }}x{{ resolution_adjusted_size }}
+  {% endcapture %}
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th class="col-item">Item</th>
+        <th class="col-sku">SKU</th>
+        <th class="col-qty text-right">Qty</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line_item in line_items_in_shipment %}
+        <tr>
+          <td class="col-item">
+            <div class="item-block">
+              <div class="item-image">
+                {% if line_item.image != blank %}
+                  <div class="image-frame" style="width: {{ desired_image_size }}px; height: {{ desired_image_size }}px;">
+                    {{ line_item.image | img_url: effective_image_dimensions | img_tag: '', 'image-content' }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="item-copy">
+                <p class="item-title">{{ line_item.title }}</p>
+
+                {% if line_item.variant_title != blank %}
+                  <p class="item-meta">{{ line_item.variant_title }}</p>
+                {% endif %}
+
+                {% for group in line_item.groups %}
+                  {% if group.deliverable? %}
+                    <p class="item-meta">For: {{ group.title }}</p>
+                  {% else %}
+                    <p class="item-meta">Part of: {{ group.title }}</p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </td>
+
+          <td class="col-sku">
+            {% if line_item.sku != blank %}
+              {{ line_item.sku }}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+
+          <td class="col-qty text-right">
+            {{ line_item.shipping_quantity }} of {{ line_item.quantity }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% unless includes_all_line_items_in_order %}
+    <div class="notice-card">
+      There are additional items from this order that are not included in this shipment.
+    </div>
+  {% endunless %}
+
+  {% if order.note != blank or delivery_method.instructions != blank %}
+    <div class="notes-grid">
+      {% if order.note != blank %}
+        <div class="note-card">
+          <p class="card-label">Order notes</p>
+          <p class="note-copy">{{ order.note }}</p>
+        </div>
+      {% endif %}
+
+      {% if delivery_method.instructions != blank %}
+        <div class="note-card">
+          <p class="card-label">Delivery instructions</p>
+          <p class="note-copy">{{ delivery_method.instructions }}</p>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="slip-footer">
+    <div class="footer-card">
+      <p class="footer-title">Thank you for shopping with {{ shop.name }}</p>
+      <p class="footer-copy">
+        Orders ship from El Paso, Texas. Questions about your shipment can be sent to {{ shop.email }}.
+      </p>
+    </div>
+
+    <div class="footer-card footer-card--compact">
+      <p class="footer-title">{{ shop.name }}</p>
+      <p class="footer-copy">
+        {{ shop_address.summary }}<br>
+        {{ shop.email }}<br>
+        {{ shop.domain }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  :root {
+    --ink: #151515;
+    --muted: #6d645d;
+    --line: #ded3c8;
+    --soft: #f7f1ea;
+    --soft-2: #fbf8f4;
+    --accent: #f1715c;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Noto Sans", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .slip-wrapper {
+    width: 831px;
+    margin: 0 auto;
+    padding: 34px 38px 40px;
+  }
+
+  .topbar {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f1715c 0%, #f49a6f 100%);
+    margin-bottom: 24px;
+  }
+
+  .slip-header {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 24px;
+  }
+
+  .brand-block,
+  .meta-card {
+    display: table-cell;
+    vertical-align: top;
+  }
+
+  .brand-block {
+    width: 58%;
+    padding-right: 18px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .brand-block h1 {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+  }
+
+  .muted {
+    margin: 8px 0 0;
+    color: var(--muted);
+  }
+
+  .meta-card {
+    width: 42%;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--soft-2);
+  }
+
+  .meta-row {
+    display: table;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .meta-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .meta-label,
+  .meta-value {
+    display: table-cell;
+    vertical-align: top;
+  }
+
+  .meta-label {
+    width: 38%;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .meta-value {
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .address-grid,
+  .notes-grid,
+  .slip-footer {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .address-card,
+  .note-card,
+  .footer-card {
+    display: table-cell;
+    vertical-align: top;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: #fff;
+    padding: 16px 18px;
+  }
+
+  .address-card:first-child,
+  .note-card:first-child,
+  .footer-card:first-child {
+    width: 50%;
+  }
+
+  .address-card:last-child,
+  .note-card:last-child,
+  .footer-card:last-child {
+    width: 50%;
+  }
+
+  .address-card:first-child,
+  .note-card:first-child,
+  .footer-card:first-child {
+    border-right-width: 1px;
+  }
+
+  .address-card + .address-card,
+  .note-card + .note-card,
+  .footer-card + .footer-card {
+    margin-left: 14px;
+  }
+
+  .address-grid {
+    border-spacing: 14px 0;
+    margin: 0 -14px 24px;
+    width: calc(100% + 28px);
+  }
+
+  .notes-grid {
+    border-spacing: 14px 0;
+    margin: 18px -14px 0;
+    width: calc(100% + 28px);
+  }
+
+  .slip-footer {
+    border-spacing: 14px 0;
+    margin: 22px -14px 0;
+    width: calc(100% + 28px);
+  }
+
+  .card-label {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .address-name,
+  .footer-title {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .address-lines,
+  .note-copy,
+  .footer-copy {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .section-head {
+    margin: 10px 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .section-head p {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .items-table thead th {
+    padding: 0 0 12px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .items-table tbody td {
+    padding: 16px 0;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .col-item {
+    width: 63%;
+  }
+
+  .col-sku {
+    width: 20%;
+    padding-left: 16px;
+    padding-right: 16px;
+    color: var(--muted);
+  }
+
+  .col-qty {
+    width: 17%;
+    font-weight: 700;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .item-block {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .item-image,
+  .item-copy {
+    display: table-cell;
+    vertical-align: top;
+  }
+
+  .item-image {
+    width: 78px;
+  }
+
+  .item-copy {
+    padding-left: 14px;
+  }
+
+  .image-frame {
+    position: relative;
+    border: 1px solid rgba(195, 207, 216, 0.45);
+    border-radius: 16px;
+    background: #fafbfc;
+    overflow: hidden;
+  }
+
+  .image-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+  }
+
+  .item-title {
+    margin: 0 0 4px;
+    font-weight: 700;
+  }
+
+  .item-meta {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .notice-card {
+    margin-top: 18px;
+    padding: 13px 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--soft);
+    color: var(--muted);
+  }
+
+  .footer-card {
+    background: var(--soft-2);
+  }
+
+  .footer-card--compact .footer-copy {
+    font-size: 13px;
+  }
+</style>

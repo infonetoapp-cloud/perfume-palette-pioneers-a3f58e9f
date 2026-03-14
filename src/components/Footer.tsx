@@ -29,6 +29,7 @@ const Footer = () => {
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/about" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">{t("footer.aboutUs")}</Link></li>
               <li><Link to="/shipping" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">{t("footer.shipping")}</Link></li>
+              <li><Link to="/refund-policy" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">{t("footer.refunds")}</Link></li>
               <li><Link to="/privacy" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">{t("footer.privacy")}</Link></li>
               <li><Link to="/terms" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">{t("footer.terms")}</Link></li>
               <li><Link to="/faq" className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">{t("footer.faq")}</Link></li>
