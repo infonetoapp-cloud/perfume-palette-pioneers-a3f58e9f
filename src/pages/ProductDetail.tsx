@@ -33,6 +33,7 @@ import { getCollectionDefinition, getCollectionPath, getProductDisplayCopy } fro
 import type { CatalogProduct } from "@/lib/catalogData";
 import { getProductMeta, type ProductMeta } from "@/lib/productMetadata";
 import { getAbsoluteUrl, SITE_BRAND, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
+import { buildFreeUsShippingDetails, buildNoReturnPolicy, getPriceValidUntil } from "@/lib/structuredData";
 import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
 import { ADDITIONAL_PERFUME_PRICE_LABEL, BUNDLE_PRICE_USD, GIFT_ORDER_LABEL, PROMO_CODE, formatUsd } from "@/lib/promotions";
@@ -504,6 +505,7 @@ const ProductDetail = () => {
   const copy = getProductDisplayCopy(product);
   const selectedVisual = product.images[selectedImage] ?? product.images[0];
   const productPath = `/product/${product.handle}`;
+  const priceValidUntil = getPriceValidUntil();
 
   const handleAddToCart = async () => {
     if (!product.availableForSale) return;
@@ -559,29 +561,15 @@ const ProductDetail = () => {
       url: getAbsoluteUrl(productPath),
       priceCurrency: product.price.currencyCode,
       price: product.price.amount,
+      priceValidUntil,
       availability: product.availableForSale ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: {
         "@type": "Organization",
         name: SITE_NAME,
       },
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingDestination: {
-          "@type": "DefinedRegion",
-          addressCountry: "US",
-        },
-        shippingRate: {
-          "@type": "MonetaryAmount",
-          value: "0",
-          currency: "USD",
-        },
-      },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "US",
-        returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
-      },
+      shippingDetails: buildFreeUsShippingDetails(product.price.currencyCode),
+      hasMerchantReturnPolicy: buildNoReturnPolicy(),
     },
   };
   const breadcrumbJsonLd = {

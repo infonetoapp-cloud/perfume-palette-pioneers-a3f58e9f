@@ -41,9 +41,11 @@ export const STOCKED_PRODUCT_CODES = [
   "e155",
   "e49",
   "e145",
+  "e152",
   "e82",
   "e185",
   "e184",
+  "e171",
   "e176",
   "e71",
   "e6",
@@ -78,6 +80,10 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     eyebrow: "Full Collection",
     description:
       "Explore the full David Walker catalog for women and men at Real Scents, organized for easy fragrance shopping.",
+    story:
+      "This collection brings the full stocked lineup into one place, making it easier to compare fresh, woody, vanilla, floral, citrus, amber, and aromatic directions without bouncing between separate landing pages.",
+    commonNotes: ["Citrus", "Lavender", "Vanilla", "Amber woods"],
+    wearMoments: "Best for comparing the full assortment, discovering signature scents, and navigating between women's, men's, and family-led categories.",
   },
   women: {
     slug: "women",
@@ -87,6 +93,10 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     eyebrow: "Women's Collection",
     description:
       "Browse David Walker women's Eau de Parfum styles with floral, fruity, warm, and modern scent profiles.",
+    story:
+      "The women's edit leans into floral brightness, creamy sweetness, polished woods, and modern warm signatures designed for daily wear, gifting, and evening dressing.",
+    commonNotes: ["Rose", "Orange blossom", "Vanilla", "Soft musk"],
+    wearMoments: "Ideal for daily elegance, gifting, special occasions, and shoppers who want polished feminine scent options in one place.",
   },
   men: {
     slug: "men",
@@ -96,6 +106,10 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     eyebrow: "Men's Collection",
     description:
       "Browse David Walker men's Eau de Parfum styles with woody, fresh, aromatic, and warm scent profiles.",
+    story:
+      "The men's lineup moves from crisp citrus-aromatic profiles into woody, amber, and vanilla-driven evening styles, giving shoppers a cleaner way to compare daily and after-dark options.",
+    commonNotes: ["Bergamot", "Lavender", "Vetiver", "Amber"],
+    wearMoments: "Built for office wear, signature scent shopping, date nights, and straightforward comparison across fresh and warm profiles.",
   },
   "best-sellers": {
     slug: "best-sellers",
@@ -105,6 +119,10 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     eyebrow: "Customer Favorites",
     description:
       "Shop the most giftable and versatile David Walker fragrances curated by Real Scents across men's and women's collections.",
+    story:
+      "These are the strongest all-rounders in the current lineup, balancing broad appeal, easy wearability, and clear scent identity across both women's and men's selections.",
+    commonNotes: ["Vanilla", "Floral notes", "Citrus", "Woody notes"],
+    wearMoments: "A strong starting point for first orders, gift shopping, and anyone who wants the safest entry into the catalog.",
   },
   "auto-scents": {
     slug: "auto-scents",
@@ -114,6 +132,10 @@ const CORE_COLLECTION_DEFINITIONS: Record<CoreCollectionSlug, CollectionDefiniti
     eyebrow: "Car Scents",
     description:
       "Shop David Walker car scents in Iris Flower, Melon, and Oud. Premium hanging scents for a cleaner, more polished cabin.",
+    story:
+      "The auto scent range is designed for drivers who want the cabin to feel cleaner, more polished, and more intentional without overwhelming sweetness or harsh chemical sharpness.",
+    commonNotes: ["Iris flower", "Melon", "Oud", "Clean musks"],
+    wearMoments: "Best for daily commuting, keeping the cabin fresh between details, and pairing the car with the same polished scent mood as your perfume.",
   },
 };
 
@@ -245,7 +267,11 @@ function getCategoryLabel(gender: ProductMeta["gender"] | null): string {
   return "Unisex fragrance";
 }
 
-function getDisplayTitle(title: string, code: string | null, genderLabel: string): string {
+function getDisplayTitle(title: string, code: string | null, genderLabel: string, meta: ProductMeta | null): string {
+  if (meta?.displayTitle) {
+    return meta.displayTitle;
+  }
+
   const normalizedTitle = title.replace(/\s+/g, " ").trim();
   if (normalizedTitle) {
     return normalizedTitle;
@@ -264,18 +290,47 @@ function formatFamilySummary(families: ScentFamily[]): string {
   return labels[0] ?? "";
 }
 
+function getSeoNoteHighlights(meta: ProductMeta | null): string[] {
+  if (!meta) return [];
+
+  const orderedNotes = [...meta.scentNotes.top, ...meta.scentNotes.middle, ...meta.scentNotes.base];
+  return orderedNotes.filter((note, index) => orderedNotes.indexOf(note) === index).slice(0, 3);
+}
+
+function condenseMetaTitle(title: string): string {
+  return title
+    .replace(/\s+Eau de Parfum\s+50ml$/i, "")
+    .replace(/\s+50ml$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function trimMetaDescription(value: string, maxLength = 158): string {
+  if (value.length <= maxLength) return value;
+
+  const trimmed = value.slice(0, maxLength - 1);
+  const lastBoundary = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf(", "), trimmed.lastIndexOf(" "));
+  const safeTrimmed = lastBoundary > 90 ? trimmed.slice(0, lastBoundary) : trimmed;
+  return `${safeTrimmed.replace(/[,\s.]+$/, "")}.`;
+}
+
 function buildMetaDescription(title: string, meta: ProductMeta | null, noteHighlights: string[], categoryLabel: string): string {
   if (!meta) {
-    return `${title}. Shop premium David Walker ${categoryLabel.toLowerCase()} online at Real Scents in the United States.`;
+    return trimMetaDescription(
+      `${condenseMetaTitle(title)}. Shop premium David Walker ${categoryLabel.toLowerCase()} online at Real Scents with free U.S. shipping.`,
+    );
   }
 
   const notes = noteHighlights.join(", ");
   const familySummary = formatFamilySummary(meta.scentFamilies);
+  const descriptor = familySummary ? `${familySummary} ${categoryLabel.toLowerCase()}` : categoryLabel.toLowerCase();
+  const condensedTitle = condenseMetaTitle(title);
+
   if (familySummary && notes) {
-    return `${title} in 50ml Eau de Parfum. ${meta.feeling} A ${familySummary} ${categoryLabel.toLowerCase()} with notes like ${notes}. Free U.S. shipping on every order.`;
+    return trimMetaDescription(`${condensedTitle}. ${descriptor} with ${notes}. Free U.S. shipping.`);
   }
 
-  return `${title} in 50ml Eau de Parfum. ${meta.feeling} Shop David Walker fragrances online at Real Scents with free U.S. shipping on every order.`;
+  return trimMetaDescription(`${condensedTitle}. ${descriptor}. Free U.S. shipping.`);
 }
 
 function getDisplayDescription(productDescription: string, meta: ProductMeta | null): string {
@@ -313,14 +368,13 @@ export function getProductDisplayCopy(product: ProductLike): ProductDisplayCopy 
   const code = normalizeCode(extractCodeFromHandle(product.handle));
   const genderLabel = getGenderLabel(meta?.gender ?? null);
   const categoryLabel = getCategoryLabel(meta?.gender ?? null);
-  const noteHighlights = meta?.mainNotes.map((item) => item.name) ?? [];
+  const noteHighlights = getSeoNoteHighlights(meta);
   const familyLabels = meta?.scentFamilies.map((family) => COLLECTION_DEFINITIONS[family].label) ?? [];
-  const title = getDisplayTitle(product.title, code, genderLabel);
-  const shortTitle = code ? `David Walker ${code.toUpperCase()}` : title;
+  const title = getDisplayTitle(product.title, code, genderLabel, meta);
+  const shortTitle = meta?.shortTitle ?? (code ? `David Walker ${code.toUpperCase()}` : title);
   const subtitleHighlights = familyLabels.length > 0 ? familyLabels : noteHighlights;
-  const subtitle = meta
-    ? `${categoryLabel} - ${subtitleHighlights.slice(0, 3).join(" - ")}`
-    : `${categoryLabel} - Eau de Parfum`;
+  const subtitle = meta?.subtitle
+    ?? (meta ? `${categoryLabel} - ${subtitleHighlights.slice(0, 3).join(" - ")}` : `${categoryLabel} - Eau de Parfum`);
   const description = getDisplayDescription(product.description, meta);
   const eyebrow = code ? `${code.toUpperCase()} - ${genderLabel}` : genderLabel;
 
@@ -331,7 +385,7 @@ export function getProductDisplayCopy(product: ProductLike): ProductDisplayCopy 
     eyebrow,
     subtitle,
     description,
-    metaDescription: buildMetaDescription(title, meta, noteHighlights, categoryLabel),
+    metaDescription: meta?.metaDescription ?? buildMetaDescription(title, meta, noteHighlights, categoryLabel),
     noteHighlights,
     familyLabels,
     badges: meta?.badges ?? [],

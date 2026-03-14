@@ -38,7 +38,7 @@ function getOutputPath(routePath: string): string {
     return templatePath;
   }
 
-  return join(distDir, routePath.replace(/^\//, ""), "index.html");
+  return join(distDir, `${routePath.replace(/^\//, "")}.html`);
 }
 
 function rewriteAssetUrls(markup: string, manifest: AssetManifest): string {

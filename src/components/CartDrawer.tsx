@@ -3,6 +3,7 @@ import { Loader2, Minus, Plus, ShoppingBag, TicketPercent, Trash2 } from "lucide
 import { toast } from "sonner";
 
 import { getAutoScentVariant, getAutoScentVariants, type AutoScentVariant } from "@/lib/autoScents";
+import { getProductDisplayCopy } from "@/lib/catalog";
 import type { CatalogProduct } from "@/lib/catalogData";
 import { createDraftCheckout } from "@/lib/draftCheckout";
 import {
@@ -86,6 +87,10 @@ function findAutoScentVariantFromItem(item: CartItem | undefined): AutoScentVari
     .toLowerCase();
 
   return getAutoScentVariants().find((variant) => haystack.includes(variant.name.toLowerCase()) || haystack.includes(variant.slug)) ?? null;
+}
+
+function getCartProductTitle(product: CatalogProduct) {
+  return getProductDisplayCopy(product).shortTitle;
 }
 
 function Row({
@@ -270,13 +275,15 @@ function Upsell({
   isLoading: boolean;
   onAdd: () => void;
 }) {
+  const copy = getProductDisplayCopy(product);
+
   return (
     <article className="min-w-[196px] rounded-[1.5rem] border border-[#eadfd1] bg-[#fffaf5] p-3 shadow-soft sm:min-w-[228px]">
       <div className="h-40 overflow-hidden rounded-[1rem] bg-secondary">
         {product.images[0] ? <img src={product.images[0].url} alt={product.images[0].altText} className="h-full w-full object-cover" /> : null}
       </div>
       <p className="mt-3 font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Best next bottle</p>
-      <p className="mt-2 font-display text-[15px] font-semibold leading-tight text-foreground">{product.title.replace(" Eau de Parfum 50ml", "")}</p>
+      <p className="mt-2 font-display text-[15px] font-semibold leading-tight text-foreground">{copy.shortTitle}</p>
       <p className="mt-1 font-body text-xs text-muted-foreground">{formatUsd(parseFloat(product.price.amount))}</p>
       <Button
         type="button"
@@ -397,7 +404,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
         rows.push({
           key: item.variantId,
           kind,
-          title: item.product.title,
+          title: kind === "perfume" ? getCartProductTitle(item.product) : item.product.title,
           subtitle: item.selectedOptions.map((option) => option.value).join(" / "),
           imageUrl: item.product.images[0]?.url ?? null,
           imageAlt: item.product.images[0]?.altText ?? item.product.title,
@@ -412,7 +419,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
         rows.push({
           key: item.variantId,
           kind,
-          title: item.product.title,
+          title: kind === "perfume" ? getCartProductTitle(item.product) : item.product.title,
           subtitle: item.selectedOptions.map((option) => option.value).join(" / "),
           imageUrl: item.product.images[0]?.url ?? null,
           imageAlt: item.product.images[0]?.altText ?? item.product.title,
@@ -532,7 +539,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
       quantity: 1,
       selectedOptions: product.variant.selectedOptions,
     });
-    toast.success(t("cart.added"), { description: product.title });
+    toast.success(t("cart.added"), { description: getProductDisplayCopy(product).shortTitle });
   };
 
   const showGiftTeaser = summary.complimentaryGiftEligible && !!selectedGiftVariant;
@@ -582,7 +589,7 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
           ) : (
             <>
               <div ref={scrollAreaRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
-                <div className="space-y-4 pb-6">
+                <div className="space-y-4 pb-8">
                   <OfferProgressCard
                     perfumeCount={summary.perfumeCount}
                     higherTierUnlocked={summary.perfumeCount >= 3}
@@ -707,36 +714,34 @@ export const CartDrawer = ({ onOpenChange }: CartDrawerProps) => {
                     </div>
                   </DrawerSection>
 
-                  <p className="hidden font-body text-xs leading-relaxed text-muted-foreground sm:block">{t("cart.previewNote")}</p>
-                </div>
-              </div>
-
-              <div className="shrink-0 border-t border-border bg-background/95 px-6 pb-5 pt-3 backdrop-blur">
-                <div className="rounded-[1.4rem] border border-[#e6d6c6] bg-[linear-gradient(180deg,#fffdf9_0%,#fff8ef_100%)] p-3 shadow-soft">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-body text-[9px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Ready to checkout</p>
-                      <p className="mt-1 font-display text-[1.7rem] font-semibold leading-none text-foreground">{formatUsd(summary.finalSubtotal)}</p>
+                  <section className="rounded-[1.35rem] border border-[#e6d6c6] bg-[linear-gradient(180deg,#fffdf9_0%,#fff8ef_100%)] p-3.5 shadow-soft">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-body text-[9px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Ready to checkout</p>
+                        <p className="mt-1 font-display text-[1.55rem] font-semibold leading-none text-foreground">{formatUsd(summary.finalSubtotal)}</p>
+                      </div>
+                      <span className="rounded-full border border-[#dfd3c6] bg-white/90 px-2.5 py-1 font-body text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                        Free shipping
+                      </span>
                     </div>
-                    <span className="rounded-full border border-[#dfd3c6] bg-white/90 px-2.5 py-1 font-body text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                      Free shipping
-                    </span>
-                  </div>
 
-                  <Button
-                    className="mt-3 h-11 w-full rounded-full border border-transparent bg-accent font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-accent-foreground hover:bg-accent/90 disabled:bg-[#b8aea3] disabled:text-white"
-                    size="lg"
-                    disabled={items.length === 0 || isLoading || isSyncing || isCreatingCheckout}
-                    onClick={() => void handleCheckout()}
-                  >
-                    {isLoading || isSyncing || isCreatingCheckout ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      `Checkout - ${formatUsd(summary.finalSubtotal)}`
-                    )}
-                  </Button>
+                    <Button
+                      className="mt-3 h-11 w-full rounded-full border border-transparent bg-accent font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-accent-foreground hover:bg-accent/90 disabled:bg-[#b8aea3] disabled:text-white"
+                      size="lg"
+                      disabled={items.length === 0 || isLoading || isSyncing || isCreatingCheckout}
+                      onClick={() => void handleCheckout()}
+                    >
+                      {isLoading || isSyncing || isCreatingCheckout ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        `Checkout - ${formatUsd(summary.finalSubtotal)}`
+                      )}
+                    </Button>
 
-                  <ShopifyTrustMark compact className="mt-3" />
+                    <ShopifyTrustMark compact className="mt-3" />
+                  </section>
+
+                  <p className="hidden font-body text-xs leading-relaxed text-muted-foreground sm:block">{t("cart.previewNote")}</p>
                 </div>
               </div>
             </>

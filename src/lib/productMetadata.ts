@@ -10,6 +10,10 @@ export type ScentFamily =
 export interface ProductMeta {
   code: string;
   gender: "women" | "men" | "unisex";
+  displayTitle?: string;
+  shortTitle?: string;
+  subtitle?: string;
+  metaDescription?: string;
   feeling: string;
   description: string;
   usage: string;
@@ -154,6 +158,33 @@ const productMetadata: Record<string, ProductMeta> = {
     intensity: "Medium",
     badges: ["Versatile", "Smart Casual"],
   },
+  e152: {
+    code: "E152",
+    gender: "men",
+    displayTitle: "David Walker E152 Citrus Vetiver Tonka",
+    shortTitle: "E152 Citrus Vetiver Tonka",
+    subtitle:
+      "Men's fragrance with bergamot, green mandarin, lavender, violet, vetiver, and tonka bean.",
+    metaDescription:
+      "Shop David Walker E152 Citrus Vetiver Tonka. Clean citrus-aromatic men's fragrance with bergamot, lavender, vetiver, and tonka bean. Free U.S. shipping.",
+    feeling: "Clean, polished, and quietly magnetic with crisp citrus over smooth woods.",
+    description:
+      "Bergamot and green mandarin open with brisk freshness before lavender and violet add a refined aromatic core. Leather, vetiver, tonka bean, and cashmere wood create a smooth dry-down that feels tailored, clean, and modern. A citrus-aromatic woody scent built for everyday confidence with office-to-evening flexibility.",
+    usage: "Office days, smart-casual dressing, spring and autumn wear, signature scent rotation.",
+    scentFamilies: ["citrus", "aromatic", "woody"],
+    scentNotes: {
+      top: ["Bergamot", "Green Mandarin"],
+      middle: ["Lavender", "Violet"],
+      base: ["Leather", "Vetiver", "Tonka Bean", "Cashmere Wood"],
+    },
+    mainNotes: [
+      { name: "Citrus", icon: "citrus" },
+      { name: "Lavender", icon: "fresh" },
+      { name: "Vetiver", icon: "woody" },
+    ],
+    intensity: "Medium",
+    badges: ["Office Friendly", "Signature"],
+  },
   e155: {
     code: "E155",
     gender: "men",
@@ -216,6 +247,33 @@ const productMetadata: Record<string, ProductMeta> = {
     ],
     intensity: "Strong",
     badges: ["Night Wear", "Cold Weather"],
+  },
+  e171: {
+    code: "E171",
+    gender: "men",
+    displayTitle: "David Walker E171 Salted Amber Reserve",
+    shortTitle: "E171 Salted Amber Reserve",
+    subtitle:
+      "Amber-spicy men's fragrance with black pepper, orange blossom, whiskey accord, and a salty amber dry-down.",
+    metaDescription:
+      "Shop David Walker E171 Salted Amber Reserve. Bold amber-spicy men's fragrance with black pepper, whiskey warmth, orange blossom, and salty amber.",
+    feeling: "Bold, boozy, and night-ready with warm spice over a salty amber glow.",
+    description:
+      "Black pepper, orange blossom, and a cool marine lift open the scent with contrast and impact. Whiskey accord and aromatic laurel deepen the heart, adding dressed-up warmth and a slightly rugged edge. Amber, ambergris, and salt accord in the base leave a dense, glowing trail made for after-dark wear. An amber-spicy fragrance with boozy depth and strong nightlife energy.",
+    usage: "Night outs, colder evenings, statement fits, weekends, and dressed-up occasions.",
+    scentFamilies: ["amber", "woody", "aromatic"],
+    scentNotes: {
+      top: ["Black Pepper", "Orange Blossom", "Marine Accord"],
+      middle: ["Whiskey Accord", "Laurel"],
+      base: ["Amber", "Ambergris", "Salt Accord"],
+    },
+    mainNotes: [
+      { name: "Amber", icon: "warm" },
+      { name: "Whiskey", icon: "spicy" },
+      { name: "Salt Accord", icon: "fresh" },
+    ],
+    intensity: "Strong",
+    badges: ["Night Wear", "Statement Scent"],
   },
   e185: {
     code: "E185",

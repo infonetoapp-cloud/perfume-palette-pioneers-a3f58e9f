@@ -1,20 +1,29 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "git": {
     "deploymentEnabled": true
   },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.shoprealscents.com"
+        }
+      ],
+      "destination": "https://shoprealscents.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
-      "source": "/api/shopify",
-      "destination": "/api/shopify.js"
-    },
-    {
-      "source": "/api/shopify-admin/install",
-      "destination": "/api/shopify-admin/install.js"
-    },
-    {
-      "source": "/api/shopify-admin/callback",
-      "destination": "/api/shopify-admin/callback.js"
+      "source": "/google-merchant-feed.xml",
+      "destination": "/api/google-merchant-feed"
     }
   ]
 }

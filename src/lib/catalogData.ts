@@ -49,9 +49,11 @@ const PRODUCT_IMAGE_MODULES = import.meta.glob(
     "../assets/products/e155/*.{png,jpg,jpeg,webp}",
     "../assets/products/e49/*.{png,jpg,jpeg,webp}",
     "../assets/products/e145/*.{png,jpg,jpeg,webp}",
+    "../assets/products/e152/*.{png,jpg,jpeg,webp}",
     "../assets/products/e82/*.{png,jpg,jpeg,webp}",
     "../assets/products/e185/*.{png,jpg,jpeg,webp}",
     "../assets/products/e184/*.{png,jpg,jpeg,webp}",
+    "../assets/products/e171/*.{png,jpg,jpeg,webp}",
     "../assets/products/e176/*.{png,jpg,jpeg,webp}",
     "../assets/products/e71/*.{png,jpg,jpeg,webp}",
     "../assets/products/e6/*.{png,jpg,jpeg,webp}",
@@ -210,7 +212,9 @@ function buildCatalogProduct(code: (typeof STOCKED_PRODUCT_CODES)[number]): Cata
     throw new Error(`Missing metadata for stocked product ${code}`);
   }
 
-  const title = `David Walker ${code.toUpperCase()} ${getGenderLabel(meta.gender)} Eau de Parfum 50ml`;
+  const title = meta.displayTitle
+    ? `${meta.displayTitle} ${getGenderLabel(meta.gender)} Eau de Parfum 50ml`
+    : `David Walker ${code.toUpperCase()} ${getGenderLabel(meta.gender)} Eau de Parfum 50ml`;
   const price = toMoney(PRODUCT_PRICE_USD[code]);
   const variant: CatalogVariant = {
     id: `variant-${code}-50ml`,

@@ -29,6 +29,7 @@ import { resolveAutoScentProduct, getAutoScentVariant, getAutoScentVariants, typ
 import type { CatalogProduct } from "@/lib/catalogData";
 import { getMotionInitial } from "@/lib/motion";
 import { getAbsoluteUrl, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
+import { buildFreeUsShippingDetails, buildNoReturnPolicy, getPriceValidUntil } from "@/lib/structuredData";
 import { useCartStore } from "@/stores/cartStore";
 import { useStorefrontCatalog } from "@/stores/storefrontCatalogStore";
 
@@ -520,8 +521,11 @@ const AutoScentDetailPage = ({ slug }: { slug: string }) => {
       url: getAbsoluteUrl(`/auto-scents/${variant.slug}`),
       priceCurrency: "USD",
       price: String(variant.priceUsd),
+      priceValidUntil: getPriceValidUntil(),
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
+      shippingDetails: buildFreeUsShippingDetails("USD"),
+      hasMerchantReturnPolicy: buildNoReturnPolicy(),
     },
   };
 

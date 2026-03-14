@@ -13,7 +13,13 @@ const FeaturedProducts = () => {
   const addItem = useCartStore((s) => s.addItem);
   const isCartLoading = useCartStore((s) => s.isLoading);
   const { getProductsForCollection } = useStorefrontCatalog();
-  const products = getProductsForCollection("best-sellers").slice(0, 8);
+  const allProducts = getProductsForCollection("all-perfumes");
+  const spotlightCodes = new Set(["E152", "E171"]);
+  const spotlightProducts = allProducts.filter((product) => spotlightCodes.has(product.code));
+  const baseProducts = getProductsForCollection("best-sellers").slice(0, 6);
+  const products = [...baseProducts, ...spotlightProducts].filter(
+    (product, index, list) => list.findIndex((entry) => entry.handle === product.handle) === index,
+  );
 
   const handleAddToCart = async (e: MouseEvent, product: CatalogProduct) => {
     e.preventDefault();

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import heroMobile from "@/assets/hero/hero-mobile.jpg";
 import heroStudio from "@/assets/hero/hero-studio.jpg";
 import { getCollectionPath } from "@/lib/catalog";
-import { useI18n } from "@/lib/i18n";
 import { getMotionInitial } from "@/lib/motion";
 import { BUNDLE_PRICE_USD, formatUsd } from "@/lib/promotions";
 
@@ -31,7 +30,7 @@ const HeroCopy = ({ mobile = false }: { mobile?: boolean }) => (
           : "mt-2 font-display text-[2.15rem] font-bold leading-[0.95] text-foreground md:mt-4 md:text-6xl md:text-white lg:text-7xl"
       }
     >
-      David Walker
+      Shop David Walker Perfumes for Women and Men
     </h1>
 
     <p
@@ -53,12 +52,6 @@ const HeroCopy = ({ mobile = false }: { mobile?: boolean }) => (
     >
       2 for {formatUsd(BUNDLE_PRICE_USD)}. Free car scent with each perfume order.
     </p>
-
-    {!mobile && (
-      <p className="mt-4 hidden max-w-lg font-body text-sm text-white/75 md:block">
-        Curated David Walker fragrances with straightforward bundle pricing, free shipping, and clear scent profiles.
-      </p>
-    )}
 
     <div className={mobile ? "mt-5 grid grid-cols-2 gap-3" : "mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-row sm:flex-wrap"}>
       <Link
@@ -86,8 +79,6 @@ const HeroCopy = ({ mobile = false }: { mobile?: boolean }) => (
 );
 
 const HeroSection = () => {
-  const { t } = useI18n();
-
   return (
     <section className="relative min-h-[92svh] w-full overflow-hidden bg-[#efe4d5] md:h-screen">
       <img

@@ -39,6 +39,8 @@ const CollectionPage = () => {
   const autoScentVariants = getAutoScentVariants();
   const isAutoScentsCollection = collection.slug === "auto-scents";
   const visibleProducts = getProductsForCollection(collection.slug);
+  const collectionCount = isAutoScentsCollection ? autoScentVariants.length : visibleProducts.length;
+  const collectionCountLabel = isAutoScentsCollection ? `${collectionCount} car scents` : `${collectionCount} perfumes`;
 
   useEffect(() => {
     activeTileRef.current?.scrollIntoView({
@@ -144,6 +146,50 @@ const CollectionPage = () => {
                     </Link>
                   );
                 })}
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-[2rem] border border-black/8 bg-white/95 px-5 py-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)] md:px-8 md:py-8">
+              <p className="font-body text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+                {collection.eyebrow}
+              </p>
+              <h1 className="mt-3 max-w-3xl font-display text-3xl font-bold leading-tight text-foreground md:text-5xl">
+                {collection.title}
+              </h1>
+              <p className="mt-4 max-w-3xl font-body text-sm leading-7 text-foreground/80 md:text-base">
+                {collection.description}
+              </p>
+              {collection.story ? (
+                <p className="mt-4 max-w-3xl font-body text-sm leading-7 text-muted-foreground md:text-[15px]">
+                  {collection.story}
+                </p>
+              ) : null}
+
+              <div className="mt-6 grid gap-3 md:grid-cols-3">
+                <article className="rounded-[1.35rem] border border-border bg-secondary/20 p-4">
+                  <p className="font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    In This Collection
+                  </p>
+                  <p className="mt-2 font-display text-xl font-semibold text-foreground">{collectionCountLabel}</p>
+                </article>
+                {collection.commonNotes?.length ? (
+                  <article className="rounded-[1.35rem] border border-border bg-secondary/20 p-4">
+                    <p className="font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                      Common Notes
+                    </p>
+                    <p className="mt-2 font-body text-sm leading-6 text-foreground">
+                      {collection.commonNotes.join(", ")}
+                    </p>
+                  </article>
+                ) : null}
+                {collection.wearMoments ? (
+                  <article className="rounded-[1.35rem] border border-border bg-secondary/20 p-4">
+                    <p className="font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                      Best For
+                    </p>
+                    <p className="mt-2 font-body text-sm leading-6 text-foreground">{collection.wearMoments}</p>
+                  </article>
+                ) : null}
               </div>
             </div>
           </div>

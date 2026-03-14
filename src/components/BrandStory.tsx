@@ -41,7 +41,7 @@ const BrandStory = () => {
               {t("brand.desc")}
             </p>
             <Link to="/about" className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
-              {t("brand.learnMore")}
+              {t("brand.aboutLink")}
             </Link>
           </motion.div>
         </div>
@@ -63,7 +63,7 @@ const BrandStory = () => {
               {t("brand.standardsDesc")}
             </p>
             <Link to={getCollectionPath("best-sellers")} className="mt-6 inline-block font-body text-sm font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-accent">
-              {t("brand.learnMore")}
+              {t("brand.bestSellersLink")}
             </Link>
           </div>
         </motion.div>

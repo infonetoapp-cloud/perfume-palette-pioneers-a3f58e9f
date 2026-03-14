@@ -108,6 +108,39 @@ const PERFUME_SYNC_PRODUCTS = [
     ]
   },
   {
+    "code": "E152",
+    "handle": "david-walker-e152-mens-eau-de-parfum-50ml",
+    "title": "David Walker E152 Citrus Vetiver Tonka",
+    "description": "Shop David Walker E152 Citrus Vetiver Tonka in 50ml Eau de Parfum. A clean citrus-aromatic men's fragrance with bergamot, lavender, vetiver, leather, and tonka bean.",
+    "bodyHtml": "<p><strong>Clean, polished, and quietly magnetic with crisp citrus over smooth woods.</strong></p><p>Bergamot and green mandarin open with brisk freshness before lavender and violet add a refined aromatic core. Leather, vetiver, tonka bean, and cashmere wood create a smooth dry-down that feels tailored, clean, and modern. A citrus-aromatic woody scent built for everyday confidence with office-to-evening flexibility.</p><p><strong>Top Notes:</strong> Bergamot, Green Mandarin</p><p><strong>Heart Notes:</strong> Lavender, Violet</p><p><strong>Base Notes:</strong> Leather, Vetiver, Tonka Bean, Cashmere Wood</p><p><strong>Best For:</strong> Office days, smart-casual dressing, spring and autumn wear, signature scent rotation.</p><p><strong>Size:</strong> 50ml / 1.7oz</p><p><strong>Concentration:</strong> Eau de Parfum</p>",
+    "vendor": "David Walker",
+    "productType": "Men's Fragrance",
+    "price": "79.90",
+    "tags": [
+      "all-perfumes",
+      "men",
+      "citrus",
+      "aromatic",
+      "woody",
+      "Office Friendly",
+      "Signature",
+      "Medium",
+      "Real Scents",
+      "David Walker"
+    ],
+    "scentFamilies": [
+      "citrus",
+      "aromatic",
+      "woody"
+    ],
+    "gender": "men",
+    "imageUrls": [
+      "https://shoprealscents.com/shopify-sync/products/e152/e152-detail.jpg",
+      "https://shoprealscents.com/shopify-sync/products/e152/e152-hero.jpg",
+      "https://shoprealscents.com/shopify-sync/products/e152/e152-lifestyle.jpg"
+    ]
+  },
+  {
     "code": "E82",
     "handle": "david-walker-e82-mens-eau-de-parfum-50ml",
     "title": "David Walker E82 Men's Eau de Parfum 50ml",
@@ -206,6 +239,39 @@ const PERFUME_SYNC_PRODUCTS = [
       "https://shoprealscents.com/shopify-sync/products/e184/e184-detail.jpg",
       "https://shoprealscents.com/shopify-sync/products/e184/e184-hero.jpg",
       "https://shoprealscents.com/shopify-sync/products/e184/e184-lifestyle.jpg"
+    ]
+  },
+  {
+    "code": "E171",
+    "handle": "david-walker-e171-mens-eau-de-parfum-50ml",
+    "title": "David Walker E171 Salted Amber Reserve",
+    "description": "Shop David Walker E171 Salted Amber Reserve in 50ml Eau de Parfum. A bold amber-spicy men's fragrance with whiskey warmth, black pepper, orange blossom, ambergris, and salt accord.",
+    "bodyHtml": "<p><strong>Bold, boozy, and night-ready with warm spice over a salty amber glow.</strong></p><p>Black pepper, orange blossom, and a cool marine lift open the scent with contrast and impact. Whiskey accord and aromatic laurel deepen the heart, adding dressed-up warmth and a slightly rugged edge. Amber, ambergris, and salt accord in the base leave a dense, glowing trail made for after-dark wear. An amber-spicy fragrance with boozy depth and strong nightlife energy.</p><p><strong>Top Notes:</strong> Black Pepper, Orange Blossom, Marine Accord</p><p><strong>Heart Notes:</strong> Whiskey Accord, Laurel</p><p><strong>Base Notes:</strong> Amber, Ambergris, Salt Accord</p><p><strong>Best For:</strong> Night outs, colder evenings, statement fits, weekends, and dressed-up occasions.</p><p><strong>Size:</strong> 50ml / 1.7oz</p><p><strong>Concentration:</strong> Eau de Parfum</p>",
+    "vendor": "David Walker",
+    "productType": "Men's Fragrance",
+    "price": "79.90",
+    "tags": [
+      "all-perfumes",
+      "men",
+      "amber",
+      "woody",
+      "aromatic",
+      "Night Wear",
+      "Statement Scent",
+      "Strong",
+      "Real Scents",
+      "David Walker"
+    ],
+    "scentFamilies": [
+      "amber",
+      "woody",
+      "aromatic"
+    ],
+    "gender": "men",
+    "imageUrls": [
+      "https://shoprealscents.com/shopify-sync/products/e171/e171-detail.jpg",
+      "https://shoprealscents.com/shopify-sync/products/e171/e171-hero.jpg",
+      "https://shoprealscents.com/shopify-sync/products/e171/e171-lifestyle.jpg"
     ]
   },
   {

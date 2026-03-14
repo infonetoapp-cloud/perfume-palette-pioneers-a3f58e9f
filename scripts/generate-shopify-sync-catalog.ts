@@ -7,9 +7,11 @@ const STOCKED_CODES = [
   "e155",
   "e49",
   "e145",
+  "e152",
   "e82",
   "e185",
   "e184",
+  "e171",
   "e176",
   "e71",
   "e6",
@@ -36,6 +38,14 @@ function getGenderLabel(gender: ProductMeta["gender"]): "Women's" | "Men's" {
 
 function getProductType(gender: ProductMeta["gender"]): "Women's Perfume" | "Men's Fragrance" {
   return gender === "women" ? "Women's Perfume" : "Men's Fragrance";
+}
+
+function getSyncTitle(meta: ProductMeta) {
+  return meta.displayTitle ?? `David Walker ${meta.code} ${getGenderLabel(meta.gender)} Eau de Parfum 50ml`;
+}
+
+function getSyncDescription(meta: ProductMeta) {
+  return meta.metaDescription ?? `${meta.feeling} ${meta.description}`;
 }
 
 function buildHandle(code: string, gender: ProductMeta["gender"]) {
@@ -69,6 +79,24 @@ function buildBodyHtml(meta: ProductMeta) {
 function ensureCleanDir(directory: string) {
   rmSync(directory, { recursive: true, force: true });
   mkdirSync(directory, { recursive: true });
+}
+
+function ensureDir(directory: string) {
+  mkdirSync(directory, { recursive: true });
+}
+
+function pruneGeneratedProductDirs() {
+  const productsDir = path.join(PUBLIC_SYNC_ROOT, "products");
+  ensureDir(productsDir);
+
+  const keepDirectories = new Set<string>(["auto-scent", ...STOCKED_CODES]);
+
+  readdirSync(productsDir, { withFileTypes: true }).forEach((entry) => {
+    if (!entry.isDirectory()) return;
+    if (keepDirectories.has(entry.name)) return;
+
+    rmSync(path.join(productsDir, entry.name), { recursive: true, force: true });
+  });
 }
 
 function copyProductImages(code: string) {
@@ -115,7 +143,8 @@ function copyCollectionImages() {
   });
 }
 
-ensureCleanDir(PUBLIC_SYNC_ROOT);
+ensureDir(PUBLIC_SYNC_ROOT);
+pruneGeneratedProductDirs();
 const collectionImageMap = Object.fromEntries(copyCollectionImages().map((entry) => [entry.handle, entry.imageUrl]));
 
 const syncCatalog = STOCKED_CODES.map((code) => {
@@ -124,7 +153,7 @@ const syncCatalog = STOCKED_CODES.map((code) => {
     throw new Error(`Missing sync metadata for ${code}`);
   }
 
-  const title = `David Walker ${meta.code} ${getGenderLabel(meta.gender)} Eau de Parfum 50ml`;
+  const title = getSyncTitle(meta);
   const handle = buildHandle(code, meta.gender);
   const tags = [
     "all-perfumes",
@@ -144,7 +173,7 @@ const syncCatalog = STOCKED_CODES.map((code) => {
     code: meta.code,
     handle,
     title,
-    description: `${meta.feeling} ${meta.description}`,
+    description: getSyncDescription(meta),
     bodyHtml: buildBodyHtml(meta),
     vendor: "David Walker",
     productType: getProductType(meta.gender),
@@ -157,7 +186,12 @@ const syncCatalog = STOCKED_CODES.map((code) => {
 });
 
 const outputPath = path.resolve("api", "shopify-admin", "_catalog.js");
-const fileContents = `export const SHOPIFY_SYNC_PRODUCTS = ${JSON.stringify(syncCatalog, null, 2)};\n`;
+const fileContents = `import { SHOPIFY_AUTO_SCENT_PRODUCT } from "./_auto-scent.js";
+
+const PERFUME_SYNC_PRODUCTS = ${JSON.stringify(syncCatalog, null, 2)};
+
+export const SHOPIFY_SYNC_PRODUCTS = [...PERFUME_SYNC_PRODUCTS, SHOPIFY_AUTO_SCENT_PRODUCT];
+`;
 
 writeFileSync(outputPath, fileContents, "utf8");
 writeFileSync(

@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Seo from "@/components/Seo";
 import { getAbsoluteUrl, SITE_DOMAIN, SITE_NAME, SITE_SUPPORT_EMAIL } from "@/lib/site";
 
-type InfoSlug = "about" | "shipping" | "privacy" | "faq" | "terms";
+type InfoSlug = "about" | "shipping" | "privacy" | "faq" | "terms" | "refund-policy";
 
 interface InfoSection {
   heading: string;
@@ -27,7 +27,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "About Real Scents",
     eyebrow: "Brand Overview",
     description:
-      "Learn how Real Scents presents David Walker fragrances online for the United States with organized collections, secure Shopify checkout, clear scent-note guidance, and free U.S. shipping on every order.",
+      "Learn how Real Scents organizes David Walker fragrances for U.S. shoppers with clear scent notes, secure checkout, and free shipping.",
     lastUpdated: "March 12, 2026",
     sections: [
       {
@@ -57,33 +57,34 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Shipping Policy",
     eyebrow: "Order Policies",
     description:
-      "Review free U.S. shipping on every order, processing timing, final sale fragrance terms, tax-at-checkout details, and customer support guidance for Real Scents orders.",
+      "Review free U.S. shipping, processing times, final sale fragrance terms, tax at checkout, and support guidance for Real Scents orders.",
     lastUpdated: "March 12, 2026",
     sections: [
       {
         heading: "Free U.S. shipping",
         body: "Standard shipping is free on every order delivered within the United States. If faster or premium delivery options are offered later, they will be shown during checkout before payment is completed.",
       },
-      {
-        heading: "Processing and delivery timing",
-        body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery timing can vary based on destination, carrier conditions, weather, and seasonal order volume.",
-        items: [
-          "Orders are processed on business days only.",
-          "A shipping confirmation and tracking update should be sent once the order leaves the warehouse.",
-          "If there is a material delay after checkout, customers should be contacted using the order details provided at purchase.",
-        ],
-      },
+        {
+          heading: "Processing and delivery timing",
+          body: "Orders ship from El Paso, Texas. Most in-stock orders are expected to process within 1 business day, and standard delivery within the contiguous United States is generally expected in 2 to 5 business days after dispatch. Delivery timing can still vary based on destination, carrier conditions, weather, and seasonal order volume.",
+          items: [
+            "Orders are processed on business days only.",
+            "Shipments to Alaska, Hawaii, U.S. territories, military addresses, or remote destinations may take longer than the standard 2 to 5 business day window.",
+            "A shipping confirmation and tracking update should be sent once the order leaves the warehouse.",
+            "If there is a material delay after checkout, customers should be contacted using the order details provided at purchase.",
+          ],
+        },
       {
         heading: "Address accuracy and review checks",
         body: "Customers are responsible for entering a complete and accurate delivery address. Orders may be delayed, adjusted, or canceled if payment review, fraud screening, or address verification problems arise before shipment.",
       },
       {
         heading: "Final sale policy",
-        body: "All fragrance purchases are final sale. Returns and exchanges are not accepted for change-of-mind purchases, scent preference, gift orders, duplicate orders, opened items, or standard ordering mistakes after checkout is completed.",
+        body: "All fragrance purchases are final sale personal care products. Returns and exchanges are not accepted after checkout for change-of-mind purchases, scent preference, gift orders, duplicate orders, opened items, or standard ordering mistakes.",
         items: [
           "Customers should review product details carefully before completing checkout.",
-          `If an order arrives damaged, defective, or incorrect, the issue should be reported promptly to ${SITE_SUPPORT_EMAIL} for review.`,
-          "Support may request the order number, shipping name, and clear photos of the issue before next steps are provided.",
+          `If an order arrives damaged, incorrect, or incomplete, the issue should be reported promptly to ${SITE_SUPPORT_EMAIL}.`,
+          "Support may request the order number, shipping name, and clear photos so the issue can be documented and reviewed.",
         ],
       },
       {
@@ -96,11 +97,58 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
     ],
   },
+  "refund-policy": {
+    title: "Refund Policy",
+    eyebrow: "Final Sale Terms",
+    description:
+      "Review the final sale policy for Real Scents fragrance and car scent orders, including the no-return and no-exchange policy for personal care products.",
+    lastUpdated: "March 13, 2026",
+    sections: [
+      {
+        heading: "Final sale on fragrance and car scent products",
+        body:
+          "All perfumes and car scents sold by Real Scents are final sale personal care products. For hygiene, product integrity, and resale-safety reasons, opened, used, tested, or change-of-mind orders are not eligible for return, refund, or exchange.",
+      },
+      {
+        heading: "No returns for customer preference or order changes",
+        body:
+          "Returns are not accepted for scent preference, gift decisions, duplicate purchases, incorrect product selection by the customer, shipping timing dissatisfaction, or any other non-defect reason once checkout has been completed.",
+        items: [
+          "No returns for personal preference or expected scent profile differences.",
+          "No returns for opened or unsealed fragrance or car scent products.",
+          "No returns for accidental duplicate orders after checkout unless support confirms cancellation before shipment.",
+        ],
+      },
+      {
+        heading: "No exchanges",
+        body:
+          "Real Scents does not offer exchanges. Because the catalog consists of personal care fragrance products, orders cannot be swapped for another scent, another code, another variation, or store credit after purchase.",
+      },
+      {
+        heading: "Delivery issues and support review",
+        body: `If an order arrives damaged, incorrect, or incomplete, customers should contact ${SITE_SUPPORT_EMAIL} promptly so support can review and document the shipment issue. This support review does not create a general return or exchange program for personal care products.`,
+        items: [
+          "Include the order number and full shipping name.",
+          "Provide clear photos of the shipping box, label, and product issue.",
+          "Report the issue as soon as possible after delivery.",
+        ],
+      },
+      {
+        heading: "Chargebacks and policy consistency",
+        body:
+          "This policy applies to all checkout methods offered on the storefront. Submitting an order means the customer agrees that fragrance and car scent products are sold on a final sale basis and are not eligible for routine returns or exchanges.",
+      },
+      {
+        heading: "Contact",
+        body: `Questions about this policy can be sent to ${SITE_SUPPORT_EMAIL}. Customers should contact support before initiating payment disputes whenever an order issue can be reviewed directly by the store.`,
+      },
+    ],
+  },
   privacy: {
     title: "Privacy Policy",
     eyebrow: "Customer Privacy",
     description:
-      "Read how Real Scents may collect, use, store, and protect customer information for order fulfillment, support, analytics, fraud prevention, and lawful business operations.",
+      "Read how Real Scents collects, uses, stores, and protects customer information for orders, support, analytics, and fraud prevention.",
     lastUpdated: "March 12, 2026",
     sections: [
       {
@@ -147,7 +195,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
     title: "Frequently Asked Questions",
     eyebrow: "Customer Help",
     description:
-      "Common questions about fragrance shopping, multi-bottle pricing, free U.S. shipping, tax at checkout, final sale terms, and customer support on the Real Scents storefront.",
+      "Common questions about fragrance shopping, multi-bottle pricing, free U.S. shipping, tax at checkout, and customer support at Real Scents.",
     lastUpdated: "March 12, 2026",
     sections: [
       {
@@ -158,10 +206,10 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
         heading: "Is shipping free in the United States?",
         body: "Yes. Standard shipping is free on every U.S. order under the current storefront policy.",
       },
-      {
-        heading: "How long will my order take?",
-        body: "Most in-stock orders are expected to process within 1 to 3 business days. Delivery timing depends on the destination, carrier, and seasonal volume.",
-      },
+        {
+          heading: "How long will my order take?",
+          body: "Orders ship from El Paso, Texas. Most in-stock orders are expected to process within 1 business day, and standard delivery within the contiguous United States is generally expected in 2 to 5 business days after dispatch. Remote destinations may take longer.",
+        },
       {
         heading: "How does multi-bottle pricing work?",
         body: "The first perfume is priced at $79.90. A cart with 2 perfumes totals $119.90, and every additional perfume after that adds $40, so the pricing stays clear as the order grows.",
@@ -184,11 +232,15 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Can I return a fragrance order?",
-        body: `No. Fragrance purchases are final sale. Returns and exchanges are not accepted for change-of-mind purchases, scent preference, or standard order mistakes after checkout.`,
+        body: "No. Fragrance purchases are final sale personal care products. Returns are not accepted after checkout.",
+      },
+      {
+        heading: "Can I exchange for a different scent?",
+        body: "No. Real Scents does not offer scent swaps or post-purchase exchanges.",
       },
       {
         heading: "What if my order arrives damaged or incorrect?",
-        body: `If an order arrives damaged, defective, or incorrect, email ${SITE_SUPPORT_EMAIL} promptly with the order number and clear photos so support can review the issue.`,
+        body: `Email ${SITE_SUPPORT_EMAIL} promptly with the order number and clear photos so support can document and review the shipment issue.`,
       },
       {
         heading: "How do I contact support?",
@@ -225,7 +277,7 @@ const pageContent: Record<InfoSlug, InfoPageContent> = {
       },
       {
         heading: "Final sale merchandise",
-        body: `Fragrance purchases are sold on a final sale basis. Returns and exchanges are not accepted for change-of-mind purchases, opened items, or scent preference. Damaged, defective, or incorrect orders should be reported promptly to ${SITE_SUPPORT_EMAIL} for review.`,
+        body: `Fragrance purchases are sold on a final sale basis. Returns and exchanges are not accepted for change-of-mind purchases, opened items, scent preference, or post-purchase swaps. If a shipment arrives damaged, incorrect, or incomplete, customers should contact ${SITE_SUPPORT_EMAIL} promptly so support can document the issue.`,
       },
       {
         heading: "Promotional offers",
